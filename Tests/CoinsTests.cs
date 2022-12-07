@@ -79,5 +79,25 @@
             Assert.That(coinResult, Is.Not.Null);
             Assert.That(coinResult.Symbol, Is.EqualTo("atom"));
         }
+
+        [Test]
+        public async Task GetCoinTickersTest()
+        {
+            await Helpers.DoRateLimiting();
+
+            var tickersResult = await _apiClient.Coins.GetCoinTickersAsync("bitcoin");
+
+            Assert.That(tickersResult, Is.Not.Null);
+            Assert.That(tickersResult.Tickers, Is.Not.Empty);
+
+            await Helpers.DoRateLimiting();
+
+            tickersResult = await _apiClient.Coins.GetCoinTickersAsync("bitcoin", null, true, 1, CoinTickersOrderBy.trust_score_desc, true);
+
+            Assert.That(tickersResult, Is.Not.Null);
+            Assert.That(tickersResult.Tickers, Is.Not.Empty);
+            Assert.That(tickersResult.Tickers[0].Market.Logo, Is.NotNull);
+            Assert.That(tickersResult.Tickers[0].Market.Logo, Is.Not(String.Empty));
+        }
     }
 }

@@ -12,5 +12,8 @@ namespace CoinGeckoAPI.Models
 
         [JsonProperty("has_trading_incentive")]
         public bool HasTradingIncentive { get; set; }
+
+        [JsonProperty("logo")]
+        public string Logo { get; set; }
     }
 }

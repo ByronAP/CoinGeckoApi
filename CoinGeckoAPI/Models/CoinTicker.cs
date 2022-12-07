@@ -21,6 +21,12 @@ namespace CoinGeckoAPI.Models
         [JsonProperty("volume")]
         public decimal Volume { get; set; }
 
+        [JsonProperty("cost_to_move_up_usd")]
+        public double CostToMoveUpUsd { get; set; }
+
+        [JsonProperty("cost_to_move_down_usd")]
+        public double CostToMoveDownUsd { get; set; }
+
         [JsonProperty("converted_last")]
         public Dictionary<string, decimal> ConvertedLast { get; set; }
 

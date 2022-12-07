@@ -146,5 +146,48 @@ namespace CoinGeckoAPI
                 }
             });
         }
+
+        /// <summary>
+        /// TODO: Document this.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="exchange_ids"></param>
+        /// <param name="include_exchange_logo"></param>
+        /// <param name="page"></param>
+        /// <param name="order"></param>
+        /// <param name="depth"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        public async Task<CoinTickersResponse> GetCoinTickersAsync(string id, IEnumerable<string> exchange_ids = null, bool include_exchange_logo = false, uint page = 1, CoinTickersOrderBy order = CoinTickersOrderBy.trust_score_desc, bool depth = false)
+        {
+            if (string.IsNullOrEmpty(id) || id.Trim() == string.Empty)
+            {
+                throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)");
+            }
+
+            if (page == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(page), "Must be a valid page index starting from 1.");
+            }
+
+            var request = new RestRequest(CoinGeckoClient.BuildUrl("coins", id, "tickers"));
+            if (exchange_ids != null && exchange_ids.Any()) { request.AddQueryParameter("exchange_ids", string.Join(",", exchange_ids)); }
+            if (include_exchange_logo) { request.AddQueryParameter("include_exchange_logo", "true"); }
+            if (page != 1) { request.AddQueryParameter("page", page); }
+            if (order != CoinTickersOrderBy.trust_score_desc) { request.AddQueryParameter("order", order.ToString()); }
+            if (depth) { request.AddQueryParameter("depth", "true"); }
+
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+
+            return JsonConvert.DeserializeObject<CoinTickersResponse>(jsonStr, new JsonSerializerSettings
+            {
+                Error = (sender, error) =>
+                {
+                    // sometimes a number has scientific notation or some other garbage so just ignore it
+                    error.ErrorContext.Handled = true;
+                }
+            });
+        }
     }
 }
