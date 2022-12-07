@@ -1,4 +1,4 @@
-﻿using CoinGeckoAPI.Models;
+using CoinGeckoAPI.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
@@ -74,6 +74,7 @@ namespace CoinGeckoAPI
             var request = new RestRequest(CoinGeckoClient.BuildUrl("coins", "markets"));
             request.AddQueryParameter("vs_currency", vs_currency);
             if (ids != null && ids.Any()) { request.AddQueryParameter("ids", String.Join(",", ids)); }
+            if (!string.IsNullOrEmpty(category) && !string.IsNullOrWhiteSpace(category)) request.AddQueryParameter("category", category);
             request.AddQueryParameter("order", order.ToString().ToLowerInvariant());
             request.AddQueryParameter("per_page", per_page);
             request.AddQueryParameter("page", page);
