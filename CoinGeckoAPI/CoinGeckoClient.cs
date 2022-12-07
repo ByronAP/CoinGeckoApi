@@ -1,4 +1,4 @@
-﻿using CoinGeckoAPI.Models;
+using CoinGeckoAPI.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
@@ -15,7 +15,7 @@ namespace CoinGeckoAPI
         /// The RestSharp client instance.
         /// This is exposed in case you wish to change the options such as use a proxy.
         /// </summary>
-        public readonly RestClient CGRestClient;
+        public RestClient CGRestClient { get; }
 
         /// <summary>
         /// Simple API calls.
