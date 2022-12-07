@@ -83,13 +83,13 @@ namespace CoinGeckoAPI
             {
                 var marketPriceChangePercentageValues = new List<string>();
 
-                if (price_change_percentage.HasFlag(MarketPriceChangePercentage.H1)) marketPriceChangePercentageValues.Add("1h");
-                if (price_change_percentage.HasFlag(MarketPriceChangePercentage.H24)) marketPriceChangePercentageValues.Add("24h");
-                if (price_change_percentage.HasFlag(MarketPriceChangePercentage.D7)) marketPriceChangePercentageValues.Add("7d");
-                if (price_change_percentage.HasFlag(MarketPriceChangePercentage.D14)) marketPriceChangePercentageValues.Add("14d");
-                if (price_change_percentage.HasFlag(MarketPriceChangePercentage.D30)) marketPriceChangePercentageValues.Add("30d");
-                if (price_change_percentage.HasFlag(MarketPriceChangePercentage.D200)) marketPriceChangePercentageValues.Add("200d");
-                if (price_change_percentage.HasFlag(MarketPriceChangePercentage.Y1)) marketPriceChangePercentageValues.Add("1y");
+                if (price_change_percentage.HasFlag(MarketPriceChangePercentage.H1)) { marketPriceChangePercentageValues.Add("1h"); }
+                if (price_change_percentage.HasFlag(MarketPriceChangePercentage.H24)) { marketPriceChangePercentageValues.Add("24h"); }
+                if (price_change_percentage.HasFlag(MarketPriceChangePercentage.D7)) { marketPriceChangePercentageValues.Add("7d"); }
+                if (price_change_percentage.HasFlag(MarketPriceChangePercentage.D14)) { marketPriceChangePercentageValues.Add("14d"); }
+                if (price_change_percentage.HasFlag(MarketPriceChangePercentage.D30)) { marketPriceChangePercentageValues.Add("30d"); }
+                if (price_change_percentage.HasFlag(MarketPriceChangePercentage.D200)) { marketPriceChangePercentageValues.Add("200d"); }
+                if (price_change_percentage.HasFlag(MarketPriceChangePercentage.Y1)) { marketPriceChangePercentageValues.Add("1y"); }
 
                 request.AddQueryParameter("price_change_percentage", string.Join(",", marketPriceChangePercentageValues));
 
