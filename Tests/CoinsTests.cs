@@ -61,5 +61,23 @@
             Assert.IsNotNull(marketsResult[0].SparklineIn7D);
             Assert.That(marketsResult.Count, Is.EqualTo(200));
         }
+
+        [Test]
+        public async Task GetCoinTest()
+        {
+            await Helpers.DoRateLimiting();
+
+            var coinResult = await _apiClient.Coins.GetCoinAsync("bitcoin");
+
+            Assert.That(coinResult, Is.Not.Null);
+            Assert.That(coinResult.BlockTimeInMinutes, Is.EqualTo(10));
+
+            await Helpers.DoRateLimiting();
+
+            coinResult = await _apiClient.Coins.GetCoinAsync("cosmos");
+
+            Assert.That(coinResult, Is.Not.Null);
+            Assert.That(coinResult.Symbol, Is.EqualTo("atom"));
+        }
     }
 }

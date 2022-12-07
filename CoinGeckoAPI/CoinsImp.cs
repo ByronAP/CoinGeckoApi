@@ -1,4 +1,4 @@
-using CoinGeckoAPI.Models;
+﻿using CoinGeckoAPI.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
@@ -99,6 +99,45 @@ namespace CoinGeckoAPI
             var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
 
             return JsonConvert.DeserializeObject<CoinsMarketItem[]>(jsonStr, new JsonSerializerSettings
+            {
+                Error = (sender, error) =>
+                {
+                    // sometimes a number has scientific notation or some other garbage so just ignore it
+                    error.ErrorContext.Handled = true;
+                }
+            });
+        }
+
+        /// <summary>
+        /// TODO: Document this.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="localization">if set to <c>true</c> [localization].</param>
+        /// <param name="tickers">if set to <c>true</c> [tickers].</param>
+        /// <param name="market_data">if set to <c>true</c> [market data].</param>
+        /// <param name="community_data">if set to <c>true</c> [community data].</param>
+        /// <param name="developer_data">if set to <c>true</c> [developer data].</param>
+        /// <param name="sparkline">if set to <c>true</c> [sparkline].</param>
+        /// <returns>A Task&lt;CoinResponse&gt; representing the asynchronous operation.</returns>
+        /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)</exception>
+        public async Task<CoinResponse> GetCoinAsync(string id, bool localization = true, bool tickers = true, bool market_data = true, bool community_data = true, bool developer_data = true, bool sparkline = false)
+        {
+            if (string.IsNullOrEmpty(id) || id.Trim() == string.Empty)
+            {
+                throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)");
+            }
+
+            var request = new RestRequest(CoinGeckoClient.BuildUrl("coins", id));
+            request.AddQueryParameter("localization", localization.ToString().ToLowerInvariant());
+            request.AddQueryParameter("tickers", tickers.ToString().ToLowerInvariant());
+            request.AddQueryParameter("market_data", market_data.ToString().ToLowerInvariant());
+            request.AddQueryParameter("community_data", community_data.ToString().ToLowerInvariant());
+            request.AddQueryParameter("developer_data", developer_data.ToString().ToLowerInvariant());
+            request.AddQueryParameter("sparkline", sparkline.ToString().ToLowerInvariant());
+
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+
+            return JsonConvert.DeserializeObject<CoinResponse>(jsonStr, new JsonSerializerSettings
             {
                 Error = (sender, error) =>
                 {
