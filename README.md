@@ -8,3 +8,4 @@ CoinGecko API Library for .NET
 [CoinGecko API Documentation](https://www.coingecko.com/en/api/documentation)
 
 [Library Documentation](https://byronap.github.io/CoinGeckApi_docs)
+
