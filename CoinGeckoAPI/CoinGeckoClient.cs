@@ -1,4 +1,4 @@
-using CoinGeckoAPI.Models;
+﻿using CoinGeckoAPI.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
@@ -29,7 +29,45 @@ namespace CoinGeckoAPI
 
         private readonly ILogger<CoinGeckoClient> _logger;
 
-        public CoinGeckoClient(ILogger<CoinGeckoClient> logger = null, bool isPro = false)
+        #region Constructors
+        public CoinGeckoClient()
+        {
+            _logger = null;
+
+            CGRestClient = new RestClient(Constants.API_BASE_URL);
+
+            Simple = new SimpleImp(CGRestClient, _logger);
+            Coins = new CoinsImp(CGRestClient, _logger);
+        }
+
+        public CoinGeckoClient(bool isPro)
+        {
+            _logger = null;
+
+            if (isPro)
+            {
+                CGRestClient = new RestClient(Constants.API_PRO_BASE_URL);
+            }
+            else
+            {
+                CGRestClient = new RestClient(Constants.API_BASE_URL);
+            }
+
+            Simple = new SimpleImp(CGRestClient, _logger);
+            Coins = new CoinsImp(CGRestClient, _logger);
+        }
+
+        public CoinGeckoClient(ILogger<CoinGeckoClient> logger)
+        {
+            _logger = logger;
+
+            CGRestClient = new RestClient(Constants.API_BASE_URL);
+
+            Simple = new SimpleImp(CGRestClient, _logger);
+            Coins = new CoinsImp(CGRestClient, _logger);
+        }
+
+        public CoinGeckoClient(ILogger<CoinGeckoClient> logger, bool isPro)
         {
             _logger = logger;
 
@@ -42,9 +80,10 @@ namespace CoinGeckoAPI
                 CGRestClient = new RestClient(Constants.API_BASE_URL);
             }
 
-            Simple = new SimpleImp(CGRestClient, logger);
-            Coins = new CoinsImp(CGRestClient, logger);
+            Simple = new SimpleImp(CGRestClient, _logger);
+            Coins = new CoinsImp(CGRestClient, _logger);
         }
+        #endregion
 
         internal static async Task<string> GetStringResponseAsync(RestClient client, RestRequest request, ILogger logger)
         {
