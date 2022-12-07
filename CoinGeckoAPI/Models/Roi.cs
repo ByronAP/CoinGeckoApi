@@ -2,7 +2,7 @@
 
 namespace CoinGeckoAPI.Models
 {
-    public class CoinsMarketRoi
+    public class Roi
     {
         [JsonProperty("times")]
         public decimal Times { get; set; }

@@ -78,7 +78,7 @@ namespace CoinGeckoAPI.Models
         public DateTimeOffset AtlDate { get; set; }
 
         [JsonProperty("roi")]
-        public CoinsMarketRoi Roi { get; set; }
+        public Roi Roi { get; set; }
 
         [JsonProperty("last_updated")]
         public DateTimeOffset LastUpdated { get; set; }
