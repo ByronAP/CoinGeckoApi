@@ -1,4 +1,5 @@
-﻿using CoinGeckoAPI.Models;
+﻿using CoinGeckoAPI.Exceptions;
+using CoinGeckoAPI.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
@@ -102,7 +103,7 @@ namespace CoinGeckoAPI
                     throw response.ErrorException;
                 }
 
-                throw new Exception($"Unknown exception, http response code is not success, {response.StatusCode}.");
+                throw new UnknownException($"Unknown exception, http response code is not success, {response.StatusCode}.");
             }
             catch (Exception ex)
             {
