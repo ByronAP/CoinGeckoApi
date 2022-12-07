@@ -96,8 +96,8 @@
 
             Assert.That(tickersResult, Is.Not.Null);
             Assert.That(tickersResult.Tickers, Is.Not.Empty);
-            Assert.That(tickersResult.Tickers[0].Market.Logo, Is.NotNull);
-            Assert.That(tickersResult.Tickers[0].Market.Logo, Is.Not(String.Empty));
+            Assert.That(tickersResult.Tickers[0].Market.Logo, Is.Not.Null);
+            Assert.That(tickersResult.Tickers[0].Market.Logo, Is.Not.EqualTo(String.Empty));
         }
     }
 }
