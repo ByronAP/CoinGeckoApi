@@ -44,11 +44,11 @@ namespace CoinGeckoAPI
             var request = new RestRequest(CoinGeckoClient.BuildUrl("simple", "price"));
             request.AddQueryParameter("ids", String.Join(",", ids));
             request.AddQueryParameter("vs_currencies", String.Join(",", vs_currencies));
-            if (include_market_cap) request.AddQueryParameter("include_market_cap", "true");
-            if (include_24hr_vol) request.AddQueryParameter("include_24hr_vol", "true");
-            if (include_24hr_change) request.AddQueryParameter("include_24hr_change", "true");
-            if (include_last_updated_at) request.AddQueryParameter("include_last_updated_at", "true");
-            if (precision != 2) request.AddQueryParameter("precision", precision);
+            if (include_market_cap) { request.AddQueryParameter("include_market_cap", "true"); }
+            if (include_24hr_vol) { request.AddQueryParameter("include_24hr_vol", "true"); }
+            if (include_24hr_change) { request.AddQueryParameter("include_24hr_change", "true"); }
+            if (include_last_updated_at) { request.AddQueryParameter("include_last_updated_at", "true"); }
+            if (precision != 2) { request.AddQueryParameter("precision", precision); }
 
             var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
 
@@ -84,11 +84,11 @@ namespace CoinGeckoAPI
             var request = new RestRequest(CoinGeckoClient.BuildUrl("simple", "token_price", id));
             request.AddQueryParameter("contract_addresses", String.Join(",", contract_addresses));
             request.AddQueryParameter("vs_currencies", String.Join(",", vs_currencies));
-            if (include_market_cap) request.AddQueryParameter("include_market_cap", "true");
-            if (include_24hr_vol) request.AddQueryParameter("include_24hr_vol", "true");
-            if (include_24hr_change) request.AddQueryParameter("include_24hr_change", "true");
-            if (include_last_updated_at) request.AddQueryParameter("include_last_updated_at", "true");
-            if (precision != 2) request.AddQueryParameter("precision", precision);
+            if (include_market_cap) { request.AddQueryParameter("include_market_cap", "true"); }
+            if (include_24hr_vol) { request.AddQueryParameter("include_24hr_vol", "true"); }
+            if (include_24hr_change) { request.AddQueryParameter("include_24hr_change", "true"); }
+            if (include_last_updated_at) { request.AddQueryParameter("include_last_updated_at", "true"); }
+            if (precision != 2) { request.AddQueryParameter("precision", precision); }
 
             var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
 

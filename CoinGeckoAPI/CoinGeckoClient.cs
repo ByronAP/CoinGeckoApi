@@ -20,12 +20,12 @@ namespace CoinGeckoAPI
         /// <summary>
         /// Simple API calls.
         /// </summary>
-        public readonly SimpleImp Simple;
+        public SimpleImp Simple { get; }
 
         /// <summary>
         /// Coins API calls.
         /// </summary>
-        public readonly CoinsImp Coins;
+        public CoinsImp Coins { get; }
 
         private readonly ILogger<CoinGeckoClient> _logger;
 

@@ -32,7 +32,7 @@ namespace CoinGeckoAPI
         public async Task<IEnumerable<CoinsListItem>> GetCoinsListAsync(bool include_platform = false)
         {
             var request = new RestRequest(CoinGeckoClient.BuildUrl("coins", "list"));
-            if (include_platform) request.AddQueryParameter("include_platform", "true");
+            if (include_platform) { request.AddQueryParameter("include_platform", "true"); }
 
             var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
 
@@ -73,11 +73,11 @@ namespace CoinGeckoAPI
 
             var request = new RestRequest(CoinGeckoClient.BuildUrl("coins", "markets"));
             request.AddQueryParameter("vs_currency", vs_currency);
-            if (ids != null && ids.Any()) request.AddQueryParameter("ids", String.Join(",", ids));
+            if (ids != null && ids.Any()) { request.AddQueryParameter("ids", String.Join(",", ids)); }
             request.AddQueryParameter("order", order.ToString().ToLowerInvariant());
             request.AddQueryParameter("per_page", per_page);
             request.AddQueryParameter("page", page);
-            if (sparkline) request.AddQueryParameter("sparkline", "true");
+            if (sparkline) { request.AddQueryParameter("sparkline", "true"); }
 
             if (!price_change_percentage.HasFlag(MarketPriceChangePercentage.None))
             {
