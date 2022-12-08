@@ -16,16 +16,16 @@ namespace CoinGeckoAPI.Models
         public TickerMarketItem Market { get; set; }
 
         [JsonProperty("last")]
-        public decimal Last { get; set; }
+        public decimal? Last { get; set; }
 
         [JsonProperty("volume")]
-        public decimal Volume { get; set; }
+        public decimal? Volume { get; set; }
 
         [JsonProperty("cost_to_move_up_usd")]
-        public double CostToMoveUpUsd { get; set; }
+        public double? CostToMoveUpUsd { get; set; }
 
         [JsonProperty("cost_to_move_down_usd")]
-        public double CostToMoveDownUsd { get; set; }
+        public double? CostToMoveDownUsd { get; set; }
 
         [JsonProperty("converted_last")]
         public Dictionary<string, decimal> ConvertedLast { get; set; }
@@ -37,22 +37,22 @@ namespace CoinGeckoAPI.Models
         public string TrustScore { get; set; }
 
         [JsonProperty("bid_ask_spread_percentage")]
-        public decimal BidAskSpreadPercentage { get; set; }
+        public decimal? BidAskSpreadPercentage { get; set; }
 
         [JsonProperty("timestamp")]
-        public DateTimeOffset Timestamp { get; set; }
+        public DateTimeOffset? Timestamp { get; set; }
 
         [JsonProperty("last_traded_at")]
-        public DateTimeOffset LastTradedAt { get; set; }
+        public DateTimeOffset? LastTradedAt { get; set; }
 
         [JsonProperty("last_fetch_at")]
-        public DateTimeOffset LastFetchAt { get; set; }
+        public DateTimeOffset? LastFetchAt { get; set; }
 
         [JsonProperty("is_anomaly")]
-        public bool IsAnomaly { get; set; }
+        public bool? IsAnomaly { get; set; }
 
         [JsonProperty("is_stale")]
-        public bool IsStale { get; set; }
+        public bool? IsStale { get; set; }
 
         [JsonProperty("trade_url")]
         public string TradeUrl { get; set; }

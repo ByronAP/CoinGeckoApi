@@ -7,7 +7,5 @@ namespace CoinGeckoAPI.Models
     {
         [JsonProperty("rates")]
         public Dictionary<string, ExchangeRate> Rates { get; set; }
-
-        public static ExchangeRatesResponse FromJson(string json) => JsonConvert.DeserializeObject<ExchangeRatesResponse>(json);
     }
 }

@@ -55,37 +55,37 @@ namespace CoinGeckoAPI.Models
         public string CountryOrigin { get; set; }
 
         [JsonProperty("genesis_date")]
-        public DateTimeOffset GenesisDate { get; set; }
+        public DateTimeOffset? GenesisDate { get; set; }
 
         [JsonProperty("sentiment_votes_up_percentage")]
-        public decimal SentimentVotesUpPercentage { get; set; }
+        public decimal? SentimentVotesUpPercentage { get; set; }
 
         [JsonProperty("sentiment_votes_down_percentage")]
-        public decimal SentimentVotesDownPercentage { get; set; }
+        public decimal? SentimentVotesDownPercentage { get; set; }
 
         [JsonProperty("ico_data")]
         public CoinIcoData IcoData { get; set; }
 
         [JsonProperty("market_cap_rank")]
-        public long MarketCapRank { get; set; }
+        public long? MarketCapRank { get; set; }
 
         [JsonProperty("coingecko_rank")]
-        public long CoingeckoRank { get; set; }
+        public long? CoingeckoRank { get; set; }
 
         [JsonProperty("coingecko_score")]
-        public decimal CoingeckoScore { get; set; }
+        public decimal? CoingeckoScore { get; set; }
 
         [JsonProperty("developer_score")]
-        public decimal DeveloperScore { get; set; }
+        public decimal? DeveloperScore { get; set; }
 
         [JsonProperty("community_score")]
-        public decimal CommunityScore { get; set; }
+        public decimal? CommunityScore { get; set; }
 
         [JsonProperty("liquidity_score")]
-        public decimal LiquidityScore { get; set; }
+        public decimal? LiquidityScore { get; set; }
 
         [JsonProperty("public_interest_score")]
-        public decimal PublicInterestScore { get; set; }
+        public decimal? PublicInterestScore { get; set; }
 
         [JsonProperty("market_data")]
         public CoinMarketData MarketData { get; set; }
@@ -103,7 +103,7 @@ namespace CoinGeckoAPI.Models
         public object[] StatusUpdates { get; set; }
 
         [JsonProperty("last_updated")]
-        public DateTimeOffset LastUpdated { get; set; }
+        public DateTimeOffset? LastUpdated { get; set; }
 
         [JsonProperty("tickers")]
         public CoinTicker[] Tickers { get; set; }

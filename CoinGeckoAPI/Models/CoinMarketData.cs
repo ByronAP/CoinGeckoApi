@@ -10,13 +10,13 @@ namespace CoinGeckoAPI.Models
         public Dictionary<string, decimal> CurrentPrice { get; set; }
 
         [JsonProperty("total_value_locked")]
-        public double TotalValueLocked { get; set; }
+        public double? TotalValueLocked { get; set; }
 
         [JsonProperty("mcap_to_tvl_ratio")]
-        public double McapToTvlRatio { get; set; }
+        public double? McapToTvlRatio { get; set; }
 
         [JsonProperty("fdv_to_tvl_ratio")]
-        public double FdvToTvlRatio { get; set; }
+        public double? FdvToTvlRatio { get; set; }
 
         [JsonProperty("roi")]
         public Roi Roi { get; set; }
@@ -43,7 +43,7 @@ namespace CoinGeckoAPI.Models
         public Dictionary<string, double> MarketCap { get; set; }
 
         [JsonProperty("market_cap_rank")]
-        public int MarketCapRank { get; set; }
+        public int? MarketCapRank { get; set; }
 
         [JsonProperty("fully_diluted_valuation")]
         public Dictionary<string, double> FullyDilutedValuation { get; set; }
@@ -58,34 +58,34 @@ namespace CoinGeckoAPI.Models
         public Dictionary<string, decimal> Low24H { get; set; }
 
         [JsonProperty("price_change_24h")]
-        public double PriceChange24H { get; set; }
+        public double? PriceChange24H { get; set; }
 
         [JsonProperty("price_change_percentage_24h")]
-        public double PriceChangePercentage24H { get; set; }
+        public double? PriceChangePercentage24H { get; set; }
 
         [JsonProperty("price_change_percentage_7d")]
-        public double PriceChangePercentage7D { get; set; }
+        public double? PriceChangePercentage7D { get; set; }
 
         [JsonProperty("price_change_percentage_14d")]
-        public double PriceChangePercentage14D { get; set; }
+        public double? PriceChangePercentage14D { get; set; }
 
         [JsonProperty("price_change_percentage_30d")]
-        public double PriceChangePercentage30D { get; set; }
+        public double? PriceChangePercentage30D { get; set; }
 
         [JsonProperty("price_change_percentage_60d")]
-        public double PriceChangePercentage60D { get; set; }
+        public double? PriceChangePercentage60D { get; set; }
 
         [JsonProperty("price_change_percentage_200d")]
-        public double PriceChangePercentage200D { get; set; }
+        public double? PriceChangePercentage200D { get; set; }
 
         [JsonProperty("price_change_percentage_1y")]
-        public double PriceChangePercentage1Y { get; set; }
+        public double? PriceChangePercentage1Y { get; set; }
 
         [JsonProperty("market_cap_change_24h")]
-        public double MarketCapChange24H { get; set; }
+        public double? MarketCapChange24H { get; set; }
 
         [JsonProperty("market_cap_change_percentage_24h")]
-        public double MarketCapChangePercentage24H { get; set; }
+        public double? MarketCapChangePercentage24H { get; set; }
 
         [JsonProperty("price_change_24h_in_currency")]
         public Dictionary<string, decimal> PriceChange24HInCurrency { get; set; }
@@ -121,18 +121,18 @@ namespace CoinGeckoAPI.Models
         public Dictionary<string, decimal> MarketCapChangePercentage24HInCurrency { get; set; }
 
         [JsonProperty("total_supply")]
-        public double TotalSupply { get; set; }
+        public double? TotalSupply { get; set; }
 
         [JsonProperty("max_supply")]
-        public double MaxSupply { get; set; }
+        public double? MaxSupply { get; set; }
 
         [JsonProperty("circulating_supply")]
-        public double CirculatingSupply { get; set; }
+        public double? CirculatingSupply { get; set; }
 
         [JsonProperty("sparkline_7d")]
         public SparklineData Sparkline7D { get; set; }
 
         [JsonProperty("last_updated")]
-        public DateTimeOffset LastUpdated { get; set; }
+        public DateTimeOffset? LastUpdated { get; set; }
     }
 }
