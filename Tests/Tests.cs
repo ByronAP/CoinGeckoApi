@@ -52,5 +52,11 @@
             Assert.IsNotEmpty(platformsResult);
             Assert.That(platformsResult.Count(), Is.LessThanOrEqualTo(9));
         }
+
+        [Test]
+        public void AFailingTest()
+        {
+            Assert.Fail();
+        }
     }
 }
