@@ -1,4 +1,4 @@
-name: .NET
+name: Build And Test dev branch
 
 on:
   push:
@@ -13,22 +13,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Decode the Pfx
-      env:
-          CERTIFICATE_BASE64: ${{ secrets.SIGNING_KEY }}
-      run: |
-          echo $CERTIFICATE_BASE64 | base64 --decode > keyPair.snk
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 7.0.x
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: | 
-        dotnet build --no-restore
-      env:
-        SignAssembly: true
-        AssemblyOriginatorKeyFile: ${{ steps.write_sign_key_file.outputs.filePath }}
+      run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
