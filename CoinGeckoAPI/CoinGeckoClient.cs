@@ -166,7 +166,7 @@ namespace CoinGeckoAPI
 
             var jsonString = await GetStringResponseAsync(CGRestClient, request, _logger);
 
-            return ExchangeRatesResponse.FromJson(jsonString);
+            return JsonConvert.DeserializeObject<ExchangeRatesResponse>(jsonString);
         }
 
         /// <summary>
