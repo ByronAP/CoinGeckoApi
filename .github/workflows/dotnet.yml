@@ -14,7 +14,7 @@ jobs:
     steps:
     - name: Decode the Pfx
       run: | 
-        $signing_keys_payload = [System.Convert]::FromBase64String("${{ secrets.SIGNING_KEY }}")
+        $signing_keys_payload = [System.Convert]::FromBase64String(${{ secrets.SIGNING_KEY }})
         $currentDirectory = Get-Location
         $certificatePath = Join-Path -Path $currentDirectory -ChildPath "keyPair.snk"
         [IO.File]::WriteAllBytes("$certificatePath", $signing_keys_payload)
