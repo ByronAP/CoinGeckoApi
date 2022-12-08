@@ -12,14 +12,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Decode the Pfx
-      run: |
-        $signing_data = ${{ secrets.SIGNING_KEY }}
-        $signing_keys_payload = [System.Convert]::FromBase64String("$signing_data")
-        $currentDirectory = Get-Location
-        $certificatePath = Join-Path -Path $currentDirectory -ChildPath "keyPair.snk"
-        [IO.File]::WriteAllBytes("$certificatePath", $signing_keys_payload)
     - uses: actions/checkout@v3
+    - name: Decode the Pfx
+      env:
+          CERTIFICATE_BASE64: ${{ secrets.SIGNING_KEY }}
+      run: |
+          echo $CERTIFICATE_BASE64 | base64 --decode > keyPair.snk
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
