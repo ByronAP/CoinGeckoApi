@@ -1,4 +1,4 @@
-﻿using CoinGeckoAPI.Models;
+using CoinGeckoAPI.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
@@ -40,7 +40,7 @@ namespace CoinGeckoAPI
         }
 
         /// <summary>
-        /// Get markets as an asynchronous operation.
+        /// TODO: Document this.
         /// </summary>
         /// <param name="vs_currency">The vs currency.</param>
         /// <param name="ids">The ids.</param>
@@ -137,28 +137,21 @@ namespace CoinGeckoAPI
 
             var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
 
-            return JsonConvert.DeserializeObject<CoinResponse>(jsonStr, new JsonSerializerSettings
-            {
-                Error = (sender, error) =>
-                {
-                    // sometimes a number has scientific notation or some other garbage so just ignore it
-                    error.ErrorContext.Handled = true;
-                }
-            });
+            return JsonConvert.DeserializeObject<CoinResponse>(jsonStr);
         }
 
         /// <summary>
         /// TODO: Document this.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="exchange_ids"></param>
-        /// <param name="include_exchange_logo"></param>
-        /// <param name="page"></param>
-        /// <param name="order"></param>
-        /// <param name="depth"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// <param name="id">The identifier.</param>
+        /// <param name="exchange_ids">The exchange ids.</param>
+        /// <param name="include_exchange_logo">if set to <c>true</c> [include exchange logo].</param>
+        /// <param name="page">The page.</param>
+        /// <param name="order">The order.</param>
+        /// <param name="depth">if set to <c>true</c> [depth].</param>
+        /// <returns>A Task&lt;CoinTickersResponse&gt; representing the asynchronous operation.</returns>
+        /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">page - Must be a valid page index starting from 1.</exception>
         public async Task<CoinTickersResponse> GetCoinTickersAsync(string id, IEnumerable<string> exchange_ids = null, bool include_exchange_logo = false, uint page = 1, CoinTickersOrderBy order = CoinTickersOrderBy.trust_score_desc, bool depth = false)
         {
             if (string.IsNullOrEmpty(id) || id.Trim() == string.Empty)
