@@ -1,4 +1,4 @@
-using CoinGeckoAPI.Models;
+﻿using CoinGeckoAPI.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
@@ -173,14 +173,37 @@ namespace CoinGeckoAPI
 
             var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
 
-            return JsonConvert.DeserializeObject<CoinTickersResponse>(jsonStr, new JsonSerializerSettings
+            return JsonConvert.DeserializeObject<CoinTickersResponse>(jsonStr);
+        }
+
+        /// <summary>
+        /// TODO: Document this.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="date">The date.</param>
+        /// <param name="localization">if set to <c>true</c> [localization].</param>
+        /// <returns>A Task&lt;CoinHistoryResponse&gt; representing the asynchronous operation.</returns>
+        /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">date - Invalid value. Value must be a valid date to snapshot a coins history.</exception>
+        public async Task<CoinHistoryResponse> GetCoinHistoryAsync(string id, DateTimeOffset date, bool localization = false)
+        {
+            if (string.IsNullOrEmpty(id) || id.Trim() == string.Empty)
             {
-                Error = (sender, error) =>
-                {
-                    // sometimes a number has scientific notation or some other garbage so just ignore it
-                    error.ErrorContext.Handled = true;
-                }
-            });
+                throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)");
+            }
+
+            if (date == null || date == DateTimeOffset.MinValue || date == DateTimeOffset.MaxValue)
+            {
+                throw new ArgumentOutOfRangeException(nameof(date), "Invalid value. Value must be a valid date to snapshot a coins history.");
+            }
+
+            var request = new RestRequest(CoinGeckoClient.BuildUrl("coins", id, "history"));
+            request.AddQueryParameter("date", date.ToString("dd-MM-yyyy"));
+            request.AddQueryParameter("localization", localization.ToString().ToLowerInvariant());
+
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+
+            return JsonConvert.DeserializeObject<CoinHistoryResponse>(jsonStr);
         }
     }
 }

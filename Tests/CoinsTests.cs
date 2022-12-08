@@ -99,5 +99,16 @@
             Assert.That(tickersResult.Tickers[0].Market.Logo, Is.Not.Null);
             Assert.That(tickersResult.Tickers[0].Market.Logo, Is.Not.EqualTo(String.Empty));
         }
+
+        [Test]
+        public async Task GetCoinHistoryTest()
+        {
+            await Helpers.DoRateLimiting();
+
+            var historyResult = await _apiClient.Coins.GetCoinHistoryAsync("bitcoin", DateTimeOffset.UtcNow);
+
+            Assert.That(historyResult, Is.Not.Null);
+            Assert.That(historyResult.MarketData.CurrentPrice, Is.Not.Empty);
+        }
     }
 }
