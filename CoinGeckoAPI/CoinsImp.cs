@@ -217,7 +217,7 @@ namespace CoinGeckoAPI
         /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)</exception>
         /// <exception cref="System.ArgumentNullException">vs_currency - Invalid value. Value must be a valid target currency of market data (usd, eur, jpy, etc.)</exception>
         /// <exception cref="System.ArgumentOutOfRangeException">days - Invalid value. Value must not exceed 900000.</exception>
-        public async Task<CoinMarketChartResponse> GetCoinMarketChart(string id, string vs_currency, uint days, CoinMarketChartInterval interval = CoinMarketChartInterval.auto)
+        public async Task<CoinMarketChartResponse> GetCoinMarketChartAsync(string id, string vs_currency, uint days, CoinMarketChartInterval interval = CoinMarketChartInterval.auto)
         {
             if (string.IsNullOrEmpty(id) || String.IsNullOrWhiteSpace(vs_currency))
             {

@@ -116,7 +116,7 @@
         {
             await Helpers.DoRateLimiting();
 
-            var chartResult = await _apiClient.Coins.GetCoinMarketChart("bitcoin", "usd", 1000);
+            var chartResult = await _apiClient.Coins.GetCoinMarketChartAsync("bitcoin", "usd", 1000);
 
             Assert.That(chartResult, Is.Not.Null);
             Assert.That(chartResult.Prices, Is.Not.Empty);
@@ -133,7 +133,7 @@
 
             await Helpers.DoRateLimiting();
 
-            chartResult = await _apiClient.Coins.GetCoinMarketChart("cosmos", "usd", 1000);
+            chartResult = await _apiClient.Coins.GetCoinMarketChartAsync("cosmos", "usd", 1000);
 
             Assert.That(chartResult, Is.Not.Null);
             Assert.That(chartResult.Prices, Is.Not.Empty);
@@ -150,7 +150,7 @@
 
             await Helpers.DoRateLimiting();
 
-            chartResult = await _apiClient.Coins.GetCoinMarketChart("ethereum", "usd", 1000);
+            chartResult = await _apiClient.Coins.GetCoinMarketChartAsync("ethereum", "usd", 1000);
 
             Assert.That(chartResult, Is.Not.Null);
             Assert.That(chartResult.Prices, Is.Not.Empty);
