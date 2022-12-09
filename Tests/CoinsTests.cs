@@ -110,5 +110,60 @@
             Assert.That(historyResult, Is.Not.Null);
             Assert.That(historyResult.MarketData.CurrentPrice, Is.Not.Empty);
         }
+
+        [Test]
+        public async Task GetCoinMarketChartTest()
+        {
+            await Helpers.DoRateLimiting();
+
+            var chartResult = await _apiClient.Coins.GetCoinMarketChart("bitcoin", "usd", 1000);
+
+            Assert.That(chartResult, Is.Not.Null);
+            Assert.That(chartResult.Prices, Is.Not.Empty);
+            Assert.That(chartResult.MarketCaps, Is.Not.Empty);
+            Assert.That(chartResult.TotalVolumes, Is.Not.Empty);
+
+            var marketChartItems = chartResult.ToMarketChartCombinedItems();
+
+            Assert.That(marketChartItems, Is.Not.Null);
+            Assert.That(marketChartItems, Is.Not.Empty);
+            Assert.That(marketChartItems.First().Price, Is.GreaterThan(0));
+            Assert.That(marketChartItems.First().MarketCap, Is.GreaterThan(0));
+            Assert.That(marketChartItems.First().TotalVolume, Is.GreaterThan(0));
+
+            await Helpers.DoRateLimiting();
+
+            chartResult = await _apiClient.Coins.GetCoinMarketChart("cosmos", "usd", 1000);
+
+            Assert.That(chartResult, Is.Not.Null);
+            Assert.That(chartResult.Prices, Is.Not.Empty);
+            Assert.That(chartResult.MarketCaps, Is.Not.Empty);
+            Assert.That(chartResult.TotalVolumes, Is.Not.Empty);
+
+            marketChartItems = chartResult.ToMarketChartCombinedItems();
+
+            Assert.That(marketChartItems, Is.Not.Null);
+            Assert.That(marketChartItems, Is.Not.Empty);
+            Assert.That(marketChartItems.First().Price, Is.GreaterThan(0));
+            Assert.That(marketChartItems.First().MarketCap, Is.GreaterThan(0));
+            Assert.That(marketChartItems.First().TotalVolume, Is.GreaterThan(0));
+
+            await Helpers.DoRateLimiting();
+
+            chartResult = await _apiClient.Coins.GetCoinMarketChart("ethereum", "usd", 1000);
+
+            Assert.That(chartResult, Is.Not.Null);
+            Assert.That(chartResult.Prices, Is.Not.Empty);
+            Assert.That(chartResult.MarketCaps, Is.Not.Empty);
+            Assert.That(chartResult.TotalVolumes, Is.Not.Empty);
+
+            marketChartItems = chartResult.ToMarketChartCombinedItems();
+
+            Assert.That(marketChartItems, Is.Not.Null);
+            Assert.That(marketChartItems, Is.Not.Empty);
+            Assert.That(marketChartItems.First().Price, Is.GreaterThan(0));
+            Assert.That(marketChartItems.First().MarketCap, Is.GreaterThan(0));
+            Assert.That(marketChartItems.First().TotalVolume, Is.GreaterThan(0));
+        }
     }
 }

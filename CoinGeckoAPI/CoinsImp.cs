@@ -205,5 +205,43 @@ namespace CoinGeckoAPI
 
             return JsonConvert.DeserializeObject<CoinHistoryResponse>(jsonStr);
         }
+
+        /// <summary>
+        /// TODO: Document this.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="vs_currency">The vs currency.</param>
+        /// <param name="days">The days.</param>
+        /// <param name="interval">The interval.</param>
+        /// <returns>CoinMarketChartResponse.</returns>
+        /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)</exception>
+        /// <exception cref="System.ArgumentNullException">vs_currency - Invalid value. Value must be a valid target currency of market data (usd, eur, jpy, etc.)</exception>
+        /// <exception cref="System.ArgumentOutOfRangeException">days - Invalid value. Value must not exceed 900000.</exception>
+        public async Task<CoinMarketChartResponse> GetCoinMarketChart(string id, string vs_currency, uint days, CoinMarketChartInterval interval = CoinMarketChartInterval.auto)
+        {
+            if (string.IsNullOrEmpty(id) || String.IsNullOrWhiteSpace(vs_currency))
+            {
+                throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)");
+            }
+
+            if (string.IsNullOrEmpty(vs_currency) || String.IsNullOrWhiteSpace(vs_currency))
+            {
+                throw new ArgumentNullException(nameof(vs_currency), "Invalid value. Value must be a valid target currency of market data (usd, eur, jpy, etc.)");
+            }
+
+            if (days > 900000)
+            {
+                throw new ArgumentOutOfRangeException(nameof(days), "Invalid value. Value must not exceed 900000.");
+            }
+
+            var request = new RestRequest(CoinGeckoClient.BuildUrl("coins", id, "market_chart"));
+            request.AddQueryParameter("vs_currency", vs_currency);
+            request.AddQueryParameter("days", days);
+            if (interval != CoinMarketChartInterval.auto) { request.AddQueryParameter("interval", interval.ToString().ToLowerInvariant()); }
+
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+
+            return JsonConvert.DeserializeObject<CoinMarketChartResponse>(jsonStr);
+        }
     }
 }
