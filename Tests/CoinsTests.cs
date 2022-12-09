@@ -1,4 +1,4 @@
-﻿namespace Tests
+namespace Tests
 {
     internal class CoinsTests
     {
@@ -186,5 +186,19 @@
             Assert.That(marketChartItems.First().MarketCap, Is.GreaterThan(0));
             Assert.That(marketChartItems.First().TotalVolume, Is.GreaterThan(0));
         }
+
+        [Test]
+        public async Task GetCoinOhlcTest()
+        {
+            await Helpers.DoRateLimiting();
+
+            var ohlcResult = await _apiClient.Coins.GetCoinOhlcAsync("bitcoin", "usd", 14);
+
+            Assert.That(ohlcResult, Is.Not.Null);
+            Assert.That(ohlcResult, Is.Not.Empty);
+            Assert.That(ohlcResult[0], Is.Not.Empty);
+            Assert.That(ohlcResult[0][0], Is.GreaterThan(99999));
+        }
+
     }
 }

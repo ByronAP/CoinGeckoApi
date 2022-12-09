@@ -1,4 +1,4 @@
-﻿using CoinGeckoAPI.Models;
+using CoinGeckoAPI.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
@@ -275,5 +275,42 @@ namespace CoinGeckoAPI
 
             return JsonConvert.DeserializeObject<CoinMarketChartResponse>(jsonStr);
         }
+
+        /// <summary>
+        /// TODO: Document this.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="vs_currency">The vs currency.</param>
+        /// <param name="days">The days.</param>
+        /// <returns>A Task&lt;System.Decimal[]&gt; representing the asynchronous operation.</returns>
+        /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)</exception>
+        /// <exception cref="System.ArgumentNullException">vs_currency - Invalid value. Value must be a valid target currency of market data (usd, eur, jpy, etc.)</exception>
+        public async Task<decimal[][]> GetCoinOhlcAsync(string id, string vs_currency, uint days)
+        {
+            if (string.IsNullOrEmpty(id) || String.IsNullOrWhiteSpace(vs_currency))
+            {
+                throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)");
+            }
+
+            if (string.IsNullOrEmpty(vs_currency) || String.IsNullOrWhiteSpace(vs_currency))
+            {
+                throw new ArgumentNullException(nameof(vs_currency), "Invalid value. Value must be a valid target currency of market data (usd, eur, jpy, etc.)");
+            }
+
+            if (days <= 0)
+            {
+                // since other endpoints accept 0 as 1 we will just make this act in the same way
+                days = 1;
+            }
+
+            var request = new RestRequest(CoinGeckoClient.BuildUrl("coins", id, "ohlc"));
+            request.AddQueryParameter("vs_currency", vs_currency);
+            request.AddQueryParameter("days", days);
+
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+
+            return JsonConvert.DeserializeObject<decimal[][]>(jsonStr);
+        }
+
     }
 }
