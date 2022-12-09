@@ -165,5 +165,26 @@
             Assert.That(marketChartItems.First().MarketCap, Is.GreaterThan(0));
             Assert.That(marketChartItems.First().TotalVolume, Is.GreaterThan(0));
         }
+
+        [Test]
+        public async Task GetCoinMarketChartRangeTest()
+        {
+            await Helpers.DoRateLimiting();
+
+            var chartResult = await _apiClient.Coins.GetCoinMarketChartRangeAsync("bitcoin", "usd", DateTimeOffset.UtcNow.AddMonths(-1), DateTimeOffset.UtcNow);
+
+            Assert.That(chartResult, Is.Not.Null);
+            Assert.That(chartResult.Prices, Is.Not.Empty);
+            Assert.That(chartResult.MarketCaps, Is.Not.Empty);
+            Assert.That(chartResult.TotalVolumes, Is.Not.Empty);
+
+            var marketChartItems = chartResult.ToMarketChartCombinedItems();
+
+            Assert.That(marketChartItems, Is.Not.Null);
+            Assert.That(marketChartItems, Is.Not.Empty);
+            Assert.That(marketChartItems.First().Price, Is.GreaterThan(0));
+            Assert.That(marketChartItems.First().MarketCap, Is.GreaterThan(0));
+            Assert.That(marketChartItems.First().TotalVolume, Is.GreaterThan(0));
+        }
     }
 }
