@@ -1,4 +1,6 @@
-﻿namespace CoinGeckoAPI
+using CoinGeckoAPI.Properties;
+
+namespace CoinGeckoAPI
 {
     public static class Constants
     {
@@ -20,5 +22,11 @@
         public static readonly string API_BASE_URL = "https://api.coingecko.com";
         public static readonly string API_PRO_BASE_URL = "https://pro-api.coingecko.com";
         public static readonly uint API_VERSION = 3;
+
+        /// <summary>
+        /// The API logo at 128 X 128 in PNG format.
+        /// This is an embedded resource.
+        /// </summary>
+        public static readonly byte[] API_LOGO_128X128_PNG = Resources.coingecko_logo;
     }
 }
