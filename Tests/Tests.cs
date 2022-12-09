@@ -52,5 +52,14 @@
             Assert.IsNotEmpty(platformsResult);
             Assert.That(platformsResult.Count(), Is.LessThanOrEqualTo(9));
         }
+
+        [Test]
+        public void LogoResourceTest()
+        {
+            var logoBytes = Constants.API_LOGO_128X128_PNG;
+
+            Assert.That(logoBytes, Is.Not.Null);
+            Assert.That(logoBytes, Is.Not.Empty);
+        }
     }
 }
