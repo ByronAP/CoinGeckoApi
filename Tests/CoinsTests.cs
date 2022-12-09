@@ -1,4 +1,4 @@
-namespace Tests
+﻿namespace Tests
 {
     internal class CoinsTests
     {
@@ -200,5 +200,17 @@ namespace Tests
             Assert.That(ohlcResult[0][0], Is.GreaterThan(99999));
         }
 
+        [Test]
+        public async Task GetCoinOhlcItemsTest()
+        {
+            await Helpers.DoRateLimiting();
+
+            var ohlcResult = await _apiClient.Coins.GetCoinOhlcItemsAsync("bitcoin", "usd", 14);
+
+            Assert.That(ohlcResult, Is.Not.Null);
+            Assert.That(ohlcResult, Is.Not.Empty);
+            Assert.That(ohlcResult.First(), Is.Not.Null);
+            Assert.That(ohlcResult.First().Timestamp, Is.GreaterThan(99999));
+        }
     }
 }

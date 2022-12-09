@@ -1,4 +1,4 @@
-using CoinGeckoAPI.Models;
+﻿using CoinGeckoAPI.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
@@ -312,5 +312,34 @@ namespace CoinGeckoAPI
             return JsonConvert.DeserializeObject<decimal[][]>(jsonStr);
         }
 
+        /// <summary>
+        /// TODO: Document this.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="vs_currency">The vs currency.</param>
+        /// <param name="days">The days.</param>
+        /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
+        public async Task<IEnumerable<OhlcItem>> GetCoinOhlcItemsAsync(string id, string vs_currency, uint days)
+        {
+            var data = await GetCoinOhlcAsync(id, vs_currency, days);
+
+            var result = new List<OhlcItem>();
+
+            foreach (var item in data)
+            {
+                var newItem = new OhlcItem
+                {
+                    Timestamp = Convert.ToInt64(item[0]),
+                    Open = item[1],
+                    High = item[2],
+                    Low = item[3],
+                    Close = item[4]
+                };
+
+                result.Add(newItem);
+            }
+
+            return result;
+        }
     }
 }
