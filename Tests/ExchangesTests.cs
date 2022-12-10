@@ -62,6 +62,17 @@
         }
 
         [Test]
+        public async Task GetExchangeVolumeChartFriendlyTest()
+        {
+            await Helpers.DoRateLimiting();
+
+            var chartResult = await _apiClient.Exchanges.GetExchangeVolumeChartFriendlyAsync("gdax", 2);
+
+            Assert.That(chartResult, Is.Not.Null);
+            Assert.That(chartResult, Is.Not.Empty);
+        }
+
+        [Test]
         public async Task GetExchangeVolumeChartTest()
         {
             await Helpers.DoRateLimiting();
