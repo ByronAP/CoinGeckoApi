@@ -51,12 +51,39 @@ namespace CoinGeckoAPI
         /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid NFT collection id (EX: 8bit)</exception>
         public async Task<NftResponse> GetNftAsync(string id)
         {
-            if (string.IsNullOrEmpty(id) || id.Trim() == string.Empty)
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
             {
-                throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid NFT collection id (EX: 8bit)");
+                throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid NFT collection id (EX: 8bit).");
             }
 
             var request = new RestRequest(CoinGeckoClient.BuildUrl("nfts", id));
+
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+
+            return JsonConvert.DeserializeObject<NftResponse>(jsonStr);
+        }
+
+        /// <summary>
+        /// TODO: Document this.
+        /// </summary>
+        /// <param name="asset_platform_id">The asset platform identifier.</param>
+        /// <param name="contract_address">The contract address.</param>
+        /// <returns>A Task&lt;NftResponse&gt; representing the asynchronous operation.</returns>
+        /// <exception cref="System.ArgumentNullException">asset_platform_id - Invalid value. Value must be a valid NFT issuing platform (EX: ethereum).</exception>
+        /// <exception cref="System.ArgumentNullException">contract_address - Invalid value. Value must be a valid NFT contract address.</exception>
+        public async Task<NftResponse> GetNftAsync(string asset_platform_id, string contract_address)
+        {
+            if (string.IsNullOrEmpty(asset_platform_id) || string.IsNullOrWhiteSpace(asset_platform_id))
+            {
+                throw new ArgumentNullException(nameof(asset_platform_id), "Invalid value. Value must be a valid NFT issuing platform (EX: ethereum).");
+            }
+
+            if (string.IsNullOrEmpty(contract_address) || string.IsNullOrWhiteSpace(contract_address))
+            {
+                throw new ArgumentNullException(nameof(contract_address), "Invalid value. Value must be a valid NFT contract address.");
+            }
+
+            var request = new RestRequest(CoinGeckoClient.BuildUrl("nfts", asset_platform_id, "contract", contract_address));
 
             var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
 
