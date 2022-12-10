@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>3.0.0.1-alpha</Version>
+    <Version>3.0.0.1-beta</Version>
     <Authors>ByronAP</Authors>
     <AssemblyVersion>3.0.0.1</AssemblyVersion>
     <FileVersion>3.0.0.1</FileVersion>
