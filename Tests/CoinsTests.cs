@@ -105,7 +105,7 @@
         {
             await Helpers.DoRateLimiting();
 
-            var historyResult = await _apiClient.Coins.GetCoinHistoryAsync("bitcoin", DateTimeOffset.UtcNow);
+            var historyResult = await _apiClient.Coins.GetCoinHistoryAsync("bitcoin", DateTimeOffset.UtcNow.AddDays(-2));
 
             Assert.That(historyResult, Is.Not.Null);
             Assert.That(historyResult.MarketData.CurrentPrice, Is.Not.Empty);
