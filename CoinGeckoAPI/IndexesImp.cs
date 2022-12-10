@@ -64,5 +64,18 @@ namespace CoinGeckoAPI
 
             return result;
         }
+
+        /// <summary>
+        /// TODO: Document this.
+        /// </summary>
+        /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
+        public async Task<IEnumerable<IndexListItem>> GetIndexesListAsync()
+        {
+            var request = new RestRequest(CoinGeckoClient.BuildUrl("indexes", "list"));
+
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+
+            return JsonConvert.DeserializeObject<IndexListItem[]>(jsonStr);
+        }
     }
 }

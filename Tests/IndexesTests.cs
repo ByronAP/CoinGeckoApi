@@ -32,5 +32,16 @@
             Assert.That(indexResult.IsMultiAssetComposite, Is.False);
             Assert.That(indexResult.Name, Is.EqualTo("CME Bitcoin Futures BTC"));
         }
+
+        [Test]
+        public async Task GetIndexesListTask()
+        {
+            await Helpers.DoRateLimiting();
+
+            var indexesResult = await _apiClient.Indexes.GetIndexesListAsync();
+
+            Assert.That(indexesResult, Is.Not.Null);
+            Assert.That(indexesResult, Is.Not.Empty);
+        }
     }
 }
