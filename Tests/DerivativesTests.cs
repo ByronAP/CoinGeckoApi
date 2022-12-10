@@ -42,5 +42,16 @@
             Assert.That(derivativesResult, Is.Not.Null);
             Assert.That(derivativesResult.YearEstablished, Is.GreaterThan(2000));
         }
+
+        [Test]
+        public async Task GetDerivativesExchangesListTest()
+        {
+            await Helpers.DoRateLimiting();
+
+            var derivativesResult = await _apiClient.Derivatives.GetDerivativesExchangesListAsync();
+
+            Assert.That(derivativesResult, Is.Not.Null);
+            Assert.That(derivativesResult, Is.Not.Empty);
+        }
     }
 }

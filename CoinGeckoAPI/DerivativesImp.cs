@@ -77,5 +77,18 @@ namespace CoinGeckoAPI
 
             return JsonConvert.DeserializeObject<DerivativesExchangeDetailItem>(jsonStr);
         }
+
+        /// <summary>
+        /// TODO: Document this.
+        /// </summary>
+        /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
+        public async Task<IEnumerable<IdNameListItem>> GetDerivativesExchangesListAsync()
+        {
+            var request = new RestRequest(CoinGeckoClient.BuildUrl("derivatives", "exchanges", "list"));
+
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+
+            return JsonConvert.DeserializeObject<IdNameListItem[]>(jsonStr);
+        }
     }
 }
