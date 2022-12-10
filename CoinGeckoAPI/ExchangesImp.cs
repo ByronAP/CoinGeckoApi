@@ -34,5 +34,17 @@ namespace CoinGeckoAPI
             return JsonConvert.DeserializeObject<ExchangeItem[]>(jsonStr);
         }
 
+        /// <summary>
+        /// TODO: Document this.
+        /// </summary>
+        /// <returns>A Task&lt;ExchangeListItem[]&gt; representing the asynchronous operation.</returns>
+        public async Task<ExchangeListItem[]> GetExchangesListAsync()
+        {
+            var request = new RestRequest(CoinGeckoClient.BuildUrl("exchanges", "list"));
+
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+
+            return JsonConvert.DeserializeObject<ExchangeListItem[]>(jsonStr);
+        }
     }
 }
