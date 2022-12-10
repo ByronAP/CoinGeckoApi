@@ -1,4 +1,4 @@
-using CoinGeckoAPI.Models;
+﻿using CoinGeckoAPI.Models;
 using CoinGeckoAPI.Types;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -54,6 +54,28 @@ namespace CoinGeckoAPI
             var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
 
             return JsonConvert.DeserializeObject<DerivativesExchangeItem[]>(jsonStr);
+        }
+
+        /// <summary>
+        /// TODO: Document this.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <param name="include_all_tickers">if set to <c>true</c> [include all tickers].</param>
+        /// <returns>A Task&lt;DerivativesExchangeDetailItem&gt; representing the asynchronous operation.</returns>
+        /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid derivatives exchange (EX: zbg_futures)</exception>
+        public async Task<DerivativesExchangeDetailItem> GetDerivativesExchangeAsync(string id, bool include_all_tickers = false)
+        {
+            if (string.IsNullOrEmpty(id) || String.IsNullOrWhiteSpace(id))
+            {
+                throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid derivatives exchange (EX: zbg_futures)");
+            }
+
+            var request = new RestRequest(CoinGeckoClient.BuildUrl("derivatives", "exchanges", id));
+            request.AddQueryParameter("include_tickers", include_all_tickers ? "all" : "unexpired");
+
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+
+            return JsonConvert.DeserializeObject<DerivativesExchangeDetailItem>(jsonStr);
         }
     }
 }

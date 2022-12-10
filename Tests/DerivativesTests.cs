@@ -1,4 +1,4 @@
-namespace Tests
+﻿namespace Tests
 {
     public class DerivativesTests
     {
@@ -30,6 +30,17 @@ namespace Tests
 
             Assert.That(derivativesResult, Is.Not.Null);
             Assert.That(derivativesResult, Is.Not.Empty);
+        }
+
+        [Test]
+        public async Task GetDerivativesExchangeTest()
+        {
+            await Helpers.DoRateLimiting();
+
+            var derivativesResult = await _apiClient.Derivatives.GetDerivativesExchangeAsync("zbg_futures");
+
+            Assert.That(derivativesResult, Is.Not.Null);
+            Assert.That(derivativesResult.YearEstablished, Is.GreaterThan(2000));
         }
     }
 }
