@@ -17,27 +17,27 @@
 
             var coinsResult = await _apiClient.Coins.GetCoinsListAsync();
 
-            Assert.IsNotNull(coinsResult);
-            Assert.IsNotEmpty(coinsResult);
+            Assert.That(coinsResult, Is.Not.Null);
+            Assert.That(coinsResult, Is.Not.Empty);
 
             var husdItem = coinsResult.FirstOrDefault(x => x.Id.Equals("husd", StringComparison.InvariantCultureIgnoreCase));
 
-            Assert.IsNotNull(husdItem);
-            Assert.IsNull(husdItem.Platforms);
+            Assert.That(husdItem, Is.Not.Null);
+            Assert.That(husdItem.Platforms, Is.Null);
 
 
             await Helpers.DoRateLimiting();
 
             coinsResult = await _apiClient.Coins.GetCoinsListAsync(true);
 
-            Assert.IsNotNull(coinsResult);
-            Assert.IsNotEmpty(coinsResult);
+            Assert.That(coinsResult, Is.Not.Null);
+            Assert.That(coinsResult, Is.Not.Empty);
 
             husdItem = coinsResult.FirstOrDefault(x => x.Id.Equals("husd", StringComparison.InvariantCultureIgnoreCase));
 
-            Assert.IsNotNull(husdItem);
-            Assert.IsNotNull(husdItem.Platforms);
-            Assert.IsNotEmpty(husdItem.Platforms);
+            Assert.That(husdItem, Is.Not.Null);
+            Assert.That(husdItem.Platforms, Is.Not.Null);
+            Assert.That(husdItem.Platforms, Is.Not.Empty);
         }
 
         [Test]
@@ -47,18 +47,18 @@
 
             var marketsResult = await _apiClient.Coins.GetMarketsAsync("usd");
 
-            Assert.IsNotNull(marketsResult);
-            Assert.IsNotEmpty(marketsResult);
-            Assert.IsNull(marketsResult[0].SparklineIn7D);
+            Assert.That(marketsResult, Is.Not.Null);
+            Assert.That(marketsResult, Is.Not.Empty);
+            Assert.That(marketsResult[0].SparklineIn7D, Is.Null);
             Assert.That(marketsResult.Count, Is.EqualTo(100));
 
             await Helpers.DoRateLimiting();
 
             marketsResult = await _apiClient.Coins.GetMarketsAsync("usd", per_page: 200, sparkline: true);
 
-            Assert.IsNotNull(marketsResult);
-            Assert.IsNotEmpty(marketsResult);
-            Assert.IsNotNull(marketsResult[0].SparklineIn7D);
+            Assert.That(marketsResult, Is.Not.Null);
+            Assert.That(marketsResult, Is.Not.Empty);
+            Assert.That(marketsResult[0].SparklineIn7D, Is.Not.Null);
             Assert.That(marketsResult.Count, Is.EqualTo(200));
         }
 

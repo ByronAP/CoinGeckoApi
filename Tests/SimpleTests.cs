@@ -23,7 +23,7 @@ namespace Tests
             Assert.NotNull(priceResult);
             foreach (var id in ids)
             {
-                Assert.IsTrue(priceResult.ContainsKey(id));
+                Assert.That(priceResult.ContainsKey(id), Is.True);
                 Assert.That(priceResult[id].Count(), Is.EqualTo(2));
             }
 
@@ -31,10 +31,10 @@ namespace Tests
 
             priceResult = await _apiClient.Simple.GetPriceAsync(ids, vsCurrencies, true);
 
-            Assert.NotNull(priceResult);
+            Assert.That(priceResult, Is.Not.Null);
             foreach (var id in ids)
             {
-                Assert.IsTrue(priceResult.ContainsKey(id));
+                Assert.That(priceResult.ContainsKey(id), Is.True);
                 Assert.That(priceResult[id].Count(), Is.EqualTo(4));
             }
 
@@ -45,7 +45,7 @@ namespace Tests
             Assert.NotNull(priceResult);
             foreach (var id in ids)
             {
-                Assert.IsTrue(priceResult.ContainsKey(id));
+                Assert.That(priceResult.ContainsKey(id), Is.True);
                 Assert.That(priceResult[id].Count(), Is.EqualTo(6));
             }
 
@@ -56,7 +56,7 @@ namespace Tests
             Assert.NotNull(priceResult);
             foreach (var id in ids)
             {
-                Assert.IsTrue(priceResult.ContainsKey(id));
+                Assert.That(priceResult.ContainsKey(id), Is.True);
                 Assert.That(priceResult[id].Count(), Is.EqualTo(8));
             }
 
@@ -67,7 +67,7 @@ namespace Tests
             Assert.NotNull(priceResult);
             foreach (var id in ids)
             {
-                Assert.IsTrue(priceResult.ContainsKey(id));
+                Assert.That(priceResult.ContainsKey(id), Is.True);
                 Assert.That(priceResult[id].Count(), Is.EqualTo(9));
             }
 
@@ -84,10 +84,10 @@ namespace Tests
 
             var priceResult = await _apiClient.Simple.GetTokenPriceAsync("ethereum", contractAddresses, vsCurrencies);
 
-            Assert.NotNull(priceResult);
+            Assert.That(priceResult, Is.Not.Null);
             foreach (var contractAddress in contractAddresses)
             {
-                Assert.IsTrue(priceResult.ContainsKey(contractAddress));
+                Assert.That(priceResult.ContainsKey(contractAddress), Is.True);
                 Assert.That(priceResult[contractAddress].Count(), Is.EqualTo(2));
             }
 
@@ -96,10 +96,10 @@ namespace Tests
 
             priceResult = await _apiClient.Simple.GetTokenPriceAsync("ethereum", contractAddresses, vsCurrencies, true);
 
-            Assert.NotNull(priceResult);
+            Assert.That(priceResult, Is.Not.Null);
             foreach (var contractAddress in contractAddresses)
             {
-                Assert.IsTrue(priceResult.ContainsKey(contractAddress));
+                Assert.That(priceResult.ContainsKey(contractAddress), Is.True);
                 Assert.That(priceResult[contractAddress].Count(), Is.EqualTo(4));
             }
 
@@ -107,10 +107,10 @@ namespace Tests
 
             priceResult = await _apiClient.Simple.GetTokenPriceAsync("ethereum", contractAddresses, vsCurrencies, true, true);
 
-            Assert.NotNull(priceResult);
+            Assert.That(priceResult, Is.Not.Null);
             foreach (var contractAddress in contractAddresses)
             {
-                Assert.IsTrue(priceResult.ContainsKey(contractAddress));
+                Assert.That(priceResult.ContainsKey(contractAddress), Is.True);
                 Assert.That(priceResult[contractAddress].Count(), Is.EqualTo(6));
             }
 
@@ -118,10 +118,10 @@ namespace Tests
 
             priceResult = await _apiClient.Simple.GetTokenPriceAsync("ethereum", contractAddresses, vsCurrencies, true, true, true);
 
-            Assert.NotNull(priceResult);
+            Assert.That(priceResult, Is.Not.Null);
             foreach (var contractAddress in contractAddresses)
             {
-                Assert.IsTrue(priceResult.ContainsKey(contractAddress));
+                Assert.That(priceResult.ContainsKey(contractAddress), Is.True);
                 Assert.That(priceResult[contractAddress].Count(), Is.EqualTo(8));
             }
 
@@ -129,10 +129,10 @@ namespace Tests
 
             priceResult = await _apiClient.Simple.GetTokenPriceAsync("ethereum", contractAddresses, vsCurrencies, true, true, true, true);
 
-            Assert.NotNull(priceResult);
+            Assert.That(priceResult, Is.Not.Null);
             foreach (var contractAddress in contractAddresses)
             {
-                Assert.IsTrue(priceResult.ContainsKey(contractAddress));
+                Assert.That(priceResult.ContainsKey(contractAddress), Is.True);
                 Assert.That(priceResult[contractAddress].Count(), Is.EqualTo(9));
             }
 
@@ -146,8 +146,8 @@ namespace Tests
 
             var currsResult = await _apiClient.Simple.GetSupportedVSCurrenciesAsync();
 
-            Assert.IsNotNull(currsResult);
-            Assert.IsNotEmpty(currsResult);
+            Assert.That(currsResult, Is.Not.Null);
+            Assert.That(currsResult, Is.Not.Empty);
         }
     }
 }
