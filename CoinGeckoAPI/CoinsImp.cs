@@ -19,6 +19,7 @@ namespace CoinGeckoAPI
         private readonly ILogger<CoinGeckoClient> _logger;
 
         public CoinsContractImp Contract { get; }
+        public CoinsCategoriesImp Categories { get; }
 
         internal CoinsImp(RestClient restClient, ILogger<CoinGeckoClient> logger = null)
         {
@@ -26,6 +27,7 @@ namespace CoinGeckoAPI
             _restClient = restClient;
 
             Contract = new CoinsContractImp(restClient, logger);
+            Categories = new CoinsCategoriesImp(restClient, logger);
         }
 
         /// <summary>
