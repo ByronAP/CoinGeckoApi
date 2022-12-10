@@ -3,6 +3,7 @@ using CoinGeckoAPI.Types;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -40,6 +41,26 @@ namespace CoinGeckoAPI
             var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
 
             return JsonConvert.DeserializeObject<NftListItem[]>(jsonStr);
+        }
+
+        /// <summary>
+        /// TODO: Document this.
+        /// </summary>
+        /// <param name="id">The identifier.</param>
+        /// <returns>A Task&lt;NftResponse&gt; representing the asynchronous operation.</returns>
+        /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid NFT collection id (EX: 8bit)</exception>
+        public async Task<NftResponse> GetNftAsync(string id)
+        {
+            if (string.IsNullOrEmpty(id) || id.Trim() == string.Empty)
+            {
+                throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid NFT collection id (EX: 8bit)");
+            }
+
+            var request = new RestRequest(CoinGeckoClient.BuildUrl("nfts", id));
+
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+
+            return JsonConvert.DeserializeObject<NftResponse>(jsonStr);
         }
     }
 }

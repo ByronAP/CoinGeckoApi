@@ -20,5 +20,16 @@
             Assert.That(nftsResult, Is.Not.Null);
             Assert.That(nftsResult, Is.Not.Empty);
         }
+
+        [Test]
+        public async Task GetNftTest()
+        {
+            await Helpers.DoRateLimiting();
+
+            var nftsResult = await _apiClient.Nfts.GetNftAsync("8bit");
+
+            Assert.That(nftsResult, Is.Not.Null);
+            Assert.That(nftsResult.Name, Is.EqualTo("8 Bit Universe"));
+        }
     }
 }
