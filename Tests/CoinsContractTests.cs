@@ -1,6 +1,6 @@
 ﻿namespace Tests
 {
-    internal class CoinsContractTests
+    public class CoinsContractTests
     {
         private CoinGeckoClient _apiClient;
 
