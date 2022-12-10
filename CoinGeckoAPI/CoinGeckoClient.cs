@@ -34,10 +34,16 @@ namespace CoinGeckoAPI
         public ExchangesImp Exchanges { get; }
 
         /// <summary>
-        /// Index API calls
+        /// Index API calls.
         /// </summary>
         /// <value>The indexes.</value>
         public IndexesImp Indexes { get; }
+
+        /// <summary>
+        /// Derivatives API calls.
+        /// </summary>
+        /// <value>The derivatives.</value>
+        public DerivativesImp Derivatives { get; }
 
         private readonly ILogger<CoinGeckoClient> _logger;
 
@@ -52,6 +58,7 @@ namespace CoinGeckoAPI
             Coins = new CoinsImp(CGRestClient, _logger);
             Exchanges = new ExchangesImp(CGRestClient, _logger);
             Indexes = new IndexesImp(CGRestClient, _logger);
+            Derivatives = new DerivativesImp(CGRestClient, _logger);
         }
 
         public CoinGeckoClient(bool isPro)
@@ -71,6 +78,7 @@ namespace CoinGeckoAPI
             Coins = new CoinsImp(CGRestClient, _logger);
             Exchanges = new ExchangesImp(CGRestClient, _logger);
             Indexes = new IndexesImp(CGRestClient, _logger);
+            Derivatives = new DerivativesImp(CGRestClient, _logger);
         }
 
         public CoinGeckoClient(ILogger<CoinGeckoClient> logger)
@@ -83,6 +91,7 @@ namespace CoinGeckoAPI
             Coins = new CoinsImp(CGRestClient, _logger);
             Exchanges = new ExchangesImp(CGRestClient, _logger);
             Indexes = new IndexesImp(CGRestClient, _logger);
+            Derivatives = new DerivativesImp(CGRestClient, _logger);
         }
 
         public CoinGeckoClient(ILogger<CoinGeckoClient> logger, bool isPro)
@@ -102,6 +111,7 @@ namespace CoinGeckoAPI
             Coins = new CoinsImp(CGRestClient, _logger);
             Exchanges = new ExchangesImp(CGRestClient, _logger);
             Indexes = new IndexesImp(CGRestClient, _logger);
+            Derivatives = new DerivativesImp(CGRestClient, _logger);
         }
         #endregion
 
