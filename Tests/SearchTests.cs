@@ -31,5 +31,16 @@
             Assert.That(searchResult.Coins, Is.Not.Empty);
             Assert.That(searchResult.Categories, Is.Not.Empty);
         }
+
+        [Test]
+        public async Task GetSearchTrendingTest()
+        {
+            await Helpers.DoRateLimiting();
+
+            var searchResult = await _apiClient.Search.GetSearchTrendingAsync();
+
+            Assert.That(searchResult, Is.Not.Null);
+            Assert.That(searchResult.Coins, Is.Not.Empty);
+        }
     }
 }

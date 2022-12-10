@@ -38,5 +38,18 @@ namespace CoinGeckoAPI
 
             return JsonConvert.DeserializeObject<SearchResponse>(jsonStr);
         }
+
+        /// <summary>
+        /// TODO: Document this.
+        /// </summary>
+        /// <returns>A Task&lt;SearchTrendingResponse&gt; representing the asynchronous operation.</returns>
+        public async Task<SearchTrendingResponse> GetSearchTrendingAsync()
+        {
+            var request = new RestRequest(CoinGeckoClient.BuildUrl("search", "trending"));
+
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+
+            return JsonConvert.DeserializeObject<SearchTrendingResponse>(jsonStr);
+        }
     }
 }
