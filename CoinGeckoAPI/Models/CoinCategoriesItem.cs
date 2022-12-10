@@ -3,7 +3,7 @@ using System;
 
 namespace CoinGeckoAPI.Models
 {
-    public class CoinCategoriesResponse
+    public class CoinCategoriesItem
     {
         [JsonProperty("id")]
         public string Id { get; set; }

@@ -1,4 +1,4 @@
-﻿using CoinGeckoAPI.Models;
+using CoinGeckoAPI.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
@@ -22,14 +22,14 @@ namespace CoinGeckoAPI
         /// </summary>
         /// <param name="order">The order.</param>
         /// <returns>A Task&lt;CoinCategoriesResponse[]&gt; representing the asynchronous operation.</returns>
-        public async Task<CoinCategoriesResponse[]> GetCoinCategoriesAsync(CoinCategoriesOrderBy order = CoinCategoriesOrderBy.market_cap_desc)
+        public async Task<CoinCategoriesItem[]> GetCoinCategoriesAsync(CoinCategoriesOrderBy order = CoinCategoriesOrderBy.market_cap_desc)
         {
             var request = new RestRequest(CoinGeckoClient.BuildUrl("coins", "categories"));
             if (order != CoinCategoriesOrderBy.market_cap_desc) { request.AddQueryParameter("order", order.ToString()); }
 
             var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
 
-            return JsonConvert.DeserializeObject<CoinCategoriesResponse[]>(jsonStr);
+            return JsonConvert.DeserializeObject<CoinCategoriesItem[]>(jsonStr);
         }
     }
 }
