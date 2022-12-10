@@ -57,6 +57,12 @@ namespace CoinGeckoAPI
         /// <value>The search.</value>
         public SearchImp Search { get; }
 
+        /// <summary>
+        /// Global API calls.
+        /// </summary>
+        /// <value>The global.</value>
+        public GlobalImp Global { get; }
+
         private readonly ILogger<CoinGeckoClient> _logger;
 
         #region Constructors
@@ -73,6 +79,7 @@ namespace CoinGeckoAPI
             Derivatives = new DerivativesImp(CGRestClient, _logger);
             Nfts = new NftsImp(CGRestClient, _logger);
             Search = new SearchImp(CGRestClient, _logger);
+            Global = new GlobalImp(CGRestClient, _logger);
         }
 
         public CoinGeckoClient(bool isPro)
@@ -95,6 +102,7 @@ namespace CoinGeckoAPI
             Derivatives = new DerivativesImp(CGRestClient, _logger);
             Nfts = new NftsImp(CGRestClient, _logger);
             Search = new SearchImp(CGRestClient, _logger);
+            Global = new GlobalImp(CGRestClient, _logger);
         }
 
         public CoinGeckoClient(ILogger<CoinGeckoClient> logger)
@@ -110,6 +118,7 @@ namespace CoinGeckoAPI
             Derivatives = new DerivativesImp(CGRestClient, _logger);
             Nfts = new NftsImp(CGRestClient, _logger);
             Search = new SearchImp(CGRestClient, _logger);
+            Global = new GlobalImp(CGRestClient, _logger);
         }
 
         public CoinGeckoClient(ILogger<CoinGeckoClient> logger, bool isPro)
@@ -132,6 +141,7 @@ namespace CoinGeckoAPI
             Derivatives = new DerivativesImp(CGRestClient, _logger);
             Nfts = new NftsImp(CGRestClient, _logger);
             Search = new SearchImp(CGRestClient, _logger);
+            Global = new GlobalImp(CGRestClient, _logger);
         }
         #endregion
 
