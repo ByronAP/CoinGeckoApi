@@ -2,7 +2,7 @@
 
 namespace CoinGeckoAPI.Models
 {
-    public class ExchangeListItem
+    public class IdNameListItem
     {
         [JsonProperty("id")]
         public string Id { get; set; }

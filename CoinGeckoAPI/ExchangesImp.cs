@@ -42,13 +42,13 @@ namespace CoinGeckoAPI
         /// TODO: Document this.
         /// </summary>
         /// <returns>A Task&lt;ExchangeListItem[]&gt; representing the asynchronous operation.</returns>
-        public async Task<IEnumerable<ExchangeListItem>> GetExchangesListAsync()
+        public async Task<IEnumerable<IdNameListItem>> GetExchangesListAsync()
         {
             var request = new RestRequest(CoinGeckoClient.BuildUrl("exchanges", "list"));
 
             var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
 
-            return JsonConvert.DeserializeObject<ExchangeListItem[]>(jsonStr);
+            return JsonConvert.DeserializeObject<IdNameListItem[]>(jsonStr);
         }
 
         /// <summary>
