@@ -22,7 +22,19 @@ namespace CoinGeckoAPI.Models
         [JsonProperty("thumb")]
         public string Thumb { get; set; }
 
+        [JsonProperty("small")]
+        public string Small { get; set; }
+
         [JsonProperty("large")]
         public string Large { get; set; }
+
+        [JsonProperty("slug")]
+        public string Slug { get; set; }
+
+        [JsonProperty("price_btc")]
+        public decimal? PriceBtc { get; set; }
+
+        [JsonProperty("score")]
+        public int? Score { get; set; }
     }
 }
