@@ -36,5 +36,17 @@
             Assert.That(gdaxItem, Is.Not.Null);
             Assert.That(gdaxItem.Name, Is.EqualTo("Bitstamp"));
         }
+
+        [Test]
+        public async Task GetExchangeTest()
+        {
+            await Helpers.DoRateLimiting();
+
+            var exchangeResult = await _apiClient.Exchanges.GetExchangeAsync("gdax");
+
+            Assert.That(exchangeResult, Is.Not.Null);
+            Assert.That(exchangeResult.Tickers, Is.Not.Empty);
+            Assert.That(exchangeResult.Name, Is.EqualTo("Coinbase Exchange"));
+        }
     }
 }
