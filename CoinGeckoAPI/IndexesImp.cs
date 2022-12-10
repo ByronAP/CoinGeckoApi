@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -33,6 +34,35 @@ namespace CoinGeckoAPI
             var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
 
             return JsonConvert.DeserializeObject<IndexItem[]>(jsonStr);
+        }
+
+        /// <summary>
+        /// TODO: Document this.
+        /// </summary>
+        /// <param name="market_id">The market identifier.</param>
+        /// <param name="id">The identifier.</param>
+        /// <returns>A Task&lt;IndexItem&gt; representing the asynchronous operation.</returns>
+        /// <exception cref="System.ArgumentNullException">market_id - Invalid value. Value must be a valid market id (EX: cme_futures)</exception>
+        /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid index id (EX: btc)</exception>
+        public async Task<IndexItem> GetIndexAsync(string market_id, string id)
+        {
+            if (string.IsNullOrEmpty(market_id) || string.IsNullOrWhiteSpace(market_id))
+            {
+                throw new ArgumentNullException(nameof(market_id), "Invalid value. Value must be a valid market id (EX: cme_futures)");
+            }
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
+            {
+                throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid index id (EX: btc)");
+            }
+            var request = new RestRequest(CoinGeckoClient.BuildUrl("indexes", market_id, id));
+
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+
+            var result = JsonConvert.DeserializeObject<IndexItem>(jsonStr);
+
+            result.Id = id;
+
+            return result;
         }
     }
 }

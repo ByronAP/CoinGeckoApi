@@ -15,10 +15,22 @@
         {
             await Helpers.DoRateLimiting();
 
-            var categoriesResult = await _apiClient.Indexes.GetIndexesAsync();
+            var indexesResult = await _apiClient.Indexes.GetIndexesAsync();
 
-            Assert.That(categoriesResult, Is.Not.Null);
-            Assert.That(categoriesResult, Is.Not.Empty);
+            Assert.That(indexesResult, Is.Not.Null);
+            Assert.That(indexesResult, Is.Not.Empty);
+        }
+
+        [Test]
+        public async Task GetIndexTask()
+        {
+            await Helpers.DoRateLimiting();
+
+            var indexResult = await _apiClient.Indexes.GetIndexAsync("cme_futures", "btc");
+
+            Assert.That(indexResult, Is.Not.Null);
+            Assert.That(indexResult.IsMultiAssetComposite, Is.False);
+            Assert.That(indexResult.Name, Is.EqualTo("CME Bitcoin Futures BTC"));
         }
     }
 }
