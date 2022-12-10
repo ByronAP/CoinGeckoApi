@@ -63,6 +63,12 @@ namespace CoinGeckoAPI
         /// <value>The global.</value>
         public GlobalImp Global { get; }
 
+        /// <summary>
+        /// Companies API calls.
+        /// </summary>
+        /// <value>The companies.</value>
+        public CompaniesImp Companies { get; }
+
         private readonly ILogger<CoinGeckoClient> _logger;
 
         #region Constructors
@@ -80,6 +86,7 @@ namespace CoinGeckoAPI
             Nfts = new NftsImp(CGRestClient, _logger);
             Search = new SearchImp(CGRestClient, _logger);
             Global = new GlobalImp(CGRestClient, _logger);
+            Companies = new CompaniesImp(CGRestClient, _logger);
         }
 
         public CoinGeckoClient(bool isPro)
@@ -103,6 +110,7 @@ namespace CoinGeckoAPI
             Nfts = new NftsImp(CGRestClient, _logger);
             Search = new SearchImp(CGRestClient, _logger);
             Global = new GlobalImp(CGRestClient, _logger);
+            Companies = new CompaniesImp(CGRestClient, _logger);
         }
 
         public CoinGeckoClient(ILogger<CoinGeckoClient> logger)
@@ -119,6 +127,7 @@ namespace CoinGeckoAPI
             Nfts = new NftsImp(CGRestClient, _logger);
             Search = new SearchImp(CGRestClient, _logger);
             Global = new GlobalImp(CGRestClient, _logger);
+            Companies = new CompaniesImp(CGRestClient, _logger);
         }
 
         public CoinGeckoClient(ILogger<CoinGeckoClient> logger, bool isPro)
@@ -142,6 +151,7 @@ namespace CoinGeckoAPI
             Nfts = new NftsImp(CGRestClient, _logger);
             Search = new SearchImp(CGRestClient, _logger);
             Global = new GlobalImp(CGRestClient, _logger);
+            Companies = new CompaniesImp(CGRestClient, _logger);
         }
         #endregion
 
