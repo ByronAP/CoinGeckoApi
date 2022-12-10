@@ -49,7 +49,7 @@
 
             Assert.That(marketsResult, Is.Not.Null);
             Assert.That(marketsResult, Is.Not.Empty);
-            Assert.That(marketsResult[0].SparklineIn7D, Is.Null);
+            Assert.That(marketsResult.First().SparklineIn7D, Is.Null);
             Assert.That(marketsResult.Count, Is.EqualTo(100));
 
             await Helpers.DoRateLimiting();
@@ -58,7 +58,7 @@
 
             Assert.That(marketsResult, Is.Not.Null);
             Assert.That(marketsResult, Is.Not.Empty);
-            Assert.That(marketsResult[0].SparklineIn7D, Is.Not.Null);
+            Assert.That(marketsResult.First().SparklineIn7D, Is.Not.Null);
             Assert.That(marketsResult.Count, Is.EqualTo(200));
         }
 

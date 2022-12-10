@@ -61,7 +61,7 @@ namespace CoinGeckoAPI
         /// <exception cref="System.ArgumentNullException">vs_currency - Invalid value. Value must be a valid target currency of market data (usd, eur, jpy, etc.)</exception>
         /// <exception cref="System.ArgumentOutOfRangeException">per_page - Must be a valid integer from 1 through 250.</exception>
         /// <exception cref="System.ArgumentOutOfRangeException">page - Must be a valid page index starting from 1.</exception>
-        public async Task<CoinsMarketItem[]> GetMarketsAsync(string vs_currency, IEnumerable<string> ids = null, string category = "", MarketsOrderBy order = MarketsOrderBy.market_cap_desc, uint per_page = 100, uint page = 1, bool sparkline = false, MarketPriceChangePercentage price_change_percentage = MarketPriceChangePercentage.None)
+        public async Task<IEnumerable<CoinsMarketItem>> GetMarketsAsync(string vs_currency, IEnumerable<string> ids = null, string category = "", MarketsOrderBy order = MarketsOrderBy.market_cap_desc, uint per_page = 100, uint page = 1, bool sparkline = false, MarketPriceChangePercentage price_change_percentage = MarketPriceChangePercentage.None)
         {
             if (string.IsNullOrEmpty(vs_currency) || vs_currency.Trim() == string.Empty)
             {

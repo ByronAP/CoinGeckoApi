@@ -27,7 +27,7 @@ namespace CoinGeckoAPI
         /// <param name="per_page">The per page.</param>
         /// <param name="page">The page.</param>
         /// <returns>A Task&lt;ExchangeItem[]&gt; representing the asynchronous operation.</returns>
-        public async Task<ExchangeItem[]> GetExchangesAsync(uint per_page = 100, uint page = 1)
+        public async Task<IEnumerable<ExchangeItem>> GetExchangesAsync(uint per_page = 100, uint page = 1)
         {
             var request = new RestRequest(CoinGeckoClient.BuildUrl("exchanges"));
             if (per_page != 100) { request.AddQueryParameter("per_page", per_page); }
@@ -42,7 +42,7 @@ namespace CoinGeckoAPI
         /// TODO: Document this.
         /// </summary>
         /// <returns>A Task&lt;ExchangeListItem[]&gt; representing the asynchronous operation.</returns>
-        public async Task<ExchangeListItem[]> GetExchangesListAsync()
+        public async Task<IEnumerable<ExchangeListItem>> GetExchangesListAsync()
         {
             var request = new RestRequest(CoinGeckoClient.BuildUrl("exchanges", "list"));
 

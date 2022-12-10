@@ -3,6 +3,7 @@ using CoinGeckoAPI.Types;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace CoinGeckoAPI
@@ -23,7 +24,7 @@ namespace CoinGeckoAPI
         /// </summary>
         /// <param name="order">The order.</param>
         /// <returns>A Task&lt;CoinCategoriesResponse[]&gt; representing the asynchronous operation.</returns>
-        public async Task<CoinCategoriesItem[]> GetCoinCategoriesAsync(CoinCategoriesOrderBy order = CoinCategoriesOrderBy.market_cap_desc)
+        public async Task<IEnumerable<CoinCategoriesItem>> GetCoinCategoriesAsync(CoinCategoriesOrderBy order = CoinCategoriesOrderBy.market_cap_desc)
         {
             var request = new RestRequest(CoinGeckoClient.BuildUrl("coins", "categories"));
             if (order != CoinCategoriesOrderBy.market_cap_desc) { request.AddQueryParameter("order", order.ToString()); }
@@ -37,7 +38,7 @@ namespace CoinGeckoAPI
         /// TODO: Document this.
         /// </summary>
         /// <returns>A Task&lt;CoinCategoriesListItem[]&gt; representing the asynchronous operation.</returns>
-        public async Task<CoinCategoriesListItem[]> GetCoinCategoriesListAsync()
+        public async Task<IEnumerable<CoinCategoriesListItem>> GetCoinCategoriesListAsync()
         {
             var request = new RestRequest(CoinGeckoClient.BuildUrl("coins", "categories", "list"));
 
