@@ -1,4 +1,5 @@
 ﻿using CoinGeckoAPI.Models;
+using CoinGeckoAPI.Types;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;

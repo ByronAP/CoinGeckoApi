@@ -1,4 +1,4 @@
-﻿namespace CoinGeckoAPI
+﻿namespace CoinGeckoAPI.Types
 {
     public enum CoinMarketChartInterval
     {
