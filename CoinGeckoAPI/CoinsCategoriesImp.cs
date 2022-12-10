@@ -1,4 +1,4 @@
-using CoinGeckoAPI.Models;
+﻿using CoinGeckoAPI.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
@@ -30,6 +30,19 @@ namespace CoinGeckoAPI
             var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
 
             return JsonConvert.DeserializeObject<CoinCategoriesItem[]>(jsonStr);
+        }
+
+        /// <summary>
+        /// TODO: Document this.
+        /// </summary>
+        /// <returns>A Task&lt;CoinCategoriesListItem[]&gt; representing the asynchronous operation.</returns>
+        public async Task<CoinCategoriesListItem[]> GetCoinCategoriesListAsync()
+        {
+            var request = new RestRequest(CoinGeckoClient.BuildUrl("coins", "categories", "list"));
+
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+
+            return JsonConvert.DeserializeObject<CoinCategoriesListItem[]>(jsonStr);
         }
     }
 }
