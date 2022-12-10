@@ -60,5 +60,16 @@
             Assert.That(tickersResult.Tickers, Is.Not.Empty);
             Assert.That(tickersResult.Name, Is.EqualTo("Coinbase Exchange"));
         }
+
+        [Test]
+        public async Task GetExchangeVolumeChartTest()
+        {
+            await Helpers.DoRateLimiting();
+
+            var chartResult = await _apiClient.Exchanges.GetExchangeVolumeChartAsync("gdax", 2);
+
+            Assert.That(chartResult, Is.Not.Null);
+            Assert.That(chartResult, Is.Not.Empty);
+        }
     }
 }
