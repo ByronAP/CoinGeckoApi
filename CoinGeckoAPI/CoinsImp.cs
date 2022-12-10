@@ -345,7 +345,5 @@ namespace CoinGeckoAPI
 
             return result;
         }
-
-
     }
 }
