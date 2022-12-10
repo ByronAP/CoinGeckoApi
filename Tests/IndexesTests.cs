@@ -11,7 +11,7 @@
         }
 
         [Test]
-        public async Task GetIndexesTask()
+        public async Task GetIndexesTest()
         {
             await Helpers.DoRateLimiting();
 
@@ -22,7 +22,7 @@
         }
 
         [Test]
-        public async Task GetIndexTask()
+        public async Task GetIndexTest()
         {
             await Helpers.DoRateLimiting();
 
@@ -34,7 +34,7 @@
         }
 
         [Test]
-        public async Task GetIndexesListTask()
+        public async Task GetIndexesListTest()
         {
             await Helpers.DoRateLimiting();
 

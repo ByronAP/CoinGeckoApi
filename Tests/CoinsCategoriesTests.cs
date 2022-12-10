@@ -11,7 +11,7 @@
         }
 
         [Test]
-        public async Task GetCoinCategoriesTask()
+        public async Task GetCoinCategoriesTest()
         {
             await Helpers.DoRateLimiting();
 
@@ -27,7 +27,7 @@
         }
 
         [Test]
-        public async Task GetCoinCategoriesListTask()
+        public async Task GetCoinCategoriesListTest()
         {
             await Helpers.DoRateLimiting();
 
