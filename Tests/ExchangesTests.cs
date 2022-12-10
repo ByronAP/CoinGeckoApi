@@ -48,5 +48,17 @@
             Assert.That(exchangeResult.Tickers, Is.Not.Empty);
             Assert.That(exchangeResult.Name, Is.EqualTo("Coinbase Exchange"));
         }
+
+        [Test]
+        public async Task GetExchangeTickersTest()
+        {
+            await Helpers.DoRateLimiting();
+
+            var tickersResult = await _apiClient.Exchanges.GetExchangeTickersAsync("gdax", new[] { "bitcoin", "ethereum", "cosmos" }, true);
+
+            Assert.That(tickersResult, Is.Not.Null);
+            Assert.That(tickersResult.Tickers, Is.Not.Empty);
+            Assert.That(tickersResult.Name, Is.EqualTo("Coinbase Exchange"));
+        }
     }
 }
