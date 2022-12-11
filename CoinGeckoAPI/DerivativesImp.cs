@@ -1,4 +1,16 @@
-﻿using CoinGeckoAPI.Models;
+﻿// ***********************************************************************
+// Assembly         : CoinGeckoAPI
+// Author           : ByronAP
+// Created          : 12-10-2022
+//
+// Last Modified By : ByronAP
+// Last Modified On : 12-11-2022
+// ***********************************************************************
+// <copyright file="DerivativesImp.cs" company="ByronAP">
+//     Copyright © 2022 ByronAP, CoinGecko. All rights reserved.
+// </copyright>
+// ***********************************************************************
+using CoinGeckoAPI.Models;
 using CoinGeckoAPI.Types;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -9,6 +21,11 @@ using System.Threading.Tasks;
 
 namespace CoinGeckoAPI
 {
+    /// <summary>
+    /// <para>Implementation of the '/derivatives' API calls.</para>
+    /// <para>Implementation classes do not have a public constructor
+    /// and must be accessed through an instance of <see cref="CoinGeckoClient"/>.</para>
+    /// </summary>
     public class DerivativesImp
     {
         private readonly RestClient _restClient;
@@ -21,10 +38,10 @@ namespace CoinGeckoAPI
         }
 
         /// <summary>
-        /// TODO: Document this.
+        /// List all derivative tickers.
         /// </summary>
-        /// <param name="include_all">if set to <c>true</c> [include all].</param>
-        /// <returns>IEnumerable&lt;DerivativesTickerItem&gt;.</returns>
+        /// <param name="include_all">Set to <c>true</c> to include all, otherwise only unexpired.</param>
+        /// <returns>A Task&lt;IEnumerable&lt;<see cref="DerivativesTickerItem"/>&gt;&gt; representing the asynchronous operation.</returns>
         public async Task<IEnumerable<DerivativesTickerItem>> GetDerivativesAsync(bool include_all = false)
         {
             var request = new RestRequest(CoinGeckoClient.BuildUrl("derivatives"));
@@ -36,12 +53,12 @@ namespace CoinGeckoAPI
         }
 
         /// <summary>
-        /// TODO: Document this.
+        /// List all derivative exchanges.
         /// </summary>
-        /// <param name="order">The order.</param>
-        /// <param name="per_page">The per page.</param>
-        /// <param name="page">The page.</param>
-        /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
+        /// <param name="order">The ordering of results (sort) <see cref="DerivativesExchangeOrderBy"/>.</param>
+        /// <param name="per_page">Total results per page.</param>
+        /// <param name="page">Page through results.</param>
+        /// <returns>A Task&lt;IEnumerable&lt;<see cref="DerivativesExchangeItem"/>&gt;&gt; representing the asynchronous operation.</returns>
         public async Task<IEnumerable<DerivativesExchangeItem>> GetDerivativesExchangesAsync(DerivativesExchangeOrderBy order = DerivativesExchangeOrderBy.trade_volume_24h_btc_desc, uint per_page = 50, uint page = 1)
         {
             if (page == 0) { page = 1; }
@@ -57,11 +74,11 @@ namespace CoinGeckoAPI
         }
 
         /// <summary>
-        /// TODO: Document this.
+        /// Get derivative exchange data.
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="include_all_tickers">if set to <c>true</c> [include all tickers].</param>
-        /// <returns>A Task&lt;DerivativesExchangeDetailItem&gt; representing the asynchronous operation.</returns>
+        /// <param name="id">The derivatives exchange id (can be obtained from <see cref="GetDerivativesExchangesListAsync"/>).</param>
+        /// <param name="include_all_tickers">Set to <c>true</c> to include all, otherwise only unexpired.</param>
+        /// <returns>A Task&lt;<see cref="DerivativesExchangeDetailItem"/>&gt; representing the asynchronous operation.</returns>
         /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid derivatives exchange (EX: zbg_futures)</exception>
         public async Task<DerivativesExchangeDetailItem> GetDerivativesExchangeAsync(string id, bool include_all_tickers = false)
         {
@@ -79,9 +96,9 @@ namespace CoinGeckoAPI
         }
 
         /// <summary>
-        /// TODO: Document this.
+        /// List all derivative exchanges name and identifier.
         /// </summary>
-        /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
+        /// <returns>A Task&lt;IEnumerable&lt;<see cref="IdNameListItem"/>&gt;&gt; representing the asynchronous operation.</returns>
         public async Task<IEnumerable<IdNameListItem>> GetDerivativesExchangesListAsync()
         {
             var request = new RestRequest(CoinGeckoClient.BuildUrl("derivatives", "exchanges", "list"));
