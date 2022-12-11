@@ -15,11 +15,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    
     - name: Decode the Signing Key
+      id: write_sign_key_file
       env:
           CERTIFICATE_BASE64: ${{ secrets.SIGNING_KEY }}
       run: |
           echo $CERTIFICATE_BASE64 | base64 --decode > keyPair.snk
+	  
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
@@ -29,10 +32,11 @@ jobs:
       run: dotnet restore
       
     - name: Build
-      run: dotnet build --no-restore
       env:
-        SignAssembly: true
-	AssemblyOriginatorKeyFile: ${{ steps.write_sign_key_file.outputs.filePath }}
+          SignAssembly: true
+	  AssemblyOriginatorKeyFile: ${{ steps.write_sign_key_file.outputs.filePath }}
+      run: |
+          dotnet build --no-restore --configuration Release
 	
     - name: Test
       run: dotnet test --no-build --verbosity normal
