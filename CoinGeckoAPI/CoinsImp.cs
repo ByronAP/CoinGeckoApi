@@ -47,7 +47,7 @@ namespace CoinGeckoAPI
         /// <summary>
         /// Use this to obtain all the coins' id in order to make API calls.
         /// </summary>
-        /// <param name="include_platform">if set to <c>true</c> [include platform] platform contract addresses (eg. 0x.... for Ethereum based tokens) will be included in the response.</param>
+        /// <param name="include_platform">Set to <c>true</c> to include platform contract addresses (eg. 0x.... for Ethereum based tokens) in the response.</param>
         /// <returns>A Task&lt;IEnumerable&lt;<see cref="CoinsListItem"/>&gt;&gt; representing the asynchronous operation.</returns>
         public async Task<IEnumerable<CoinsListItem>> GetCoinsListAsync(bool include_platform = false)
         {
@@ -65,10 +65,10 @@ namespace CoinGeckoAPI
         /// <param name="vs_currency">The target currency of market data (usd, eur, jpy, etc.).</param>
         /// <param name="ids">The ids of the coin cryptocurrency symbols (base). See <see cref="GetCoinsListAsync"/>.</param>
         /// <param name="category">Filter by coin category.</param>
-        /// <param name="order">The order of the results (sort).</param>
+        /// <param name="order">The order of the results (sort <see cref="MarketsOrderBy"/>).</param>
         /// <param name="per_page">Total results per page. Default value: 100.</param>
         /// <param name="page">Page through results. Default value: 1.</param>
-        /// <param name="sparkline">if set to <c>true</c> then sparkline 7 days data will be included in the results.</param>
+        /// <param name="sparkline">Set to <c>true</c> to include sparkline 7 days data in the response.</param>
         /// <param name="price_change_percentage">Include price change percentage. These are flags so you can set as many as needed.</param>
         /// <returns>A Task&lt;IEnumerable&lt;<see cref="CoinsMarketItem"/>&gt;&gt; representing the asynchronous operation.</returns>
         /// <exception cref="System.ArgumentNullException">vs_currency - Invalid value. Value must be a valid target currency of market data (usd, eur, jpy, etc.)</exception>
@@ -123,22 +123,28 @@ namespace CoinGeckoAPI
                 Error = (sender, error) =>
                 {
                     // sometimes a number has scientific notation or some other garbage so just ignore it
+                    // HACK: should fix this to parse the number
                     error.ErrorContext.Handled = true;
                 }
             });
         }
 
         /// <summary>
-        /// TODO: Document this.
+        /// <para>Get current data (name, price, market, ... including exchange tickers) for a coin.</para>
+        /// <para>IMPORTANT:</para>
+        /// <para>Ticker object is limited to 100 items, to get more tickers, use <see cref="GetCoinTickersAsync"/>.
+        /// Ticker is_stale is true when ticker has not been updated/unchanged from the exchange for a while.
+        /// Ticker is_anomaly is true if ticker's price is outliered by our system.
+        /// You are responsible for managing how you want to display these information(e.g.footnote, different background, change opacity, hide).</para>
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="localization">if set to <c>true</c> [localization].</param>
-        /// <param name="tickers">if set to <c>true</c> [tickers].</param>
-        /// <param name="market_data">if set to <c>true</c> [market data].</param>
-        /// <param name="community_data">if set to <c>true</c> [community data].</param>
-        /// <param name="developer_data">if set to <c>true</c> [developer data].</param>
-        /// <param name="sparkline">if set to <c>true</c> [sparkline].</param>
-        /// <returns>A Task&lt;CoinResponse&gt; representing the asynchronous operation.</returns>
+        /// <param name="id">The id of the coin cryptocurrency. See <see cref="GetCoinsListAsync"/>.</param>
+        /// <param name="localization">Set to <c>true</c> to include all localized languages in response.</param>
+        /// <param name="tickers">Set to <c>true</c> to include tickers data in response.</param>
+        /// <param name="market_data">Set to <c>true</c> to include market data in response.</param>
+        /// <param name="community_data">Set to <c>true</c> to include community data in response.</param>
+        /// <param name="developer_data">Set to <c>true</c> to include developer data in response.</param>
+        /// <param name="sparkline">Set to <c>true</c> to include sparkline 7 dats data in response.</param>
+        /// <returns>A Task&lt;<see cref="CoinResponse"/>&gt; representing the asynchronous operation.</returns>
         /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)</exception>
         public async Task<CoinResponse> GetCoinAsync(string id, bool localization = true, bool tickers = true, bool market_data = true, bool community_data = true, bool developer_data = true, bool sparkline = false)
         {
@@ -161,15 +167,20 @@ namespace CoinGeckoAPI
         }
 
         /// <summary>
-        /// TODO: Document this.
+        /// Get coin tickers.
+        /// <para>IMPORTANT:</para>
+        /// <para>Ticker object is limited to 100 items per page.
+        /// Ticker is_stale is true when ticker has not been updated/unchanged from the exchange for a while.
+        /// Ticker is_anomaly is true if ticker's price is outliered by our system.
+        /// You are responsible for managing how you want to display these information(e.g.footnote, different background, change opacity, hide).</para>
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="exchange_ids">The exchange ids.</param>
-        /// <param name="include_exchange_logo">if set to <c>true</c> [include exchange logo].</param>
-        /// <param name="page">The page.</param>
-        /// <param name="order">The order.</param>
-        /// <param name="depth">if set to <c>true</c> [depth].</param>
-        /// <returns>A Task&lt;CoinTickersResponse&gt; representing the asynchronous operation.</returns>
+        /// <param name="id">The id of the coin cryptocurrency. See <see cref="GetCoinsListAsync"/>.</param>
+        /// <param name="exchange_ids">Filter results by exchange_ids (<see cref="ExchangesImp.GetExchangesListAsync"/>).</param>
+        /// <param name="include_exchange_logo">if set to <c>true</c> include exchange logo in response.</param>
+        /// <param name="page">Page through results.</param>
+        /// <param name="order">The ordering of the results (sort <see cref="CoinTickersOrderBy"/>).</param>
+        /// <param name="depth">Set to <c>true</c> to include 2% orderbook depth in the response.</param>
+        /// <returns>A Task&lt;<see cref="CoinTickersResponse"/>&gt; representing the asynchronous operation.</returns>
         /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)</exception>
         /// <exception cref="System.ArgumentOutOfRangeException">page - Must be a valid page index starting from 1.</exception>
         public async Task<CoinTickersResponse> GetCoinTickersAsync(string id, IEnumerable<string> exchange_ids = null, bool include_exchange_logo = false, uint page = 1, CoinTickersOrderBy order = CoinTickersOrderBy.trust_score_desc, bool depth = false)
@@ -197,17 +208,17 @@ namespace CoinGeckoAPI
         }
 
         /// <summary>
-        /// TODO: Document this.
+        /// Get historical data (name, price, market, stats) at a given date for a coin.
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="date">The date.</param>
-        /// <param name="localization">if set to <c>true</c> [localization].</param>
-        /// <returns>A Task&lt;CoinHistoryResponse&gt; representing the asynchronous operation.</returns>
+        /// <param name="id">The id of the coin cryptocurrency. See <see cref="GetCoinsListAsync"/>.</param>
+        /// <param name="date">The date of data snapshot.</param>
+        /// <param name="localization">Set to <c>true</c> to include all localized languages in response.</param>
+        /// <returns>A Task&lt;<see cref="CoinHistoryResponse"/>&gt; representing the asynchronous operation.</returns>
         /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)</exception>
         /// <exception cref="System.ArgumentOutOfRangeException">date - Invalid value. Value must be a valid date to snapshot a coins history.</exception>
         public async Task<CoinHistoryResponse> GetCoinHistoryAsync(string id, DateTimeOffset date, bool localization = false)
         {
-            if (string.IsNullOrEmpty(id) || id.Trim() == string.Empty)
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)");
             }
@@ -227,13 +238,17 @@ namespace CoinGeckoAPI
         }
 
         /// <summary>
-        /// TODO: Document this.
+        /// Get historical market data include price, market cap, and 24h volume (granularity auto).
+        /// <para>* Data granularity is automatic (cannot be adjusted)</para>
+        /// <para>* 1 day from current time = 5 minute interval data</para>
+        /// <para>* 1 - 90 days from current time = hourly data</para>
+        /// <para>* above 90 days from current time = daily data(00:00 UTC)</para>
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="vs_currency">The vs currency.</param>
-        /// <param name="days">The days.</param>
-        /// <param name="interval">The interval.</param>
-        /// <returns>CoinMarketChartResponse.</returns>
+        /// <param name="id">The id of the coin cryptocurrency. See <see cref="GetCoinsListAsync"/>.</param>
+        /// <param name="vs_currency">The target currency of market data (usd, eur, jpy, etc.).</param>
+        /// <param name="days">Data up to number of days ago (eg. 1,14,30,max).</param>
+        /// <param name="interval">The interval (granularity <see cref="CoinMarketChartInterval"/>).</param>
+        /// <returns>A Task&lt;<see cref="CoinMarketChartResponse"/>&gt; representing the asynchronous operation.</returns>
         /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)</exception>
         /// <exception cref="System.ArgumentNullException">vs_currency - Invalid value. Value must be a valid target currency of market data (usd, eur, jpy, etc.)</exception>
         /// <exception cref="System.ArgumentOutOfRangeException">days - Invalid value. Value must not exceed 900000.</exception>
@@ -265,13 +280,17 @@ namespace CoinGeckoAPI
         }
 
         /// <summary>
-        /// TODO: Document this.
+        /// Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto).
+        /// <para>* Data granularity is automatic (cannot be adjusted)</para>
+        /// <para>* 1 day from current time = 5 minute interval data</para>
+        /// <para>* 1 - 90 days from current time = hourly data</para>
+        /// <para>* above 90 days from current time = daily data(00:00 UTC)</para>
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="vs_currency">The vs currency.</param>
+        /// <param name="id">The id of the coin cryptocurrency. See <see cref="GetCoinsListAsync"/>.</param>
+        /// <param name="vs_currency">The target currency of market data (usd, eur, jpy, etc.).</param>
         /// <param name="fromDate">From date.</param>
         /// <param name="toDate">To date.</param>
-        /// <returns>A Task&lt;CoinMarketChartResponse&gt; representing the asynchronous operation.</returns>
+        /// <returns>A Task&lt;<see cref="CoinMarketChartResponse"/>&gt; representing the asynchronous operation.</returns>
         /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)</exception>
         /// <exception cref="System.ArgumentNullException">vs_currency - Invalid value. Value must be a valid target currency of market data (usd, eur, jpy, etc.)</exception>
         public async Task<CoinMarketChartResponse> GetCoinMarketChartRangeAsync(string id, string vs_currency, DateTimeOffset fromDate, DateTimeOffset toDate)
@@ -297,11 +316,14 @@ namespace CoinGeckoAPI
         }
 
         /// <summary>
-        /// TODO: Document this.
+        /// Get coin's OHLC (open, high, low, close) data (granularity auto).
+        /// <para>* 1 - 2 days: 30 minutes</para>
+        /// <para>* 3 - 30 days: 4 hours</para>
+        /// <para>* 31 days and beyond: 4 days</para>
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="vs_currency">The vs currency.</param>
-        /// <param name="days">The days.</param>
+        /// <param name="id">The id of the coin cryptocurrency. See <see cref="GetCoinsListAsync"/>.</param>
+        /// <param name="vs_currency">The target currency of market data (usd, eur, jpy, etc.).</param>
+        /// <param name="days">Data up to number of days ago (1/7/14/30/90/180/365/max).</param>
         /// <returns>A Task&lt;System.Decimal[]&gt; representing the asynchronous operation.</returns>
         /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)</exception>
         /// <exception cref="System.ArgumentNullException">vs_currency - Invalid value. Value must be a valid target currency of market data (usd, eur, jpy, etc.)</exception>
@@ -333,12 +355,16 @@ namespace CoinGeckoAPI
         }
 
         /// <summary>
-        /// TODO: Document this.
+        /// Get coin's OHLC (open, high, low, close) data (granularity auto).
+        /// <para>This is the same as <see cref="GetCoinOhlcAsync"/>, however the results are returned as concrete class items of <see cref="OhlcItem"/>.</para>
+        /// <para>* 1 - 2 days: 30 minutes</para>
+        /// <para>* 3 - 30 days: 4 hours</para>
+        /// <para>* 31 days and beyond: 4 days</para>
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="vs_currency">The vs currency.</param>
-        /// <param name="days">The days.</param>
-        /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
+        /// <param name="id">The id of the coin cryptocurrency. See <see cref="GetCoinsListAsync"/>.</param>
+        /// <param name="vs_currency">The target currency of market data (usd, eur, jpy, etc.).</param>
+        /// <param name="days">Data up to number of days ago (1/7/14/30/90/180/365/max).</param>
+        /// <returns>A Task&lt;IEnumerable&lt;<see cref="OhlcItem"/>&gt;&gt; representing the asynchronous operation.</returns>
         public async Task<IEnumerable<OhlcItem>> GetCoinOhlcItemsAsync(string id, string vs_currency, uint days)
         {
             var data = await GetCoinOhlcAsync(id, vs_currency, days);
