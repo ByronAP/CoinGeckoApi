@@ -1,4 +1,16 @@
-﻿using CoinGeckoAPI.Properties;
+// ***********************************************************************
+// Assembly         : CoinGeckoAPI
+// Author           : ByronAP
+// Created          : 12-10-2022
+//
+// Last Modified By : ByronAP
+// Last Modified On : 12-10-2022
+// ***********************************************************************
+// <copyright file="Constants.cs" company="ByronAP">
+//     Copyright © 2022 ByronAP, CoinGecko. All rights reserved.
+// </copyright>
+// ***********************************************************************
+using CoinGeckoAPI.Properties;
 
 namespace CoinGeckoAPI
 {

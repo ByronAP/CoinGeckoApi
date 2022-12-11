@@ -1,4 +1,16 @@
-﻿using CoinGeckoAPI.Models;
+// ***********************************************************************
+// Assembly         : CoinGeckoAPI
+// Author           : ByronAP
+// Created          : 12-10-2022
+//
+// Last Modified By : ByronAP
+// Last Modified On : 12-11-2022
+// ***********************************************************************
+// <copyright file="CoinsCategoriesImp.cs" company="ByronAP">
+//     Copyright © 2022 ByronAP, CoinGecko. All rights reserved.
+// </copyright>
+// ***********************************************************************
+using CoinGeckoAPI.Models;
 using CoinGeckoAPI.Types;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -8,6 +20,11 @@ using System.Threading.Tasks;
 
 namespace CoinGeckoAPI
 {
+    /// <summary>
+    /// <para>Implementation of the '/coins/categories' API calls.</para>
+    /// <para>Implementation classes do not have a public constructor
+    /// and must be accessed through an instance of <see cref="CoinGeckoClient"/>.</para>
+    /// </summary>
     public class CoinsCategoriesImp
     {
         private readonly RestClient _restClient;
@@ -20,10 +37,10 @@ namespace CoinGeckoAPI
         }
 
         /// <summary>
-        /// TODO: Document this.
+        /// List all categories with market data.
         /// </summary>
-        /// <param name="order">The order.</param>
-        /// <returns>A Task&lt;CoinCategoriesResponse[]&gt; representing the asynchronous operation.</returns>
+        /// <param name="order">How the response is ordered (sorting).</param>
+        /// <returns>A Task&lt;IEnumerable&lt;<see cref="CoinCategoriesItem"/>&gt;&gt; representing the asynchronous operation.</returns>
         public async Task<IEnumerable<CoinCategoriesItem>> GetCoinCategoriesAsync(CoinCategoriesOrderBy order = CoinCategoriesOrderBy.market_cap_desc)
         {
             var request = new RestRequest(CoinGeckoClient.BuildUrl("coins", "categories"));
@@ -35,9 +52,9 @@ namespace CoinGeckoAPI
         }
 
         /// <summary>
-        /// TODO: Document this.
+        /// List all categories.
         /// </summary>
-        /// <returns>A Task&lt;CoinCategoriesListItem[]&gt; representing the asynchronous operation.</returns>
+        /// <returns>A Task&lt;IEnumerable&lt;<see cref="CoinCategoriesListItem"/>&gt;&gt; representing the asynchronous operation.</returns>
         public async Task<IEnumerable<CoinCategoriesListItem>> GetCoinCategoriesListAsync()
         {
             var request = new RestRequest(CoinGeckoClient.BuildUrl("coins", "categories", "list"));

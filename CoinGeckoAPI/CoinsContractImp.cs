@@ -1,4 +1,16 @@
-﻿using CoinGeckoAPI.Models;
+// ***********************************************************************
+// Assembly         : CoinGeckoAPI
+// Author           : ByronAP
+// Created          : 12-10-2022
+//
+// Last Modified By : ByronAP
+// Last Modified On : 12-11-2022
+// ***********************************************************************
+// <copyright file="CoinsContractImp.cs" company="ByronAP">
+//     Copyright © 2022 ByronAP, CoinGecko. All rights reserved.
+// </copyright>
+// ***********************************************************************
+using CoinGeckoAPI.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
@@ -7,6 +19,11 @@ using System.Threading.Tasks;
 
 namespace CoinGeckoAPI
 {
+    /// <summary>
+    /// <para>Implementation of the '/coins/contract' API calls.</para>
+    /// <para>Implementation classes do not have a public constructor
+    /// and must be accessed through an instance of <see cref="CoinGeckoClient"/>.</para>
+    /// </summary>
     public class CoinsContractImp
     {
         private readonly RestClient _restClient;
@@ -19,11 +36,11 @@ namespace CoinGeckoAPI
         }
 
         /// <summary>
-        /// TODO: Document this.
+        /// Get coin info from contract address.
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="contract_address">The contract address.</param>
-        /// <returns>A Task&lt;CoinContractResponse&gt; representing the asynchronous operation.</returns>
+        /// <param name="id">The id of the platform issuing tokens (see <see cref="CoinGeckoClient.GetAssetPlatformsAsync"/> endpoint for list of options).</param>
+        /// <param name="contract_address">The token's contract address.</param>
+        /// <returns>A Task&lt;<see cref="CoinContractResponse"/>&gt; representing the asynchronous operation.</returns>
         /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid coin id (EX: ethereum)</exception>
         /// <exception cref="System.ArgumentNullException">contract_address - Invalid value. Value must be a valid contract address (EX: 0x514910771af9ca656af840dff83e8264ecf986ca)</exception>
         public async Task<CoinContractResponse> GetCoinContractAsync(string id, string contract_address)
@@ -46,13 +63,13 @@ namespace CoinGeckoAPI
         }
 
         /// <summary>
-        /// TODO: Document this.
+        /// Get historical market data include price, market cap, and 24h volume (granularity auto).
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="contract_address">The contract address.</param>
-        /// <param name="vs_currency">The vs currency.</param>
-        /// <param name="days">The days.</param>
-        /// <returns>A Task&lt;CoinMarketChartResponse&gt; representing the asynchronous operation.</returns>
+        /// <param name="id">The id of the platform issuing tokens (see <see cref="CoinGeckoClient.GetAssetPlatformsAsync"/> endpoint for list of options).</param>
+        /// <param name="contract_address">The token's contract address.</param>
+        /// <param name="vs_currency">The target currency of market data (usd, eur, jpy, etc.).</param>
+        /// <param name="days">Data up to number of days ago (eg. 1,14,30,max).</param>
+        /// <returns>A Task&lt;<see cref="CoinMarketChartResponse"/>&gt; representing the asynchronous operation.</returns>
         /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid coin id (EX: ethereum)</exception>
         /// <exception cref="System.ArgumentNullException">contract_address - Invalid value. Value must be a valid contract address (EX: 0x514910771af9ca656af840dff83e8264ecf986ca)</exception>
         /// <exception cref="System.ArgumentNullException">vs_currency - Invalid value. Value must be a valid target currency of market data (usd, eur, jpy, etc.)</exception>
@@ -89,14 +106,14 @@ namespace CoinGeckoAPI
         }
 
         /// <summary>
-        /// TODO: Document this.
+        /// Get historical market data include price, market cap, and 24h volume within a range of timestamp (granularity auto).
         /// </summary>
-        /// <param name="id">The identifier.</param>
-        /// <param name="contract_address">The contract address.</param>
-        /// <param name="vs_currency">The vs currency.</param>
+        /// <param name="id">The id of the platform issuing tokens (see <see cref="CoinGeckoClient.GetAssetPlatformsAsync"/> endpoint for list of options).</param>
+        /// <param name="contract_address">The token's contract address.</param>
+        /// <param name="vs_currency">The target currency of market data (usd, eur, jpy, etc.).</param>
         /// <param name="fromDate">From date.</param>
         /// <param name="toDate">To date.</param>
-        /// <returns>A Task&lt;CoinMarketChartResponse&gt; representing the asynchronous operation.</returns>
+        /// <returns>A Task&lt;<see cref="CoinMarketChartResponse"/>&gt; representing the asynchronous operation.</returns>
         /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid coin id (EX: ethereum)</exception>
         /// <exception cref="System.ArgumentNullException">contract_address - Invalid value. Value must be a valid contract address (EX: 0x514910771af9ca656af840dff83e8264ecf986ca)</exception>
         /// <exception cref="System.ArgumentNullException">vs_currency - Invalid value. Value must be a valid target currency of market data (usd, eur, jpy, etc.)</exception>

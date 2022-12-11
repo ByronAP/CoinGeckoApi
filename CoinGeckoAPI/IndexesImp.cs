@@ -1,4 +1,16 @@
-﻿using CoinGeckoAPI.Models;
+// ***********************************************************************
+// Assembly         : CoinGeckoAPI
+// Author           : ByronAP
+// Created          : 12-10-2022
+//
+// Last Modified By : ByronAP
+// Last Modified On : 12-11-2022
+// ***********************************************************************
+// <copyright file="IndexesImp.cs" company="ByronAP">
+//     Copyright © 2022 ByronAP, CoinGecko. All rights reserved.
+// </copyright>
+// ***********************************************************************
+using CoinGeckoAPI.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
@@ -8,6 +20,11 @@ using System.Threading.Tasks;
 
 namespace CoinGeckoAPI
 {
+    /// <summary>
+    /// <para>Implementation of the '/indexes' API calls.</para>
+    /// <para>Implementation classes do not have a public constructor
+    /// and must be accessed through an instance of <see cref="CoinGeckoClient"/>.</para>
+    /// </summary>
     public class IndexesImp
     {
         private readonly RestClient _restClient;
@@ -20,11 +37,11 @@ namespace CoinGeckoAPI
         }
 
         /// <summary>
-        /// TODO: Document this.
+        /// List all market indexes.
         /// </summary>
-        /// <param name="per_page">The per page.</param>
-        /// <param name="page">The page.</param>
-        /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
+        /// <param name="per_page">Total results per page.</param>
+        /// <param name="page">Page through results.</param>
+        /// <returns>A Task&lt;IEnumerable&lt;<see cref="IndexItem"/>&gt;&gt; representing the asynchronous operation.</returns>
         public async Task<IEnumerable<IndexItem>> GetIndexesAsync(uint per_page = 50, uint page = 1)
         {
             var request = new RestRequest(CoinGeckoClient.BuildUrl("indexes"));
@@ -37,11 +54,11 @@ namespace CoinGeckoAPI
         }
 
         /// <summary>
-        /// TODO: Document this.
+        /// Get market index by market id and index id.
         /// </summary>
-        /// <param name="market_id">The market identifier.</param>
-        /// <param name="id">The identifier.</param>
-        /// <returns>A Task&lt;IndexItem&gt; representing the asynchronous operation.</returns>
+        /// <param name="market_id">The market id (can be obtained from <see cref="ExchangesImp.GetExchangesListAsync"/>).</param>
+        /// <param name="id">The index id (can be obtained from <see cref="GetIndexesListAsync"/>).</param>
+        /// <returns>A Task&lt;<see cref="IndexItem"/>&gt; representing the asynchronous operation.</returns>
         /// <exception cref="System.ArgumentNullException">market_id - Invalid value. Value must be a valid market id (EX: cme_futures)</exception>
         /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid index id (EX: btc)</exception>
         public async Task<IndexItem> GetIndexAsync(string market_id, string id)
@@ -66,9 +83,9 @@ namespace CoinGeckoAPI
         }
 
         /// <summary>
-        /// TODO: Document this.
+        /// List market indexes id and name.
         /// </summary>
-        /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
+        /// <returns>A Task&lt;IEnumerable&lt;<see cref="IndexListItem"/>&gt;&gt; representing the asynchronous operation.</returns>
         public async Task<IEnumerable<IndexListItem>> GetIndexesListAsync()
         {
             var request = new RestRequest(CoinGeckoClient.BuildUrl("indexes", "list"));

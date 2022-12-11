@@ -1,4 +1,4 @@
-﻿namespace Tests
+namespace Tests
 {
     public class CoinsTests
     {
@@ -45,7 +45,7 @@
         {
             await Helpers.DoRateLimiting();
 
-            var marketsResult = await _apiClient.Coins.GetMarketsAsync("usd");
+            var marketsResult = await _apiClient.Coins.GetCoinMarketsAsync("usd");
 
             Assert.That(marketsResult, Is.Not.Null);
             Assert.That(marketsResult, Is.Not.Empty);
@@ -54,7 +54,7 @@
 
             await Helpers.DoRateLimiting();
 
-            marketsResult = await _apiClient.Coins.GetMarketsAsync("usd", per_page: 200, sparkline: true);
+            marketsResult = await _apiClient.Coins.GetCoinMarketsAsync("usd", per_page: 200, sparkline: true);
 
             Assert.That(marketsResult, Is.Not.Null);
             Assert.That(marketsResult, Is.Not.Empty);
