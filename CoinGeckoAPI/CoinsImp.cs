@@ -1,4 +1,16 @@
-﻿using CoinGeckoAPI.Models;
+﻿// ***********************************************************************
+// Assembly         : CoinGeckoAPI
+// Author           : ByronAP
+// Created          : 12-10-2022
+//
+// Last Modified By : ByronAP
+// Last Modified On : 12-11-2022
+// ***********************************************************************
+// <copyright file="CoinsImp.cs" company="ByronAP">
+//     Copyright © 2022 ByronAP, CoinGecko. All rights reserved.
+// </copyright>
+// ***********************************************************************
+using CoinGeckoAPI.Models;
 using CoinGeckoAPI.Types;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -11,8 +23,9 @@ using System.Threading.Tasks;
 namespace CoinGeckoAPI
 {
     /// <summary>
-    /// This class implements the Coins API calls and can not be instantiated directly.
-    /// Access these methods through an instance of the <see cref="CoinGeckoClient"/>, <see cref="CoinGeckoClient.Coins"/> field.
+    /// <para>Implementation of the '/coins' API calls.</para>
+    /// <para>Implementation classes do not have a public constructor
+    /// and must be accessed through an instance of <see cref="CoinGeckoClient"/>.</para>
     /// </summary>
     public class CoinsImp
     {
@@ -32,10 +45,10 @@ namespace CoinGeckoAPI
         }
 
         /// <summary>
-        /// Get coins list as an asynchronous operation.
+        /// Use this to obtain all the coins' id in order to make API calls.
         /// </summary>
-        /// <param name="include_platform">if set to <c>true</c> [include platform].</param>
-        /// <returns>A Task&lt;IEnumerable`1&gt; representing the asynchronous operation.</returns>
+        /// <param name="include_platform">if set to <c>true</c> [include platform] platform contract addresses (eg. 0x.... for Ethereum based tokens) will be included in the response.</param>
+        /// <returns>A Task&lt;IEnumerable&lt;<see cref="CoinsListItem"/>&gt;&gt; representing the asynchronous operation.</returns>
         public async Task<IEnumerable<CoinsListItem>> GetCoinsListAsync(bool include_platform = false)
         {
             var request = new RestRequest(CoinGeckoClient.BuildUrl("coins", "list"));
@@ -47,21 +60,21 @@ namespace CoinGeckoAPI
         }
 
         /// <summary>
-        /// TODO: Document this.
+        /// Use this to obtain all the coins market data (price, market cap, volume).
         /// </summary>
-        /// <param name="vs_currency">The vs currency.</param>
-        /// <param name="ids">The ids.</param>
-        /// <param name="category">The category.</param>
-        /// <param name="order">The order.</param>
-        /// <param name="per_page">The per page.</param>
-        /// <param name="page">The page.</param>
-        /// <param name="sparkline">if set to <c>true</c> [sparkline].</param>
-        /// <param name="price_change_percentage">The price change percentage.</param>
-        /// <returns>A Task&lt;CoinsMarketItem[]&gt; representing the asynchronous operation.</returns>
+        /// <param name="vs_currency">The target currency of market data (usd, eur, jpy, etc.).</param>
+        /// <param name="ids">The ids of the coin cryptocurrency symbols (base). See <see cref="GetCoinsListAsync"/>.</param>
+        /// <param name="category">Filter by coin category.</param>
+        /// <param name="order">The order of the results (sort).</param>
+        /// <param name="per_page">Total results per page. Default value: 100.</param>
+        /// <param name="page">Page through results. Default value: 1.</param>
+        /// <param name="sparkline">if set to <c>true</c> then sparkline 7 days data will be included in the results.</param>
+        /// <param name="price_change_percentage">Include price change percentage. These are flags so you can set as many as needed.</param>
+        /// <returns>A Task&lt;IEnumerable&lt;<see cref="CoinsMarketItem"/>&gt;&gt; representing the asynchronous operation.</returns>
         /// <exception cref="System.ArgumentNullException">vs_currency - Invalid value. Value must be a valid target currency of market data (usd, eur, jpy, etc.)</exception>
         /// <exception cref="System.ArgumentOutOfRangeException">per_page - Must be a valid integer from 1 through 250.</exception>
         /// <exception cref="System.ArgumentOutOfRangeException">page - Must be a valid page index starting from 1.</exception>
-        public async Task<IEnumerable<CoinsMarketItem>> GetMarketsAsync(string vs_currency, IEnumerable<string> ids = null, string category = "", MarketsOrderBy order = MarketsOrderBy.market_cap_desc, uint per_page = 100, uint page = 1, bool sparkline = false, MarketPriceChangePercentage price_change_percentage = MarketPriceChangePercentage.None)
+        public async Task<IEnumerable<CoinsMarketItem>> GetCoinMarketsAsync(string vs_currency, IEnumerable<string> ids = null, string category = "", MarketsOrderBy order = MarketsOrderBy.market_cap_desc, uint per_page = 100, uint page = 1, bool sparkline = false, MarketPriceChangePercentage price_change_percentage = MarketPriceChangePercentage.None)
         {
             if (string.IsNullOrEmpty(vs_currency) || vs_currency.Trim() == string.Empty)
             {
