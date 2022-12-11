@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GenerateDocumentationFile>False</GenerateDocumentationFile>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Version>3.0.0.1-beta</Version>
+    <Version>3.0.0.1</Version>
     <Authors>ByronAP</Authors>
     <AssemblyVersion>3.0.0.1</AssemblyVersion>
     <FileVersion>3.0.0.1</FileVersion>
@@ -18,7 +18,7 @@
     <PackageIcon>coingecko-logo.png</PackageIcon>
     <RepositoryType>git</RepositoryType>
     <Copyright>Copyright © 2022 ByronAP, CoinGecko. All rights reserved.</Copyright>
-    <PackageReleaseNotes>PRE-ALPH WIP</PackageReleaseNotes>
+    <PackageReleaseNotes>See: https://github.com/ByronAP/CoinGeckoApi/releases </PackageReleaseNotes>
     <PackageTags>coingecko,coin gecko,coingecko api,api,bitcoin,eth,etherium,atom,cosmos,btc,usdt,teather,bnb,usdc,doge,dogecoin,xrp,ripple,ltc,litecoin,crypto,market,price,market cap,cryptocurrencies</PackageTags>
     <Description>CoinGecko API Client Library</Description>
     <Title>CoinGecko API Client Library</Title>
