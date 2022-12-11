@@ -1,4 +1,4 @@
-﻿namespace CoinGeckoAPI.Types
+namespace CoinGeckoAPI.Types
 {
     public enum DerivativesExchangeOrderBy
     {
