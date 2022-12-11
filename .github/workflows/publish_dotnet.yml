@@ -29,6 +29,4 @@ jobs:
       - name: Test
         run: dotnet test --no-build --verbosity normal
       - name: Publish
-        run: failHEREonPurpose nuget push **\*.nupkg -Source
-          'https://api.nuget.org/v3/index.json' -ApiKey
-          ${{secrets.NUGET_PUB_KEY}}
+        run: failHEREonPurpose nuget push **\*.nupkg -Source 'https://api.nuget.org/v3/index.json' -ApiKey ${{secrets.NUGET_PUB_KEY}}
