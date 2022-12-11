@@ -245,7 +245,7 @@ namespace CoinGeckoAPI
         /// <para>* above 90 days from current time = daily data(00:00 UTC)</para>
         /// </summary>
         /// <param name="id">The id of the coin cryptocurrency. See <see cref="GetCoinsListAsync"/>.</param>
-        /// <param name="vs_currency">The target currency of market data (usd, eur, jpy, etc.).</param>
+        /// <param name="vs_currency">The target currency of market data (usd, eur, jpy, etc.). See <see cref="SimpleImp.GetSupportedVSCurrenciesAsync"/>.</param>
         /// <param name="days">Data up to number of days ago (eg. 1,14,30,max).</param>
         /// <param name="interval">The interval (granularity <see cref="CoinMarketChartInterval"/>).</param>
         /// <returns>A Task&lt;<see cref="CoinMarketChartResponse"/>&gt; representing the asynchronous operation.</returns>
@@ -287,7 +287,7 @@ namespace CoinGeckoAPI
         /// <para>* above 90 days from current time = daily data(00:00 UTC)</para>
         /// </summary>
         /// <param name="id">The id of the coin cryptocurrency. See <see cref="GetCoinsListAsync"/>.</param>
-        /// <param name="vs_currency">The target currency of market data (usd, eur, jpy, etc.).</param>
+        /// <param name="vs_currency">The target currency of market data (usd, eur, jpy, etc.). See <see cref="SimpleImp.GetSupportedVSCurrenciesAsync"/>.</param>
         /// <param name="fromDate">From date.</param>
         /// <param name="toDate">To date.</param>
         /// <returns>A Task&lt;<see cref="CoinMarketChartResponse"/>&gt; representing the asynchronous operation.</returns>
@@ -322,7 +322,7 @@ namespace CoinGeckoAPI
         /// <para>* 31 days and beyond: 4 days</para>
         /// </summary>
         /// <param name="id">The id of the coin cryptocurrency. See <see cref="GetCoinsListAsync"/>.</param>
-        /// <param name="vs_currency">The target currency of market data (usd, eur, jpy, etc.).</param>
+        /// <param name="vs_currency">The target currency of market data (usd, eur, jpy, etc.). See <see cref="SimpleImp.GetSupportedVSCurrenciesAsync"/>.</param>
         /// <param name="days">Data up to number of days ago (1/7/14/30/90/180/365/max).</param>
         /// <returns>A Task&lt;System.Decimal[]&gt; representing the asynchronous operation.</returns>
         /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)</exception>
@@ -362,7 +362,7 @@ namespace CoinGeckoAPI
         /// <para>* 31 days and beyond: 4 days</para>
         /// </summary>
         /// <param name="id">The id of the coin cryptocurrency. See <see cref="GetCoinsListAsync"/>.</param>
-        /// <param name="vs_currency">The target currency of market data (usd, eur, jpy, etc.).</param>
+        /// <param name="vs_currency">The target currency of market data (usd, eur, jpy, etc.). See <see cref="SimpleImp.GetSupportedVSCurrenciesAsync"/>.</param>
         /// <param name="days">Data up to number of days ago (1/7/14/30/90/180/365/max).</param>
         /// <returns>A Task&lt;IEnumerable&lt;<see cref="OhlcItem"/>&gt;&gt; representing the asynchronous operation.</returns>
         public async Task<IEnumerable<OhlcItem>> GetCoinOhlcItemsAsync(string id, string vs_currency, uint days)
