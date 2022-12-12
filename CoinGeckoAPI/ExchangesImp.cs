@@ -175,7 +175,7 @@ namespace CoinGeckoAPI
                 var newItem = new ExchangeVolumeChartItem
                 {
                     Timestamp = long.Parse(item[0].Substring(0, item[0].IndexOf('.'))),
-                    volume = decimal.Parse(item[1])
+                    Volume = decimal.Parse(item[1])
                 };
 
                 result.Add(newItem);
