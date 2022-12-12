@@ -126,8 +126,7 @@ namespace CoinGeckoAPI
         internal static DateTimeOffset Last429ResponseAt { get; set; } = DateTimeOffset.MinValue;
         internal static int CallsInLast60Seconds { get; set; }
         internal static readonly SemaphoreSlim RateLimitSemaphore = new SemaphoreSlim(1, 1);
-
-        internal static Timer RateLimitTimer = new Timer(RateLimitTimerCallback, null, 60000, 60000);
+        internal static readonly Timer RateLimitTimer = new Timer(RateLimitTimerCallback, null, 60000, 60000);
 
         private readonly MemCache _cache;
         private bool _disposedValue;
