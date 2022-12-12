@@ -5,8 +5,6 @@
         [Test]
         public async Task GetIndexesTest()
         {
-            await Helpers.DoRateLimiting();
-
             var indexesResult = await Helpers.GetApiClient().Indexes.GetIndexesAsync();
 
             Assert.That(indexesResult, Is.Not.Null);
@@ -16,8 +14,6 @@
         [Test]
         public async Task GetIndexTest()
         {
-            await Helpers.DoRateLimiting();
-
             var indexResult = await Helpers.GetApiClient().Indexes.GetIndexAsync("cme_futures", "btc");
 
             Assert.That(indexResult, Is.Not.Null);
@@ -28,8 +24,6 @@
         [Test]
         public async Task GetIndexesListTest()
         {
-            await Helpers.DoRateLimiting();
-
             var indexesResult = await Helpers.GetApiClient().Indexes.GetIndexesListAsync();
 
             Assert.That(indexesResult, Is.Not.Null);

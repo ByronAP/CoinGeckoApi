@@ -8,8 +8,6 @@ namespace Tests
             var ids = new[] { "bitcoin", "ethereum" };
             var vsCurrencies = new[] { "btc", "usd" };
 
-            await Helpers.DoRateLimiting();
-
             var priceResult = await Helpers.GetApiClient().Simple.GetPriceAsync(ids, vsCurrencies);
 
             Assert.NotNull(priceResult);
@@ -18,8 +16,6 @@ namespace Tests
                 Assert.That(priceResult.ContainsKey(id), Is.True);
                 Assert.That(priceResult[id].Count(), Is.EqualTo(2));
             }
-
-            await Helpers.DoRateLimiting();
 
             priceResult = await Helpers.GetApiClient().Simple.GetPriceAsync(ids, vsCurrencies, true);
 
@@ -30,8 +26,6 @@ namespace Tests
                 Assert.That(priceResult[id].Count(), Is.EqualTo(4));
             }
 
-            await Helpers.DoRateLimiting();
-
             priceResult = await Helpers.GetApiClient().Simple.GetPriceAsync(ids, vsCurrencies, true, true);
 
             Assert.NotNull(priceResult);
@@ -41,8 +35,6 @@ namespace Tests
                 Assert.That(priceResult[id].Count(), Is.EqualTo(6));
             }
 
-            await Helpers.DoRateLimiting();
-
             priceResult = await Helpers.GetApiClient().Simple.GetPriceAsync(ids, vsCurrencies, true, true, true);
 
             Assert.NotNull(priceResult);
@@ -51,8 +43,6 @@ namespace Tests
                 Assert.That(priceResult.ContainsKey(id), Is.True);
                 Assert.That(priceResult[id].Count(), Is.EqualTo(8));
             }
-
-            await Helpers.DoRateLimiting();
 
             priceResult = await Helpers.GetApiClient().Simple.GetPriceAsync(ids, vsCurrencies, true, true, true, true);
 
@@ -72,8 +62,6 @@ namespace Tests
             var contractAddresses = new[] { "0x514910771af9ca656af840dff83e8264ecf986ca", "0x0f2d719407fdbeff09d87557abb7232601fd9f29" };
             var vsCurrencies = new[] { "btc", "usd" };
 
-            await Helpers.DoRateLimiting();
-
             var priceResult = await Helpers.GetApiClient().Simple.GetTokenPriceAsync("ethereum", contractAddresses, vsCurrencies);
 
             Assert.That(priceResult, Is.Not.Null);
@@ -82,9 +70,6 @@ namespace Tests
                 Assert.That(priceResult.ContainsKey(contractAddress), Is.True);
                 Assert.That(priceResult[contractAddress].Count(), Is.EqualTo(2));
             }
-
-
-            await Helpers.DoRateLimiting();
 
             priceResult = await Helpers.GetApiClient().Simple.GetTokenPriceAsync("ethereum", contractAddresses, vsCurrencies, true);
 
@@ -95,8 +80,6 @@ namespace Tests
                 Assert.That(priceResult[contractAddress].Count(), Is.EqualTo(4));
             }
 
-            await Helpers.DoRateLimiting();
-
             priceResult = await Helpers.GetApiClient().Simple.GetTokenPriceAsync("ethereum", contractAddresses, vsCurrencies, true, true);
 
             Assert.That(priceResult, Is.Not.Null);
@@ -106,8 +89,6 @@ namespace Tests
                 Assert.That(priceResult[contractAddress].Count(), Is.EqualTo(6));
             }
 
-            await Helpers.DoRateLimiting();
-
             priceResult = await Helpers.GetApiClient().Simple.GetTokenPriceAsync("ethereum", contractAddresses, vsCurrencies, true, true, true);
 
             Assert.That(priceResult, Is.Not.Null);
@@ -116,8 +97,6 @@ namespace Tests
                 Assert.That(priceResult.ContainsKey(contractAddress), Is.True);
                 Assert.That(priceResult[contractAddress].Count(), Is.EqualTo(8));
             }
-
-            await Helpers.DoRateLimiting();
 
             priceResult = await Helpers.GetApiClient().Simple.GetTokenPriceAsync("ethereum", contractAddresses, vsCurrencies, true, true, true, true);
 
@@ -134,8 +113,6 @@ namespace Tests
         [Test]
         public async Task GetSupportedVSCurrenciesTest()
         {
-            await Helpers.DoRateLimiting();
-
             var currsResult = await Helpers.GetApiClient().Simple.GetSupportedVSCurrenciesAsync();
 
             Assert.That(currsResult, Is.Not.Null);

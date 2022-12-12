@@ -5,8 +5,6 @@
         [Test]
         public async Task GetGlobalTest()
         {
-            await Helpers.DoRateLimiting();
-
             var globalResult = await Helpers.GetApiClient().Global.GetGlobalAsync();
 
             Assert.That(globalResult, Is.Not.Null);
@@ -17,8 +15,6 @@
         [Test]
         public async Task GetGlobalDefiTest()
         {
-            await Helpers.DoRateLimiting();
-
             var globalResult = await Helpers.GetApiClient().Global.GetGlobalDefiAsync();
 
             Assert.That(globalResult, Is.Not.Null);
