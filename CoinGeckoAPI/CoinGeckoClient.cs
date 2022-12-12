@@ -124,7 +124,7 @@ namespace CoinGeckoAPI
         // with rate limiting off causing an instance that does to have calls fail unexpectedly.
         internal static DateTimeOffset LastApiCallAt { get; set; } = DateTimeOffset.MinValue;
         internal static DateTimeOffset Last429ResponseAt { get; set; } = DateTimeOffset.MinValue;
-        internal static int CallsInLast60Seconds = 0;
+        internal static int CallsInLast60Seconds { get; set; }
         internal static readonly SemaphoreSlim RateLimitSemaphore = new SemaphoreSlim(1, 1);
 
         internal static Timer RateLimitTimer = new Timer(RateLimitTimerCallback, null, 60000, 60000);
