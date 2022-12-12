@@ -428,6 +428,30 @@ namespace CoinGeckoAPI
             {
                 if (disposing)
                 {
+                    if (RateLimitTimer != null)
+                    {
+                        try
+                        {
+                            RateLimitTimer.Dispose();
+                        }
+                        catch
+                        {
+                            // ignore
+                        }
+                    }
+
+                    if (RateLimitSemaphore != null)
+                    {
+                        try
+                        {
+                            RateLimitSemaphore.Dispose();
+                        }
+                        catch
+                        {
+                            // ignore
+                        }
+                    }
+
                     if (_cache != null)
                     {
                         try
