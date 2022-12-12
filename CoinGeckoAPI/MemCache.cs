@@ -1,4 +1,4 @@
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -159,9 +159,6 @@ namespace CoinGeckoAPI
             }
         }
 
-        public void Dispose()
-        {
-            ((IDisposable)_cache).Dispose();
-        }
+        public void Dispose() => _cache.Dispose();
     }
 }
