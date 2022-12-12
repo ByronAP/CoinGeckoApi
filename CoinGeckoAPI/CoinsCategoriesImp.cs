@@ -29,10 +29,12 @@ namespace CoinGeckoAPI
     {
         private readonly RestClient _restClient;
         private readonly ILogger<CoinGeckoClient> _logger;
+        private readonly MemCache _cache;
 
-        internal CoinsCategoriesImp(RestClient restClient, ILogger<CoinGeckoClient> logger = null)
+        internal CoinsCategoriesImp(RestClient restClient, MemCache cache, ILogger<CoinGeckoClient> logger = null)
         {
             _logger = logger;
+            _cache = cache;
             _restClient = restClient;
         }
 
@@ -46,7 +48,7 @@ namespace CoinGeckoAPI
             var request = new RestRequest(CoinGeckoClient.BuildUrl("coins", "categories"));
             if (order != CoinCategoriesOrderBy.market_cap_desc) { request.AddQueryParameter("order", order.ToString()); }
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<CoinCategoriesItem[]>(jsonStr);
         }
@@ -59,7 +61,7 @@ namespace CoinGeckoAPI
         {
             var request = new RestRequest(CoinGeckoClient.BuildUrl("coins", "categories", "list"));
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<CoinCategoriesListItem[]>(jsonStr);
         }

@@ -28,10 +28,12 @@ namespace CoinGeckoAPI
     {
         private readonly RestClient _restClient;
         private readonly ILogger<CoinGeckoClient> _logger;
+        private readonly MemCache _cache;
 
-        internal SearchImp(RestClient restClient, ILogger<CoinGeckoClient> logger = null)
+        internal SearchImp(RestClient restClient, MemCache cache, ILogger<CoinGeckoClient> logger = null)
         {
             _logger = logger;
+            _cache = cache;
             _restClient = restClient;
         }
 
@@ -51,7 +53,7 @@ namespace CoinGeckoAPI
             var request = new RestRequest(CoinGeckoClient.BuildUrl("search"));
             request.AddQueryParameter("query", query);
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<SearchResponse>(jsonStr);
         }
@@ -65,7 +67,7 @@ namespace CoinGeckoAPI
         {
             var request = new RestRequest(CoinGeckoClient.BuildUrl("search", "trending"));
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<SearchTrendingResponse>(jsonStr);
         }

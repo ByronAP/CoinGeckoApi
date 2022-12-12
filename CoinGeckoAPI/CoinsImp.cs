@@ -31,17 +31,19 @@ namespace CoinGeckoAPI
     {
         private readonly RestClient _restClient;
         private readonly ILogger<CoinGeckoClient> _logger;
+        private readonly MemCache _cache;
 
         public CoinsContractImp Contract { get; }
         public CoinsCategoriesImp Categories { get; }
 
-        internal CoinsImp(RestClient restClient, ILogger<CoinGeckoClient> logger = null)
+        internal CoinsImp(RestClient restClient, MemCache cache, ILogger<CoinGeckoClient> logger = null)
         {
             _logger = logger;
+            _cache = cache;
             _restClient = restClient;
 
-            Contract = new CoinsContractImp(restClient, logger);
-            Categories = new CoinsCategoriesImp(restClient, logger);
+            Contract = new CoinsContractImp(restClient, _cache, logger);
+            Categories = new CoinsCategoriesImp(restClient, _cache, logger);
         }
 
         /// <summary>
@@ -54,7 +56,7 @@ namespace CoinGeckoAPI
             var request = new RestRequest(CoinGeckoClient.BuildUrl("coins", "list"));
             if (include_platform) { request.AddQueryParameter("include_platform", "true"); }
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<CoinsListItem[]>(jsonStr);
         }
@@ -116,7 +118,7 @@ namespace CoinGeckoAPI
 
             }
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<CoinsMarketItem[]>(jsonStr, new JsonSerializerSettings
             {
@@ -161,7 +163,7 @@ namespace CoinGeckoAPI
             request.AddQueryParameter("developer_data", developer_data.ToString().ToLowerInvariant());
             request.AddQueryParameter("sparkline", sparkline.ToString().ToLowerInvariant());
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<CoinResponse>(jsonStr);
         }
@@ -202,7 +204,7 @@ namespace CoinGeckoAPI
             if (order != CoinTickersOrderBy.trust_score_desc) { request.AddQueryParameter("order", order.ToString()); }
             if (depth) { request.AddQueryParameter("depth", "true"); }
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<CoinTickersResponse>(jsonStr);
         }
@@ -232,7 +234,7 @@ namespace CoinGeckoAPI
             request.AddQueryParameter("date", date.ToString("dd-MM-yyyy"));
             request.AddQueryParameter("localization", localization.ToString().ToLowerInvariant());
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<CoinHistoryResponse>(jsonStr);
         }
@@ -274,7 +276,7 @@ namespace CoinGeckoAPI
             request.AddQueryParameter("days", days);
             if (interval != CoinMarketChartInterval.auto) { request.AddQueryParameter("interval", interval.ToString().ToLowerInvariant()); }
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<CoinMarketChartResponse>(jsonStr);
         }
@@ -310,7 +312,7 @@ namespace CoinGeckoAPI
             request.AddQueryParameter("from", fromDate.ToUnixTimeSeconds());
             request.AddQueryParameter("to", toDate.ToUnixTimeSeconds());
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<CoinMarketChartResponse>(jsonStr);
         }
@@ -349,7 +351,7 @@ namespace CoinGeckoAPI
             request.AddQueryParameter("vs_currency", vs_currency);
             request.AddQueryParameter("days", days);
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<decimal[][]>(jsonStr);
         }

@@ -4,7 +4,7 @@
 // Created          : 12-10-2022
 //
 // Last Modified By : ByronAP
-// Last Modified On : 12-11-2022
+// Last Modified On : 12-12-2022
 // ***********************************************************************
 // <copyright file="CoinGeckoClient.cs" company="ByronAP">
 //     Copyright © 2022 ByronAP, CoinGecko. All rights reserved.
@@ -29,8 +29,9 @@ namespace CoinGeckoAPI
     /// CoinGecko API documentation (Ex: API call '/coins/list' 
     /// translates to 'CoinGeckoClient.Coins.GetCoinsListAsync()').
     /// </para>
+    /// <para>By default response caching is enabled. To disable it set <see cref="IsCacheEnabled"/> to <c>false</c>.</para>
     /// </summary>
-    public class CoinGeckoClient
+    public class CoinGeckoClient : IDisposable
     {
         /// <summary>
         /// The RestSharp client instance used to make the API calls.
@@ -102,6 +103,14 @@ namespace CoinGeckoAPI
         /// <value>Companies API calls.</value>
         public CompaniesImp Companies { get; }
 
+        /// <summary>
+        /// Gets or sets whether this instance is using response caching.
+        /// </summary>
+        /// <value><c>true</c> if this instances cache is enabled; otherwise, <c>false</c>.</value>
+        public bool IsCacheEnabled { get { return _cache.Enabled; } set { _cache.Enabled = value; } }
+
+        private readonly MemCache _cache;
+        private bool _disposedValue;
         private readonly ILogger<CoinGeckoClient> _logger;
 
         #region Constructors
@@ -112,17 +121,19 @@ namespace CoinGeckoAPI
         {
             _logger = null;
 
+            _cache = new MemCache(_logger);
+
             CGRestClient = new RestClient(Constants.API_BASE_URL);
 
-            Simple = new SimpleImp(CGRestClient, _logger);
-            Coins = new CoinsImp(CGRestClient, _logger);
-            Exchanges = new ExchangesImp(CGRestClient, _logger);
-            Indexes = new IndexesImp(CGRestClient, _logger);
-            Derivatives = new DerivativesImp(CGRestClient, _logger);
-            Nfts = new NftsImp(CGRestClient, _logger);
-            Search = new SearchImp(CGRestClient, _logger);
-            Global = new GlobalImp(CGRestClient, _logger);
-            Companies = new CompaniesImp(CGRestClient, _logger);
+            Simple = new SimpleImp(CGRestClient, _cache, _logger);
+            Coins = new CoinsImp(CGRestClient, _cache, _logger);
+            Exchanges = new ExchangesImp(CGRestClient, _cache, _logger);
+            Indexes = new IndexesImp(CGRestClient, _cache, _logger);
+            Derivatives = new DerivativesImp(CGRestClient, _cache, _logger);
+            Nfts = new NftsImp(CGRestClient, _cache, _logger);
+            Search = new SearchImp(CGRestClient, _cache, _logger);
+            Global = new GlobalImp(CGRestClient, _cache, _logger);
+            Companies = new CompaniesImp(CGRestClient, _cache, _logger);
         }
 
         /// <summary>
@@ -133,6 +144,8 @@ namespace CoinGeckoAPI
         {
             _logger = null;
 
+            _cache = new MemCache(_logger);
+
             if (isPro)
             {
                 CGRestClient = new RestClient(Constants.API_PRO_BASE_URL);
@@ -142,15 +155,15 @@ namespace CoinGeckoAPI
                 CGRestClient = new RestClient(Constants.API_BASE_URL);
             }
 
-            Simple = new SimpleImp(CGRestClient, _logger);
-            Coins = new CoinsImp(CGRestClient, _logger);
-            Exchanges = new ExchangesImp(CGRestClient, _logger);
-            Indexes = new IndexesImp(CGRestClient, _logger);
-            Derivatives = new DerivativesImp(CGRestClient, _logger);
-            Nfts = new NftsImp(CGRestClient, _logger);
-            Search = new SearchImp(CGRestClient, _logger);
-            Global = new GlobalImp(CGRestClient, _logger);
-            Companies = new CompaniesImp(CGRestClient, _logger);
+            Simple = new SimpleImp(CGRestClient, _cache, _logger);
+            Coins = new CoinsImp(CGRestClient, _cache, _logger);
+            Exchanges = new ExchangesImp(CGRestClient, _cache, _logger);
+            Indexes = new IndexesImp(CGRestClient, _cache, _logger);
+            Derivatives = new DerivativesImp(CGRestClient, _cache, _logger);
+            Nfts = new NftsImp(CGRestClient, _cache, _logger);
+            Search = new SearchImp(CGRestClient, _cache, _logger);
+            Global = new GlobalImp(CGRestClient, _cache, _logger);
+            Companies = new CompaniesImp(CGRestClient, _cache, _logger);
         }
 
         /// <summary>
@@ -161,17 +174,19 @@ namespace CoinGeckoAPI
         {
             _logger = logger;
 
+            _cache = new MemCache(_logger);
+
             CGRestClient = new RestClient(Constants.API_BASE_URL);
 
-            Simple = new SimpleImp(CGRestClient, _logger);
-            Coins = new CoinsImp(CGRestClient, _logger);
-            Exchanges = new ExchangesImp(CGRestClient, _logger);
-            Indexes = new IndexesImp(CGRestClient, _logger);
-            Derivatives = new DerivativesImp(CGRestClient, _logger);
-            Nfts = new NftsImp(CGRestClient, _logger);
-            Search = new SearchImp(CGRestClient, _logger);
-            Global = new GlobalImp(CGRestClient, _logger);
-            Companies = new CompaniesImp(CGRestClient, _logger);
+            Simple = new SimpleImp(CGRestClient, _cache, _logger);
+            Coins = new CoinsImp(CGRestClient, _cache, _logger);
+            Exchanges = new ExchangesImp(CGRestClient, _cache, _logger);
+            Indexes = new IndexesImp(CGRestClient, _cache, _logger);
+            Derivatives = new DerivativesImp(CGRestClient, _cache, _logger);
+            Nfts = new NftsImp(CGRestClient, _cache, _logger);
+            Search = new SearchImp(CGRestClient, _cache, _logger);
+            Global = new GlobalImp(CGRestClient, _cache, _logger);
+            Companies = new CompaniesImp(CGRestClient, _cache, _logger);
         }
 
         /// <summary>
@@ -183,6 +198,8 @@ namespace CoinGeckoAPI
         {
             _logger = logger;
 
+            _cache = new MemCache(_logger);
+
             if (isPro)
             {
                 CGRestClient = new RestClient(Constants.API_PRO_BASE_URL);
@@ -192,27 +209,44 @@ namespace CoinGeckoAPI
                 CGRestClient = new RestClient(Constants.API_BASE_URL);
             }
 
-            Simple = new SimpleImp(CGRestClient, _logger);
-            Coins = new CoinsImp(CGRestClient, _logger);
-            Exchanges = new ExchangesImp(CGRestClient, _logger);
-            Indexes = new IndexesImp(CGRestClient, _logger);
-            Derivatives = new DerivativesImp(CGRestClient, _logger);
-            Nfts = new NftsImp(CGRestClient, _logger);
-            Search = new SearchImp(CGRestClient, _logger);
-            Global = new GlobalImp(CGRestClient, _logger);
-            Companies = new CompaniesImp(CGRestClient, _logger);
+            Simple = new SimpleImp(CGRestClient, _cache, _logger);
+            Coins = new CoinsImp(CGRestClient, _cache, _logger);
+            Exchanges = new ExchangesImp(CGRestClient, _cache, _logger);
+            Indexes = new IndexesImp(CGRestClient, _cache, _logger);
+            Derivatives = new DerivativesImp(CGRestClient, _cache, _logger);
+            Nfts = new NftsImp(CGRestClient, _cache, _logger);
+            Search = new SearchImp(CGRestClient, _cache, _logger);
+            Global = new GlobalImp(CGRestClient, _cache, _logger);
+            Companies = new CompaniesImp(CGRestClient, _cache, _logger);
         }
         #endregion
 
-        internal static async Task<string> GetStringResponseAsync(RestClient client, RestRequest request, ILogger logger)
+        internal static async Task<string> GetStringResponseAsync(RestClient client, RestRequest request, MemCache cache, ILogger logger)
         {
+            var fullUrl = client.BuildUri(request).ToString();
+
+            try
+            {
+                if (cache.TryGet(fullUrl, out var cacheResponse))
+                {
+                    return (string)cacheResponse;
+                }
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex, "");
+            }
+
             try
             {
                 var response = await client.GetAsync(request);
 
                 if (response.IsSuccessStatusCode)
                 {
+                    cache.CacheRequest(fullUrl, response);
+
                     return response.Content;
+
                 }
 
                 if (response.ErrorException != null)
@@ -264,7 +298,7 @@ namespace CoinGeckoAPI
 
             try
             {
-                var jsonString = await GetStringResponseAsync(CGRestClient, request, _logger);
+                var jsonString = await GetStringResponseAsync(CGRestClient, request, _cache, _logger);
                 _logger?.LogDebug("{JsonString}", jsonString);
                 return true;
             }
@@ -282,7 +316,7 @@ namespace CoinGeckoAPI
         {
             var request = new RestRequest(BuildUrl("exchange_rates"));
 
-            var jsonString = await GetStringResponseAsync(CGRestClient, request, _logger);
+            var jsonString = await GetStringResponseAsync(CGRestClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<ExchangeRatesResponse>(jsonString);
         }
@@ -301,9 +335,44 @@ namespace CoinGeckoAPI
                 request.AddQueryParameter("filter", filter);
             }
 
-            var jsonString = await GetStringResponseAsync(CGRestClient, request, _logger);
+            var jsonString = await GetStringResponseAsync(CGRestClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<IEnumerable<AssetPlatform>>(jsonString);
+        }
+
+        /// <summary>
+        /// Clears the response cache.
+        /// </summary>
+        public void ClearCache() => _cache.Clear();
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposedValue)
+            {
+                if (disposing)
+                {
+                    if (_cache != null)
+                    {
+                        try
+                        {
+                            _cache.Dispose();
+                        }
+                        catch
+                        {
+                            // ignore
+                        }
+                    }
+                }
+
+                _disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }

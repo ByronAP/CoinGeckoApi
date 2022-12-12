@@ -2,14 +2,6 @@ namespace Tests
 {
     public class SimpleTests
     {
-        private CoinGeckoClient _apiClient;
-
-        [SetUp]
-        public void Setup()
-        {
-            _apiClient = new CoinGeckoClient();
-        }
-
         [Test]
         public async Task GetPriceTest()
         {
@@ -18,7 +10,7 @@ namespace Tests
 
             await Helpers.DoRateLimiting();
 
-            var priceResult = await _apiClient.Simple.GetPriceAsync(ids, vsCurrencies);
+            var priceResult = await Helpers.GetApiClient().Simple.GetPriceAsync(ids, vsCurrencies);
 
             Assert.NotNull(priceResult);
             foreach (var id in ids)
@@ -29,7 +21,7 @@ namespace Tests
 
             await Helpers.DoRateLimiting();
 
-            priceResult = await _apiClient.Simple.GetPriceAsync(ids, vsCurrencies, true);
+            priceResult = await Helpers.GetApiClient().Simple.GetPriceAsync(ids, vsCurrencies, true);
 
             Assert.That(priceResult, Is.Not.Null);
             foreach (var id in ids)
@@ -40,7 +32,7 @@ namespace Tests
 
             await Helpers.DoRateLimiting();
 
-            priceResult = await _apiClient.Simple.GetPriceAsync(ids, vsCurrencies, true, true);
+            priceResult = await Helpers.GetApiClient().Simple.GetPriceAsync(ids, vsCurrencies, true, true);
 
             Assert.NotNull(priceResult);
             foreach (var id in ids)
@@ -51,7 +43,7 @@ namespace Tests
 
             await Helpers.DoRateLimiting();
 
-            priceResult = await _apiClient.Simple.GetPriceAsync(ids, vsCurrencies, true, true, true);
+            priceResult = await Helpers.GetApiClient().Simple.GetPriceAsync(ids, vsCurrencies, true, true, true);
 
             Assert.NotNull(priceResult);
             foreach (var id in ids)
@@ -62,7 +54,7 @@ namespace Tests
 
             await Helpers.DoRateLimiting();
 
-            priceResult = await _apiClient.Simple.GetPriceAsync(ids, vsCurrencies, true, true, true, true);
+            priceResult = await Helpers.GetApiClient().Simple.GetPriceAsync(ids, vsCurrencies, true, true, true, true);
 
             Assert.NotNull(priceResult);
             foreach (var id in ids)
@@ -82,7 +74,7 @@ namespace Tests
 
             await Helpers.DoRateLimiting();
 
-            var priceResult = await _apiClient.Simple.GetTokenPriceAsync("ethereum", contractAddresses, vsCurrencies);
+            var priceResult = await Helpers.GetApiClient().Simple.GetTokenPriceAsync("ethereum", contractAddresses, vsCurrencies);
 
             Assert.That(priceResult, Is.Not.Null);
             foreach (var contractAddress in contractAddresses)
@@ -94,7 +86,7 @@ namespace Tests
 
             await Helpers.DoRateLimiting();
 
-            priceResult = await _apiClient.Simple.GetTokenPriceAsync("ethereum", contractAddresses, vsCurrencies, true);
+            priceResult = await Helpers.GetApiClient().Simple.GetTokenPriceAsync("ethereum", contractAddresses, vsCurrencies, true);
 
             Assert.That(priceResult, Is.Not.Null);
             foreach (var contractAddress in contractAddresses)
@@ -105,7 +97,7 @@ namespace Tests
 
             await Helpers.DoRateLimiting();
 
-            priceResult = await _apiClient.Simple.GetTokenPriceAsync("ethereum", contractAddresses, vsCurrencies, true, true);
+            priceResult = await Helpers.GetApiClient().Simple.GetTokenPriceAsync("ethereum", contractAddresses, vsCurrencies, true, true);
 
             Assert.That(priceResult, Is.Not.Null);
             foreach (var contractAddress in contractAddresses)
@@ -116,7 +108,7 @@ namespace Tests
 
             await Helpers.DoRateLimiting();
 
-            priceResult = await _apiClient.Simple.GetTokenPriceAsync("ethereum", contractAddresses, vsCurrencies, true, true, true);
+            priceResult = await Helpers.GetApiClient().Simple.GetTokenPriceAsync("ethereum", contractAddresses, vsCurrencies, true, true, true);
 
             Assert.That(priceResult, Is.Not.Null);
             foreach (var contractAddress in contractAddresses)
@@ -127,7 +119,7 @@ namespace Tests
 
             await Helpers.DoRateLimiting();
 
-            priceResult = await _apiClient.Simple.GetTokenPriceAsync("ethereum", contractAddresses, vsCurrencies, true, true, true, true);
+            priceResult = await Helpers.GetApiClient().Simple.GetTokenPriceAsync("ethereum", contractAddresses, vsCurrencies, true, true, true, true);
 
             Assert.That(priceResult, Is.Not.Null);
             foreach (var contractAddress in contractAddresses)
@@ -144,7 +136,7 @@ namespace Tests
         {
             await Helpers.DoRateLimiting();
 
-            var currsResult = await _apiClient.Simple.GetSupportedVSCurrenciesAsync();
+            var currsResult = await Helpers.GetApiClient().Simple.GetSupportedVSCurrenciesAsync();
 
             Assert.That(currsResult, Is.Not.Null);
             Assert.That(currsResult, Is.Not.Empty);

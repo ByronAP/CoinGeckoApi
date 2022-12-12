@@ -29,10 +29,12 @@ namespace CoinGeckoAPI
     {
         private readonly RestClient _restClient;
         private readonly ILogger<CoinGeckoClient> _logger;
+        private readonly MemCache _cache;
 
-        internal IndexesImp(RestClient restClient, ILogger<CoinGeckoClient> logger = null)
+        internal IndexesImp(RestClient restClient, MemCache cache, ILogger<CoinGeckoClient> logger = null)
         {
             _logger = logger;
+            _cache = cache;
             _restClient = restClient;
         }
 
@@ -48,7 +50,7 @@ namespace CoinGeckoAPI
             if (per_page != 50) { request.AddQueryParameter("per_page", per_page); }
             if (page != 0 && page != 1) { request.AddQueryParameter("page", page); }
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<IndexItem[]>(jsonStr);
         }
@@ -73,7 +75,7 @@ namespace CoinGeckoAPI
             }
             var request = new RestRequest(CoinGeckoClient.BuildUrl("indexes", market_id, id));
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             var result = JsonConvert.DeserializeObject<IndexItem>(jsonStr);
 
@@ -90,7 +92,7 @@ namespace CoinGeckoAPI
         {
             var request = new RestRequest(CoinGeckoClient.BuildUrl("indexes", "list"));
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<IndexListItem[]>(jsonStr);
         }
