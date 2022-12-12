@@ -354,7 +354,7 @@ namespace CoinGeckoAPI
             {
                 await RateLimitSemaphore.WaitAsync();
 
-                var nextCallableTime = DateTimeOffset.MinValue;
+                DateTimeOffset nextCallableTime;
                 var currentRPM = CallsInLast60Seconds;
 
                 // this is like a progressive limit
