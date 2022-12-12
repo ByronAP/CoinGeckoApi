@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -65,7 +65,7 @@ namespace CoinGeckoAPI
 
             var data = response.Content;
 
-            if (!string.IsNullOrEmpty(data) && !string.IsNullOrEmpty(data))
+            if (!string.IsNullOrEmpty(data) && !string.IsNullOrWhiteSpace(data))
             {
                 var isCFCacheHit = false;
                 var ageSeconds = 0;
