@@ -3,6 +3,6 @@
     public class ExchangeVolumeChartItem
     {
         public long? Timestamp { get; set; }
-        public decimal? volume { get; set; }
+        public decimal? Volume { get; set; }
     }
 }
