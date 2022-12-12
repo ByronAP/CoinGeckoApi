@@ -30,10 +30,12 @@ namespace CoinGeckoAPI
     {
         private readonly RestClient _restClient;
         private readonly ILogger<CoinGeckoClient> _logger;
+        private readonly MemCache _cache;
 
-        internal DerivativesImp(RestClient restClient, ILogger<CoinGeckoClient> logger = null)
+        internal DerivativesImp(RestClient restClient, MemCache cache, ILogger<CoinGeckoClient> logger = null)
         {
             _logger = logger;
+            _cache = cache;
             _restClient = restClient;
         }
 
@@ -47,7 +49,7 @@ namespace CoinGeckoAPI
             var request = new RestRequest(CoinGeckoClient.BuildUrl("derivatives"));
             if (include_all) { request.AddQueryParameter("include_tickers", "all"); }
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<DerivativesTickerItem[]>(jsonStr);
         }
@@ -68,7 +70,7 @@ namespace CoinGeckoAPI
             if (per_page != 50) { request.AddQueryParameter("per_page", per_page); }
             if (page != 1) { request.AddQueryParameter("page", page); }
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<DerivativesExchangeItem[]>(jsonStr);
         }
@@ -90,7 +92,7 @@ namespace CoinGeckoAPI
             var request = new RestRequest(CoinGeckoClient.BuildUrl("derivatives", "exchanges", id));
             request.AddQueryParameter("include_tickers", include_all_tickers ? "all" : "unexpired");
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<DerivativesExchangeDetailItem>(jsonStr);
         }
@@ -103,7 +105,7 @@ namespace CoinGeckoAPI
         {
             var request = new RestRequest(CoinGeckoClient.BuildUrl("derivatives", "exchanges", "list"));
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<IdNameListItem[]>(jsonStr);
         }

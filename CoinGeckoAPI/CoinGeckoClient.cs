@@ -17,6 +17,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,7 +31,7 @@ namespace CoinGeckoAPI
     /// translates to 'CoinGeckoClient.Coins.GetCoinsListAsync()').
     /// </para>
     /// </summary>
-    public class CoinGeckoClient
+    public class CoinGeckoClient : IDisposable
     {
         /// <summary>
         /// The RestSharp client instance used to make the API calls.
@@ -102,6 +103,14 @@ namespace CoinGeckoAPI
         /// <value>Companies API calls.</value>
         public CompaniesImp Companies { get; }
 
+        /// <summary>
+        /// Gets or sets whether this instance is using response caching.
+        /// </summary>
+        /// <value><c>true</c> if this instances cache is enabled; otherwise, <c>false</c>.</value>
+        public bool IsCacheEnabled { get { return _cache.Enabled; } set { _cache.Enabled = value; } }
+
+        private readonly MemCache _cache;
+        private bool _disposedValue;
         private readonly ILogger<CoinGeckoClient> _logger;
 
         #region Constructors
@@ -112,17 +121,19 @@ namespace CoinGeckoAPI
         {
             _logger = null;
 
+            _cache = new MemCache();
+
             CGRestClient = new RestClient(Constants.API_BASE_URL);
 
-            Simple = new SimpleImp(CGRestClient, _logger);
-            Coins = new CoinsImp(CGRestClient, _logger);
-            Exchanges = new ExchangesImp(CGRestClient, _logger);
-            Indexes = new IndexesImp(CGRestClient, _logger);
-            Derivatives = new DerivativesImp(CGRestClient, _logger);
-            Nfts = new NftsImp(CGRestClient, _logger);
-            Search = new SearchImp(CGRestClient, _logger);
-            Global = new GlobalImp(CGRestClient, _logger);
-            Companies = new CompaniesImp(CGRestClient, _logger);
+            Simple = new SimpleImp(CGRestClient, _cache, _logger);
+            Coins = new CoinsImp(CGRestClient, _cache, _logger);
+            Exchanges = new ExchangesImp(CGRestClient, _cache, _logger);
+            Indexes = new IndexesImp(CGRestClient, _cache, _logger);
+            Derivatives = new DerivativesImp(CGRestClient, _cache, _logger);
+            Nfts = new NftsImp(CGRestClient, _cache, _logger);
+            Search = new SearchImp(CGRestClient, _cache, _logger);
+            Global = new GlobalImp(CGRestClient, _cache, _logger);
+            Companies = new CompaniesImp(CGRestClient, _cache, _logger);
         }
 
         /// <summary>
@@ -133,6 +144,8 @@ namespace CoinGeckoAPI
         {
             _logger = null;
 
+            _cache = new MemCache();
+
             if (isPro)
             {
                 CGRestClient = new RestClient(Constants.API_PRO_BASE_URL);
@@ -142,15 +155,15 @@ namespace CoinGeckoAPI
                 CGRestClient = new RestClient(Constants.API_BASE_URL);
             }
 
-            Simple = new SimpleImp(CGRestClient, _logger);
-            Coins = new CoinsImp(CGRestClient, _logger);
-            Exchanges = new ExchangesImp(CGRestClient, _logger);
-            Indexes = new IndexesImp(CGRestClient, _logger);
-            Derivatives = new DerivativesImp(CGRestClient, _logger);
-            Nfts = new NftsImp(CGRestClient, _logger);
-            Search = new SearchImp(CGRestClient, _logger);
-            Global = new GlobalImp(CGRestClient, _logger);
-            Companies = new CompaniesImp(CGRestClient, _logger);
+            Simple = new SimpleImp(CGRestClient, _cache, _logger);
+            Coins = new CoinsImp(CGRestClient, _cache, _logger);
+            Exchanges = new ExchangesImp(CGRestClient, _cache, _logger);
+            Indexes = new IndexesImp(CGRestClient, _cache, _logger);
+            Derivatives = new DerivativesImp(CGRestClient, _cache, _logger);
+            Nfts = new NftsImp(CGRestClient, _cache, _logger);
+            Search = new SearchImp(CGRestClient, _cache, _logger);
+            Global = new GlobalImp(CGRestClient, _cache, _logger);
+            Companies = new CompaniesImp(CGRestClient, _cache, _logger);
         }
 
         /// <summary>
@@ -161,17 +174,19 @@ namespace CoinGeckoAPI
         {
             _logger = logger;
 
+            _cache = new MemCache();
+
             CGRestClient = new RestClient(Constants.API_BASE_URL);
 
-            Simple = new SimpleImp(CGRestClient, _logger);
-            Coins = new CoinsImp(CGRestClient, _logger);
-            Exchanges = new ExchangesImp(CGRestClient, _logger);
-            Indexes = new IndexesImp(CGRestClient, _logger);
-            Derivatives = new DerivativesImp(CGRestClient, _logger);
-            Nfts = new NftsImp(CGRestClient, _logger);
-            Search = new SearchImp(CGRestClient, _logger);
-            Global = new GlobalImp(CGRestClient, _logger);
-            Companies = new CompaniesImp(CGRestClient, _logger);
+            Simple = new SimpleImp(CGRestClient, _cache, _logger);
+            Coins = new CoinsImp(CGRestClient, _cache, _logger);
+            Exchanges = new ExchangesImp(CGRestClient, _cache, _logger);
+            Indexes = new IndexesImp(CGRestClient, _cache, _logger);
+            Derivatives = new DerivativesImp(CGRestClient, _cache, _logger);
+            Nfts = new NftsImp(CGRestClient, _cache, _logger);
+            Search = new SearchImp(CGRestClient, _cache, _logger);
+            Global = new GlobalImp(CGRestClient, _cache, _logger);
+            Companies = new CompaniesImp(CGRestClient, _cache, _logger);
         }
 
         /// <summary>
@@ -183,6 +198,8 @@ namespace CoinGeckoAPI
         {
             _logger = logger;
 
+            _cache = new MemCache();
+
             if (isPro)
             {
                 CGRestClient = new RestClient(Constants.API_PRO_BASE_URL);
@@ -192,27 +209,99 @@ namespace CoinGeckoAPI
                 CGRestClient = new RestClient(Constants.API_BASE_URL);
             }
 
-            Simple = new SimpleImp(CGRestClient, _logger);
-            Coins = new CoinsImp(CGRestClient, _logger);
-            Exchanges = new ExchangesImp(CGRestClient, _logger);
-            Indexes = new IndexesImp(CGRestClient, _logger);
-            Derivatives = new DerivativesImp(CGRestClient, _logger);
-            Nfts = new NftsImp(CGRestClient, _logger);
-            Search = new SearchImp(CGRestClient, _logger);
-            Global = new GlobalImp(CGRestClient, _logger);
-            Companies = new CompaniesImp(CGRestClient, _logger);
+            Simple = new SimpleImp(CGRestClient, _cache, _logger);
+            Coins = new CoinsImp(CGRestClient, _cache, _logger);
+            Exchanges = new ExchangesImp(CGRestClient, _cache, _logger);
+            Indexes = new IndexesImp(CGRestClient, _cache, _logger);
+            Derivatives = new DerivativesImp(CGRestClient, _cache, _logger);
+            Nfts = new NftsImp(CGRestClient, _cache, _logger);
+            Search = new SearchImp(CGRestClient, _cache, _logger);
+            Global = new GlobalImp(CGRestClient, _cache, _logger);
+            Companies = new CompaniesImp(CGRestClient, _cache, _logger);
         }
         #endregion
 
-        internal static async Task<string> GetStringResponseAsync(RestClient client, RestRequest request, ILogger logger)
+        internal static async Task<string> GetStringResponseAsync(RestClient client, RestRequest request, MemCache cache, ILogger logger)
         {
+            var fullUrl = client.BuildUri(request).ToString();
+
+            try
+            {
+                if (cache.Enabled && cache.Contains(fullUrl))
+                {
+                    var cachedResponse = cache.Get(fullUrl);
+                    if (cachedResponse != null)
+                    {
+#if DEBUG
+                        Console.WriteLine("CACHE");
+#endif
+                        return (string)cachedResponse;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex, "");
+            }
+
             try
             {
                 var response = await client.GetAsync(request);
-
+#if DEBUG
+                Console.WriteLine("REMOTE");
+#endif
                 if (response.IsSuccessStatusCode)
                 {
-                    return response.Content;
+                    var data = response.Content;
+
+                    if (!string.IsNullOrEmpty(data) && !string.IsNullOrEmpty(data) && cache.Enabled)
+                    {
+                        var isCFCacheHit = false;
+                        var ageSeconds = 0;
+                        var cacheSeconds = 0;
+
+                        if (response.Headers.Any(x => x.Name.Equals("CF-Cache-Status", StringComparison.InvariantCultureIgnoreCase)))
+                        {
+                            isCFCacheHit = response.Headers.First(x => x.Name.Equals("CF-Cache-Status", StringComparison.InvariantCultureIgnoreCase)).Value.ToString().Equals("hit", StringComparison.InvariantCultureIgnoreCase);
+                        }
+
+                        if (isCFCacheHit && response.Headers.Any(x => x.Name.Equals("age", StringComparison.InvariantCultureIgnoreCase)))
+                        {
+                            ageSeconds = Convert.ToInt32(response.Headers.First(x => x.Name.Equals("age", StringComparison.InvariantCultureIgnoreCase)).Value);
+                        }
+
+                        if (response.Headers.Any(x => x.Name.Equals("Cache-Control", StringComparison.InvariantCultureIgnoreCase)))
+                        {
+                            var cacheControl = response.Headers.First(x => x.Name.Equals("Cache-Control", StringComparison.InvariantCultureIgnoreCase)).Value.ToString();
+                            var parts = cacheControl.Split(',');
+                            if (parts.Length > 1)
+                            {
+                                var cacheControlCacheSeconds = Convert.ToInt32(parts[1].Replace("max-age=", ""));
+
+                                // make sure the data we have is not waiting for CF cache refresh
+                                if (cacheControlCacheSeconds > ageSeconds)
+                                {
+                                    cacheSeconds = cacheControlCacheSeconds - ageSeconds;
+                                }
+                            }
+                        }
+
+                        // keep a minimum cache of 10 seconds
+                        if (cacheSeconds <= 10) { cacheSeconds = 10; }
+
+                        var expiry = DateTimeOffset.UtcNow.AddSeconds(cacheSeconds);
+
+                        if (expiry < DateTimeOffset.UtcNow.AddMinutes(4))
+                        {
+                            cache?.Set(fullUrl, data, expiry);
+                        }
+                        else
+                        {
+                            logger?.LogWarning("The expires header is too far in the future. URL: {FullUrl}", fullUrl);
+                        }
+                    }
+
+                    return data;
                 }
 
                 if (response.ErrorException != null)
@@ -264,7 +353,7 @@ namespace CoinGeckoAPI
 
             try
             {
-                var jsonString = await GetStringResponseAsync(CGRestClient, request, _logger);
+                var jsonString = await GetStringResponseAsync(CGRestClient, request, _cache, _logger);
                 _logger?.LogDebug("{JsonString}", jsonString);
                 return true;
             }
@@ -282,7 +371,7 @@ namespace CoinGeckoAPI
         {
             var request = new RestRequest(BuildUrl("exchange_rates"));
 
-            var jsonString = await GetStringResponseAsync(CGRestClient, request, _logger);
+            var jsonString = await GetStringResponseAsync(CGRestClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<ExchangeRatesResponse>(jsonString);
         }
@@ -301,9 +390,41 @@ namespace CoinGeckoAPI
                 request.AddQueryParameter("filter", filter);
             }
 
-            var jsonString = await GetStringResponseAsync(CGRestClient, request, _logger);
+            var jsonString = await GetStringResponseAsync(CGRestClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<IEnumerable<AssetPlatform>>(jsonString);
+        }
+
+        public void ClearCache() => _cache.Clear();
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposedValue)
+            {
+                if (disposing)
+                {
+                    if (_cache != null)
+                    {
+                        try
+                        {
+                            _cache.Dispose();
+                        }
+                        catch
+                        {
+                            // ignore
+                        }
+                    }
+                }
+
+                _disposedValue = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }
