@@ -2,20 +2,12 @@ namespace Tests
 {
     public class CoinsTests
     {
-        private CoinGeckoClient _apiClient;
-
-        [SetUp]
-        public void Setup()
-        {
-            _apiClient = new CoinGeckoClient();
-        }
-
         [Test]
         public async Task GetCoinsListTest()
         {
             await Helpers.DoRateLimiting();
 
-            var coinsResult = await _apiClient.Coins.GetCoinsListAsync();
+            var coinsResult = await Helpers.GetApiClient().Coins.GetCoinsListAsync();
 
             Assert.That(coinsResult, Is.Not.Null);
             Assert.That(coinsResult, Is.Not.Empty);
@@ -28,7 +20,7 @@ namespace Tests
 
             await Helpers.DoRateLimiting();
 
-            coinsResult = await _apiClient.Coins.GetCoinsListAsync(true);
+            coinsResult = await Helpers.GetApiClient().Coins.GetCoinsListAsync(true);
 
             Assert.That(coinsResult, Is.Not.Null);
             Assert.That(coinsResult, Is.Not.Empty);
@@ -45,7 +37,7 @@ namespace Tests
         {
             await Helpers.DoRateLimiting();
 
-            var marketsResult = await _apiClient.Coins.GetCoinMarketsAsync("usd");
+            var marketsResult = await Helpers.GetApiClient().Coins.GetCoinMarketsAsync("usd");
 
             Assert.That(marketsResult, Is.Not.Null);
             Assert.That(marketsResult, Is.Not.Empty);
@@ -54,7 +46,7 @@ namespace Tests
 
             await Helpers.DoRateLimiting();
 
-            marketsResult = await _apiClient.Coins.GetCoinMarketsAsync("usd", per_page: 200, sparkline: true);
+            marketsResult = await Helpers.GetApiClient().Coins.GetCoinMarketsAsync("usd", per_page: 200, sparkline: true);
 
             Assert.That(marketsResult, Is.Not.Null);
             Assert.That(marketsResult, Is.Not.Empty);
@@ -67,14 +59,14 @@ namespace Tests
         {
             await Helpers.DoRateLimiting();
 
-            var coinResult = await _apiClient.Coins.GetCoinAsync("bitcoin");
+            var coinResult = await Helpers.GetApiClient().Coins.GetCoinAsync("bitcoin");
 
             Assert.That(coinResult, Is.Not.Null);
             Assert.That(coinResult.BlockTimeInMinutes, Is.EqualTo(10));
 
             await Helpers.DoRateLimiting();
 
-            coinResult = await _apiClient.Coins.GetCoinAsync("cosmos");
+            coinResult = await Helpers.GetApiClient().Coins.GetCoinAsync("cosmos");
 
             Assert.That(coinResult, Is.Not.Null);
             Assert.That(coinResult.Symbol, Is.EqualTo("atom"));
@@ -85,14 +77,14 @@ namespace Tests
         {
             await Helpers.DoRateLimiting();
 
-            var tickersResult = await _apiClient.Coins.GetCoinTickersAsync("bitcoin");
+            var tickersResult = await Helpers.GetApiClient().Coins.GetCoinTickersAsync("bitcoin");
 
             Assert.That(tickersResult, Is.Not.Null);
             Assert.That(tickersResult.Tickers, Is.Not.Empty);
 
             await Helpers.DoRateLimiting();
 
-            tickersResult = await _apiClient.Coins.GetCoinTickersAsync("bitcoin", null, true, 1, CoinTickersOrderBy.trust_score_desc, true);
+            tickersResult = await Helpers.GetApiClient().Coins.GetCoinTickersAsync("bitcoin", null, true, 1, CoinTickersOrderBy.trust_score_desc, true);
 
             Assert.That(tickersResult, Is.Not.Null);
             Assert.That(tickersResult.Tickers, Is.Not.Empty);
@@ -105,7 +97,7 @@ namespace Tests
         {
             await Helpers.DoRateLimiting();
 
-            var historyResult = await _apiClient.Coins.GetCoinHistoryAsync("bitcoin", DateTimeOffset.UtcNow.AddDays(-2));
+            var historyResult = await Helpers.GetApiClient().Coins.GetCoinHistoryAsync("bitcoin", DateTimeOffset.UtcNow.AddDays(-2));
 
             Assert.That(historyResult, Is.Not.Null);
             Assert.That(historyResult.MarketData.CurrentPrice, Is.Not.Empty);
@@ -116,7 +108,7 @@ namespace Tests
         {
             await Helpers.DoRateLimiting();
 
-            var chartResult = await _apiClient.Coins.GetCoinMarketChartAsync("bitcoin", "usd", 1000);
+            var chartResult = await Helpers.GetApiClient().Coins.GetCoinMarketChartAsync("bitcoin", "usd", 1000);
 
             Assert.That(chartResult, Is.Not.Null);
             Assert.That(chartResult.Prices, Is.Not.Empty);
@@ -133,7 +125,7 @@ namespace Tests
 
             await Helpers.DoRateLimiting();
 
-            chartResult = await _apiClient.Coins.GetCoinMarketChartAsync("cosmos", "usd", 1000);
+            chartResult = await Helpers.GetApiClient().Coins.GetCoinMarketChartAsync("cosmos", "usd", 1000);
 
             Assert.That(chartResult, Is.Not.Null);
             Assert.That(chartResult.Prices, Is.Not.Empty);
@@ -150,7 +142,7 @@ namespace Tests
 
             await Helpers.DoRateLimiting();
 
-            chartResult = await _apiClient.Coins.GetCoinMarketChartAsync("ethereum", "usd", 1000);
+            chartResult = await Helpers.GetApiClient().Coins.GetCoinMarketChartAsync("ethereum", "usd", 1000);
 
             Assert.That(chartResult, Is.Not.Null);
             Assert.That(chartResult.Prices, Is.Not.Empty);
@@ -171,7 +163,7 @@ namespace Tests
         {
             await Helpers.DoRateLimiting();
 
-            var chartResult = await _apiClient.Coins.GetCoinMarketChartRangeAsync("bitcoin", "usd", DateTimeOffset.UtcNow.AddMonths(-1), DateTimeOffset.UtcNow);
+            var chartResult = await Helpers.GetApiClient().Coins.GetCoinMarketChartRangeAsync("bitcoin", "usd", DateTimeOffset.UtcNow.AddMonths(-1), DateTimeOffset.UtcNow);
 
             Assert.That(chartResult, Is.Not.Null);
             Assert.That(chartResult.Prices, Is.Not.Empty);
@@ -192,7 +184,7 @@ namespace Tests
         {
             await Helpers.DoRateLimiting();
 
-            var ohlcResult = await _apiClient.Coins.GetCoinOhlcAsync("bitcoin", "usd", 14);
+            var ohlcResult = await Helpers.GetApiClient().Coins.GetCoinOhlcAsync("bitcoin", "usd", 14);
 
             Assert.That(ohlcResult, Is.Not.Null);
             Assert.That(ohlcResult, Is.Not.Empty);
@@ -205,7 +197,7 @@ namespace Tests
         {
             await Helpers.DoRateLimiting();
 
-            var ohlcResult = await _apiClient.Coins.GetCoinOhlcItemsAsync("bitcoin", "usd", 14);
+            var ohlcResult = await Helpers.GetApiClient().Coins.GetCoinOhlcItemsAsync("bitcoin", "usd", 14);
 
             Assert.That(ohlcResult, Is.Not.Null);
             Assert.That(ohlcResult, Is.Not.Empty);

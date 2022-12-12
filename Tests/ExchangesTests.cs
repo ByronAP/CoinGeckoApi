@@ -2,20 +2,12 @@
 {
     public class ExchangesTests
     {
-        private CoinGeckoClient _apiClient;
-
-        [SetUp]
-        public void Setup()
-        {
-            _apiClient = new CoinGeckoClient();
-        }
-
         [Test]
         public async Task GetExchangesTest()
         {
             await Helpers.DoRateLimiting();
 
-            var exchangesResult = await _apiClient.Exchanges.GetExchangesAsync();
+            var exchangesResult = await Helpers.GetApiClient().Exchanges.GetExchangesAsync();
 
             Assert.That(exchangesResult, Is.Not.Null);
             Assert.That(exchangesResult, Is.Not.Empty);
@@ -26,7 +18,7 @@
         {
             await Helpers.DoRateLimiting();
 
-            var exchangesResult = await _apiClient.Exchanges.GetExchangesListAsync();
+            var exchangesResult = await Helpers.GetApiClient().Exchanges.GetExchangesListAsync();
 
             Assert.That(exchangesResult, Is.Not.Null);
             Assert.That(exchangesResult, Is.Not.Empty);
@@ -42,7 +34,7 @@
         {
             await Helpers.DoRateLimiting();
 
-            var exchangeResult = await _apiClient.Exchanges.GetExchangeAsync("gdax");
+            var exchangeResult = await Helpers.GetApiClient().Exchanges.GetExchangeAsync("gdax");
 
             Assert.That(exchangeResult, Is.Not.Null);
             Assert.That(exchangeResult.Tickers, Is.Not.Empty);
@@ -54,7 +46,7 @@
         {
             await Helpers.DoRateLimiting();
 
-            var tickersResult = await _apiClient.Exchanges.GetExchangeTickersAsync("gdax", new[] { "bitcoin", "ethereum", "cosmos" }, true);
+            var tickersResult = await Helpers.GetApiClient().Exchanges.GetExchangeTickersAsync("gdax", new[] { "bitcoin", "ethereum", "cosmos" }, true);
 
             Assert.That(tickersResult, Is.Not.Null);
             Assert.That(tickersResult.Tickers, Is.Not.Empty);
@@ -66,7 +58,7 @@
         {
             await Helpers.DoRateLimiting();
 
-            var chartResult = await _apiClient.Exchanges.GetExchangeVolumeChartFriendlyAsync("gdax", 2);
+            var chartResult = await Helpers.GetApiClient().Exchanges.GetExchangeVolumeChartFriendlyAsync("gdax", 2);
 
             Assert.That(chartResult, Is.Not.Null);
             Assert.That(chartResult, Is.Not.Empty);
@@ -77,7 +69,7 @@
         {
             await Helpers.DoRateLimiting();
 
-            var chartResult = await _apiClient.Exchanges.GetExchangeVolumeChartAsync("gdax", 2);
+            var chartResult = await Helpers.GetApiClient().Exchanges.GetExchangeVolumeChartAsync("gdax", 2);
 
             Assert.That(chartResult, Is.Not.Null);
             Assert.That(chartResult, Is.Not.Empty);

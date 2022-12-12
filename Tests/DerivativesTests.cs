@@ -2,20 +2,12 @@
 {
     public class DerivativesTests
     {
-        private CoinGeckoClient _apiClient;
-
-        [SetUp]
-        public void Setup()
-        {
-            _apiClient = new CoinGeckoClient();
-        }
-
         [Test]
         public async Task GetDerivativesTest()
         {
             await Helpers.DoRateLimiting();
 
-            var derivativesResult = await _apiClient.Derivatives.GetDerivativesAsync();
+            var derivativesResult = await Helpers.GetApiClient().Derivatives.GetDerivativesAsync();
 
             Assert.That(derivativesResult, Is.Not.Null);
             Assert.That(derivativesResult, Is.Not.Empty);
@@ -26,7 +18,7 @@
         {
             await Helpers.DoRateLimiting();
 
-            var derivativesResult = await _apiClient.Derivatives.GetDerivativesExchangesAsync();
+            var derivativesResult = await Helpers.GetApiClient().Derivatives.GetDerivativesExchangesAsync();
 
             Assert.That(derivativesResult, Is.Not.Null);
             Assert.That(derivativesResult, Is.Not.Empty);
@@ -37,7 +29,7 @@
         {
             await Helpers.DoRateLimiting();
 
-            var derivativesResult = await _apiClient.Derivatives.GetDerivativesExchangeAsync("zbg_futures");
+            var derivativesResult = await Helpers.GetApiClient().Derivatives.GetDerivativesExchangeAsync("zbg_futures");
 
             Assert.That(derivativesResult, Is.Not.Null);
             Assert.That(derivativesResult.YearEstablished, Is.GreaterThan(2000));
@@ -48,7 +40,7 @@
         {
             await Helpers.DoRateLimiting();
 
-            var derivativesResult = await _apiClient.Derivatives.GetDerivativesExchangesListAsync();
+            var derivativesResult = await Helpers.GetApiClient().Derivatives.GetDerivativesExchangesListAsync();
 
             Assert.That(derivativesResult, Is.Not.Null);
             Assert.That(derivativesResult, Is.Not.Empty);

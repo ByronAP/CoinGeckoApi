@@ -4,7 +4,7 @@
 // Created          : 12-10-2022
 //
 // Last Modified By : ByronAP
-// Last Modified On : 12-11-2022
+// Last Modified On : 12-12-2022
 // ***********************************************************************
 // <copyright file="CoinGeckoClient.cs" company="ByronAP">
 //     Copyright © 2022 ByronAP, CoinGecko. All rights reserved.
@@ -17,7 +17,6 @@ using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -30,6 +29,7 @@ namespace CoinGeckoAPI
     /// CoinGecko API documentation (Ex: API call '/coins/list' 
     /// translates to 'CoinGeckoClient.Coins.GetCoinsListAsync()').
     /// </para>
+    /// <para>By default response caching is enabled. To disable it set <see cref="IsCacheEnabled"/> to <c>false</c>.</para>
     /// </summary>
     public class CoinGeckoClient : IDisposable
     {
@@ -121,7 +121,7 @@ namespace CoinGeckoAPI
         {
             _logger = null;
 
-            _cache = new MemCache();
+            _cache = new MemCache(_logger);
 
             CGRestClient = new RestClient(Constants.API_BASE_URL);
 
@@ -144,7 +144,7 @@ namespace CoinGeckoAPI
         {
             _logger = null;
 
-            _cache = new MemCache();
+            _cache = new MemCache(_logger);
 
             if (isPro)
             {
@@ -174,7 +174,7 @@ namespace CoinGeckoAPI
         {
             _logger = logger;
 
-            _cache = new MemCache();
+            _cache = new MemCache(_logger);
 
             CGRestClient = new RestClient(Constants.API_BASE_URL);
 
@@ -198,7 +198,7 @@ namespace CoinGeckoAPI
         {
             _logger = logger;
 
-            _cache = new MemCache();
+            _cache = new MemCache(_logger);
 
             if (isPro)
             {
@@ -227,16 +227,9 @@ namespace CoinGeckoAPI
 
             try
             {
-                if (cache.Enabled && cache.Contains(fullUrl))
+                if (cache.TryGet(fullUrl, out var cacheResponse))
                 {
-                    var cachedResponse = cache.Get(fullUrl);
-                    if (cachedResponse != null)
-                    {
-#if DEBUG
-                        Console.WriteLine("CACHE");
-#endif
-                        return (string)cachedResponse;
-                    }
+                    return (string)cacheResponse;
                 }
             }
             catch (Exception ex)
@@ -247,61 +240,13 @@ namespace CoinGeckoAPI
             try
             {
                 var response = await client.GetAsync(request);
-#if DEBUG
-                Console.WriteLine("REMOTE");
-#endif
+
                 if (response.IsSuccessStatusCode)
                 {
-                    var data = response.Content;
+                    cache.CacheRequest(fullUrl, response);
 
-                    if (!string.IsNullOrEmpty(data) && !string.IsNullOrEmpty(data) && cache.Enabled)
-                    {
-                        var isCFCacheHit = false;
-                        var ageSeconds = 0;
-                        var cacheSeconds = 0;
+                    return response.Content;
 
-                        if (response.Headers.Any(x => x.Name.Equals("CF-Cache-Status", StringComparison.InvariantCultureIgnoreCase)))
-                        {
-                            isCFCacheHit = response.Headers.First(x => x.Name.Equals("CF-Cache-Status", StringComparison.InvariantCultureIgnoreCase)).Value.ToString().Equals("hit", StringComparison.InvariantCultureIgnoreCase);
-                        }
-
-                        if (isCFCacheHit && response.Headers.Any(x => x.Name.Equals("age", StringComparison.InvariantCultureIgnoreCase)))
-                        {
-                            ageSeconds = Convert.ToInt32(response.Headers.First(x => x.Name.Equals("age", StringComparison.InvariantCultureIgnoreCase)).Value);
-                        }
-
-                        if (response.Headers.Any(x => x.Name.Equals("Cache-Control", StringComparison.InvariantCultureIgnoreCase)))
-                        {
-                            var cacheControl = response.Headers.First(x => x.Name.Equals("Cache-Control", StringComparison.InvariantCultureIgnoreCase)).Value.ToString();
-                            var parts = cacheControl.Split(',');
-                            if (parts.Length > 1)
-                            {
-                                var cacheControlCacheSeconds = Convert.ToInt32(parts[1].Replace("max-age=", ""));
-
-                                // make sure the data we have is not waiting for CF cache refresh
-                                if (cacheControlCacheSeconds > ageSeconds)
-                                {
-                                    cacheSeconds = cacheControlCacheSeconds - ageSeconds;
-                                }
-                            }
-                        }
-
-                        // keep a minimum cache of 10 seconds
-                        if (cacheSeconds <= 10) { cacheSeconds = 10; }
-
-                        var expiry = DateTimeOffset.UtcNow.AddSeconds(cacheSeconds);
-
-                        if (expiry < DateTimeOffset.UtcNow.AddMinutes(4))
-                        {
-                            cache?.Set(fullUrl, data, expiry);
-                        }
-                        else
-                        {
-                            logger?.LogWarning("The expires header is too far in the future. URL: {FullUrl}", fullUrl);
-                        }
-                    }
-
-                    return data;
                 }
 
                 if (response.ErrorException != null)
@@ -395,6 +340,9 @@ namespace CoinGeckoAPI
             return JsonConvert.DeserializeObject<IEnumerable<AssetPlatform>>(jsonString);
         }
 
+        /// <summary>
+        /// Clears the response cache.
+        /// </summary>
         public void ClearCache() => _cache.Clear();
 
         protected virtual void Dispose(bool disposing)
