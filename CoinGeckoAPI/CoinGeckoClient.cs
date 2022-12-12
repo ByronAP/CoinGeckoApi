@@ -18,6 +18,7 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace CoinGeckoAPI
@@ -30,6 +31,7 @@ namespace CoinGeckoAPI
     /// translates to 'CoinGeckoClient.Coins.GetCoinsListAsync()').
     /// </para>
     /// <para>By default response caching is enabled. To disable it set <see cref="IsCacheEnabled"/> to <c>false</c>.</para>
+    /// <para>By default rate limiting is enabled. To disable it set <see cref="IsRateLimitingEnabled"/> to <c>false</c>.</para>
     /// </summary>
     public class CoinGeckoClient : IDisposable
     {
@@ -104,10 +106,28 @@ namespace CoinGeckoAPI
         public CompaniesImp Companies { get; }
 
         /// <summary>
-        /// Gets or sets whether this instance is using response caching.
+        /// <para>Gets or sets whether this instance is using response caching.</para>
+        /// <para>Caching is enabled by default.</para>
         /// </summary>
         /// <value><c>true</c> if this instances cache is enabled; otherwise, <c>false</c>.</value>
         public bool IsCacheEnabled { get { return _cache.Enabled; } set { _cache.Enabled = value; } }
+
+        /// <summary>
+        /// <para>Gets or sets a value indicating whether rate limiting is enabled.</para>
+        /// <para>Rate limiting is enabled by default.</para>
+        /// <para>Rate limiting is shared across all instances.</para>
+        /// </summary>
+        /// <value><c>true</c> if rate limiting is enabled; otherwise, <c>false</c>.</value>
+        public static bool IsRateLimitingEnabled { get; set; } = true;
+
+        // this shares the call times across instances ensuring that we don't have an instance making calls
+        // with rate limiting off causing an instance that does to have calls fail unexpectedly.
+        internal static DateTimeOffset LastApiCallAt { get; set; } = DateTimeOffset.MinValue;
+        internal static DateTimeOffset Last429ResponseAt { get; set; } = DateTimeOffset.MinValue;
+        internal static int CallsInLast60Seconds = 0;
+        internal static readonly SemaphoreSlim RateLimitSemaphore = new SemaphoreSlim(1, 1);
+
+        internal static Timer RateLimitTimer = new Timer(RateLimitTimerCallback, null, 60000, 60000);
 
         private readonly MemCache _cache;
         private bool _disposedValue;
@@ -221,73 +241,6 @@ namespace CoinGeckoAPI
         }
         #endregion
 
-        internal static async Task<string> GetStringResponseAsync(RestClient client, RestRequest request, MemCache cache, ILogger logger)
-        {
-            var fullUrl = client.BuildUri(request).ToString();
-
-            try
-            {
-                if (cache.TryGet(fullUrl, out var cacheResponse))
-                {
-                    return (string)cacheResponse;
-                }
-            }
-            catch (Exception ex)
-            {
-                logger?.LogError(ex, "");
-            }
-
-            try
-            {
-                var response = await client.GetAsync(request);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    cache.CacheRequest(fullUrl, response);
-
-                    return response.Content;
-
-                }
-
-                if (response.ErrorException != null)
-                {
-                    logger?.LogError(response.ErrorException, "GetStringResponseAsync failed.");
-                    throw response.ErrorException;
-                }
-
-                throw new UnknownException($"Unknown exception, http response code is not success, {response.StatusCode}.");
-            }
-            catch (Exception ex)
-            {
-                logger?.LogError(ex, "GetStringResponseAsync request failure.");
-                throw;
-            }
-        }
-
-        internal static string BuildUrl(params string[] parts)
-        {
-            if (parts.Length > 2)
-            {
-                var sb = new StringBuilder();
-                sb.Append("/api/v").Append(Constants.API_VERSION);
-                foreach (var part in parts)
-                {
-                    sb.Append('/');
-                    sb.Append(part);
-                }
-                return sb.ToString();
-            }
-            else
-            {
-                var result = $"/api/v{Constants.API_VERSION}";
-                foreach (var part in parts)
-                {
-                    result += $"/{part}";
-                }
-                return result;
-            }
-        }
-
         /// <summary>
         /// Check API server status.
         /// </summary>
@@ -344,6 +297,131 @@ namespace CoinGeckoAPI
         /// Clears the response cache.
         /// </summary>
         public void ClearCache() => _cache.Clear();
+
+        internal static async Task<string> GetStringResponseAsync(RestClient client, RestRequest request, MemCache cache, ILogger logger)
+        {
+            var fullUrl = client.BuildUri(request).ToString();
+
+            try
+            {
+                if (cache.TryGet(fullUrl, out var cacheResponse))
+                {
+                    return (string)cacheResponse;
+                }
+            }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex, "");
+            }
+
+            try
+            {
+                await DoRateLimiting();
+
+                var response = await client.GetAsync(request);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    cache.CacheRequest(fullUrl, response);
+
+                    return response.Content;
+
+                }
+
+                if (response.ErrorException != null)
+                {
+                    logger?.LogError(response.ErrorException, "GetStringResponseAsync failed.");
+                    throw response.ErrorException;
+                }
+
+                throw new UnknownException($"Unknown exception, http response code is not success, {response.StatusCode}.");
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.ToLowerInvariant().Contains("toomanyrequests"))
+                {
+                    Last429ResponseAt = DateTimeOffset.UtcNow;
+                    logger?.LogError("API requests rate limited at the server for the next {RateLimitRefreshSeconds} seconds.", Constants.API_RATE_LIMIT_RESET_MS / 1000);
+                }
+                logger?.LogError(ex, "GetStringResponseAsync request failure.");
+                throw;
+            }
+        }
+
+        internal static async Task DoRateLimiting()
+        {
+            try
+            {
+                await RateLimitSemaphore.WaitAsync();
+
+                var nextCallableTime = DateTimeOffset.MinValue;
+                var currentRPM = CallsInLast60Seconds;
+
+                // this is like a progressive limit
+                if (currentRPM >= Constants.API_MAX_RPM / (Constants.API_RATE_LIMIT_MS / 1000))
+                {
+                    nextCallableTime = DateTimeOffset.UtcNow.AddMilliseconds(Constants.API_RATE_LIMIT_MS);
+                }
+                else if (currentRPM * 2 >= Constants.API_MAX_RPM / (Constants.API_RATE_LIMIT_MS / 1000))
+                {
+                    nextCallableTime = LastApiCallAt.AddMilliseconds(Constants.API_RATE_LIMIT_MS / 1.5);
+                }
+                else
+                {
+                    nextCallableTime = DateTimeOffset.UtcNow.AddMilliseconds(Constants.API_RATE_LIMIT_MS / 2);
+                }
+
+                if (Last429ResponseAt.AddMilliseconds(Constants.API_RATE_LIMIT_RESET_MS) > DateTimeOffset.UtcNow)
+                {
+                    nextCallableTime = Last429ResponseAt.AddMilliseconds(Constants.API_RATE_LIMIT_RESET_MS);
+                }
+
+                if (nextCallableTime > DateTimeOffset.UtcNow)
+                {
+                    var delayTimeMs = Convert.ToInt32((nextCallableTime - DateTimeOffset.UtcNow).TotalMilliseconds);
+                    await Task.Delay(delayTimeMs);
+                }
+
+                LastApiCallAt = DateTimeOffset.UtcNow;
+                CallsInLast60Seconds++;
+            }
+            finally { RateLimitSemaphore.Release(); }
+        }
+
+        internal static async void RateLimitTimerCallback(Object nothing)
+        {
+            try
+            {
+                await RateLimitSemaphore.WaitAsync();
+
+                CallsInLast60Seconds = 0;
+            }
+            finally { RateLimitSemaphore.Release(); }
+        }
+
+        internal static string BuildUrl(params string[] parts)
+        {
+            if (parts.Length > 2)
+            {
+                var sb = new StringBuilder();
+                sb.Append("/api/v").Append(Constants.API_VERSION);
+                foreach (var part in parts)
+                {
+                    sb.Append('/');
+                    sb.Append(part);
+                }
+                return sb.ToString();
+            }
+            else
+            {
+                var result = $"/api/v{Constants.API_VERSION}";
+                foreach (var part in parts)
+                {
+                    result += $"/{part}";
+                }
+                return result;
+            }
+        }
 
         protected virtual void Dispose(bool disposing)
         {
