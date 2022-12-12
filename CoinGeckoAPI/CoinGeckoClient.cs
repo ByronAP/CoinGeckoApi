@@ -388,11 +388,11 @@ namespace CoinGeckoAPI
             finally { RateLimitSemaphore.Release(); }
         }
 
-        internal static async void RateLimitTimerCallback(Object nothing)
+        internal static void RateLimitTimerCallback(Object nothing)
         {
             try
             {
-                await RateLimitSemaphore.WaitAsync();
+                RateLimitSemaphore.Wait();
 
                 CallsInLast60Seconds = 0;
             }
