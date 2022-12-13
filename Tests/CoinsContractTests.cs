@@ -6,8 +6,6 @@
         [Test]
         public async Task GetCoinContractTest()
         {
-            await Helpers.DoRateLimiting();
-
             var contractResult = await Helpers.GetApiClient().Coins.Contract.GetCoinContractAsync("ethereum", "0x514910771af9ca656af840dff83e8264ecf986ca");
 
             Assert.That(contractResult, Is.Not.Null);
@@ -17,8 +15,6 @@
         [Test]
         public async Task GetCoinContractMarketChartTest()
         {
-            await Helpers.DoRateLimiting();
-
             var chartResult = await Helpers.GetApiClient().Coins.Contract.GetCoinContractMarketChartAsync("ethereum", "0x514910771af9ca656af840dff83e8264ecf986ca", "usd", 30);
 
             Assert.That(chartResult, Is.Not.Null);
@@ -38,8 +34,6 @@
         [Test]
         public async Task GetCoinMarketChartRangeTest()
         {
-            await Helpers.DoRateLimiting();
-
             var chartResult = await Helpers.GetApiClient().Coins.Contract.GetCoinContractMarketChartRangeAsync("ethereum", "0x514910771af9ca656af840dff83e8264ecf986ca", "usd", DateTimeOffset.UtcNow.AddMonths(-1), DateTimeOffset.UtcNow);
 
             Assert.That(chartResult, Is.Not.Null);

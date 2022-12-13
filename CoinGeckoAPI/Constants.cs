@@ -4,7 +4,7 @@
 // Created          : 12-10-2022
 //
 // Last Modified By : ByronAP
-// Last Modified On : 12-10-2022
+// Last Modified On : 12-12-2022
 // ***********************************************************************
 // <copyright file="Constants.cs" company="ByronAP">
 //     Copyright © 2022 ByronAP, CoinGecko. All rights reserved.
@@ -22,16 +22,20 @@ namespace CoinGeckoAPI
         public static readonly string API_NAME = "CoinGecko";
 
         /// <summary>
-        /// Actual rate limit is 10-50 RPM.
-        /// This is the recommended wait time between calls to not ever get rate limited.
+        /// <para>This is the wait time between calls to not ever get rate limited (AKA 10 RPM).</para>
         /// </summary>
         public static readonly uint API_RATE_LIMIT_MS = 6000;
+
+        /// <summary>
+        /// The absolute maximum number of api calls allowed in 1 minute (Requests Per Minute).
+        /// </summary>
+        public static readonly uint API_MAX_RPM = 50;
 
         /// <summary>
         /// Time interval when the rate limit is reset.
         /// AKA: If a response code is 429 then let the api cool down for this long.
         /// </summary>
-        public static readonly uint API_RATE_LIMIT_RESET_MS = 61000;
+        public static readonly uint API_RATE_LIMIT_RESET_MS = 90000;
 
         /// <summary>
         /// The base API URL.

@@ -6,8 +6,6 @@
         [Test]
         public async Task GetCoinCategoriesTest()
         {
-            await Helpers.DoRateLimiting();
-
             var categoriesResult = await Helpers.GetApiClient().Coins.Categories.GetCoinCategoriesAsync();
 
             Assert.That(categoriesResult, Is.Not.Null);
@@ -22,8 +20,6 @@
         [Test]
         public async Task GetCoinCategoriesListTest()
         {
-            await Helpers.DoRateLimiting();
-
             var categoriesResult = await Helpers.GetApiClient().Coins.Categories.GetCoinCategoriesListAsync();
 
             Assert.That(categoriesResult, Is.Not.Null);

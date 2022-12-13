@@ -5,8 +5,6 @@
         [Test]
         public async Task GetDerivativesTest()
         {
-            await Helpers.DoRateLimiting();
-
             var derivativesResult = await Helpers.GetApiClient().Derivatives.GetDerivativesAsync();
 
             Assert.That(derivativesResult, Is.Not.Null);
@@ -16,8 +14,6 @@
         [Test]
         public async Task GetDerivativesExchangesTest()
         {
-            await Helpers.DoRateLimiting();
-
             var derivativesResult = await Helpers.GetApiClient().Derivatives.GetDerivativesExchangesAsync();
 
             Assert.That(derivativesResult, Is.Not.Null);
@@ -27,8 +23,6 @@
         [Test]
         public async Task GetDerivativesExchangeTest()
         {
-            await Helpers.DoRateLimiting();
-
             var derivativesResult = await Helpers.GetApiClient().Derivatives.GetDerivativesExchangeAsync("zbg_futures");
 
             Assert.That(derivativesResult, Is.Not.Null);
@@ -38,8 +32,6 @@
         [Test]
         public async Task GetDerivativesExchangesListTest()
         {
-            await Helpers.DoRateLimiting();
-
             var derivativesResult = await Helpers.GetApiClient().Derivatives.GetDerivativesExchangesListAsync();
 
             Assert.That(derivativesResult, Is.Not.Null);

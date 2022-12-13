@@ -34,8 +34,6 @@
             Helpers.GetApiClient().IsCacheEnabled = true;
             Helpers.GetApiClient().ClearCache();
 
-            await Helpers.DoRateLimiting();
-
             var categoriesResponse = await Helpers.GetApiClient().Coins.Categories.GetCoinCategoriesAsync();
 
             Assert.IsNotNull(categoriesResponse);
@@ -94,8 +92,8 @@
 
             Assert.That(categoriesResponse.First().UpdatedAt.Value, Is.EqualTo(updatedAt));
 
-            // wait for the cache to clear, we don't just clear the cache because we want to make sure they are expiring
-            await Task.Delay(240000);
+            // wait for the cache to clear and the server to update the UpdateAt value, we don't just clear the cache because we want to make sure they are expiring
+            await Task.Delay(300000);
 
             categoriesResponse = await Helpers.GetApiClient().Coins.Categories.GetCoinCategoriesAsync();
 
@@ -106,14 +104,11 @@
             Assert.That(categoriesResponse.First().UpdatedAt, Is.Not.Null);
 
             Assert.That(categoriesResponse.First().UpdatedAt.Value, Is.Not.EqualTo(updatedAt));
-
         }
 
         [Test]
         public async Task CacheEnableDisableTest()
         {
-            await Helpers.DoRateLimiting();
-
             Helpers.GetApiClient().ClearCache();
 
             Helpers.GetApiClient().IsCacheEnabled = true;
@@ -221,8 +216,6 @@
         [Test]
         public async Task PingTest()
         {
-            await Helpers.DoRateLimiting();
-
             var pingResult = await Helpers.GetApiClient().PingAsync();
 
             Assert.That(pingResult, Is.True);
@@ -231,8 +224,6 @@
         [Test]
         public async Task GetExchangeRatesTest()
         {
-            await Helpers.DoRateLimiting();
-
             var ratesResult = await Helpers.GetApiClient().GetExchangeRatesAsync();
 
             Assert.That(ratesResult, Is.Not.Null);
@@ -243,15 +234,11 @@
         [Test]
         public async Task GetAssetPlatformsTest()
         {
-            await Helpers.DoRateLimiting();
-
             var platformsResult = await Helpers.GetApiClient().GetAssetPlatformsAsync();
 
             Assert.That(platformsResult, Is.Not.Null);
             Assert.That(platformsResult, Is.Not.Empty);
             Assert.That(platformsResult.Count(), Is.GreaterThanOrEqualTo(10));
-
-            await Helpers.DoRateLimiting();
 
             platformsResult = await Helpers.GetApiClient().GetAssetPlatformsAsync("nft");
 
