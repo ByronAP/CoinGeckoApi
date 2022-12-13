@@ -2,20 +2,10 @@
 {
     public class IndexesTests
     {
-        private CoinGeckoClient _apiClient;
-
-        [SetUp]
-        public void Setup()
-        {
-            _apiClient = new CoinGeckoClient();
-        }
-
         [Test]
         public async Task GetIndexesTest()
         {
-            await Helpers.DoRateLimiting();
-
-            var indexesResult = await _apiClient.Indexes.GetIndexesAsync();
+            var indexesResult = await Helpers.GetApiClient().Indexes.GetIndexesAsync();
 
             Assert.That(indexesResult, Is.Not.Null);
             Assert.That(indexesResult, Is.Not.Empty);
@@ -24,9 +14,7 @@
         [Test]
         public async Task GetIndexTest()
         {
-            await Helpers.DoRateLimiting();
-
-            var indexResult = await _apiClient.Indexes.GetIndexAsync("cme_futures", "btc");
+            var indexResult = await Helpers.GetApiClient().Indexes.GetIndexAsync("cme_futures", "btc");
 
             Assert.That(indexResult, Is.Not.Null);
             Assert.That(indexResult.IsMultiAssetComposite, Is.False);
@@ -36,9 +24,7 @@
         [Test]
         public async Task GetIndexesListTest()
         {
-            await Helpers.DoRateLimiting();
-
-            var indexesResult = await _apiClient.Indexes.GetIndexesListAsync();
+            var indexesResult = await Helpers.GetApiClient().Indexes.GetIndexesListAsync();
 
             Assert.That(indexesResult, Is.Not.Null);
             Assert.That(indexesResult, Is.Not.Empty);

@@ -2,20 +2,221 @@
 {
     public class Tests
     {
-        private CoinGeckoClient _apiClient;
-
-        [SetUp]
-        public void Setup()
+        [Test]
+        public async Task InstantiateAndDisposeTest()
         {
-            _apiClient = new CoinGeckoClient();
+            var apiClient = new CoinGeckoClient();
+
+            var pingResult = await apiClient.PingAsync();
+
+            Assert.That(pingResult, Is.True);
+
+            apiClient.Dispose();
+
+            Assert.Pass();
+
+        }
+
+        /// <summary>
+        /// This test is not very accurate, find a better way.
+        /// To test this, check the test output, it should show:
+        /// * Cache Miss ...
+        /// * Cache Hit ...
+        /// * Cache Hit ...
+        /// * Cache Hit ...
+        /// * Cache Hit ...
+        /// This indicates that a request was made to the remote host and then then the 
+        /// other requests were served from our cache.
+        /// </summary>
+        [Test]
+        public async Task CacheTest()
+        {
+            Helpers.GetApiClient().IsCacheEnabled = true;
+            Helpers.GetApiClient().ClearCache();
+
+            var categoriesResponse = await Helpers.GetApiClient().Coins.Categories.GetCoinCategoriesAsync();
+
+            Assert.IsNotNull(categoriesResponse);
+
+            Assert.That(categoriesResponse, Is.Not.Empty);
+
+            Assert.That(categoriesResponse.First().UpdatedAt, Is.Not.Null);
+
+            var updatedAt = categoriesResponse.First().UpdatedAt.Value;
+
+            await Task.Delay(1000);
+
+            categoriesResponse = await Helpers.GetApiClient().Coins.Categories.GetCoinCategoriesAsync();
+
+            Assert.IsNotNull(categoriesResponse);
+
+            Assert.That(categoriesResponse, Is.Not.Empty);
+
+            Assert.That(categoriesResponse.First().UpdatedAt, Is.Not.Null);
+
+            Assert.That(categoriesResponse.First().UpdatedAt.Value, Is.EqualTo(updatedAt));
+
+            await Task.Delay(1000);
+
+            categoriesResponse = await Helpers.GetApiClient().Coins.Categories.GetCoinCategoriesAsync();
+
+            Assert.IsNotNull(categoriesResponse);
+
+            Assert.That(categoriesResponse, Is.Not.Empty);
+
+            Assert.That(categoriesResponse.First().UpdatedAt, Is.Not.Null);
+
+            Assert.That(categoriesResponse.First().UpdatedAt.Value, Is.EqualTo(updatedAt));
+
+            await Task.Delay(1000);
+
+            categoriesResponse = await Helpers.GetApiClient().Coins.Categories.GetCoinCategoriesAsync();
+
+            Assert.IsNotNull(categoriesResponse);
+
+            Assert.That(categoriesResponse, Is.Not.Empty);
+
+            Assert.That(categoriesResponse.First().UpdatedAt, Is.Not.Null);
+
+            Assert.That(categoriesResponse.First().UpdatedAt.Value, Is.EqualTo(updatedAt));
+
+            await Task.Delay(1000);
+
+            categoriesResponse = await Helpers.GetApiClient().Coins.Categories.GetCoinCategoriesAsync();
+
+            Assert.IsNotNull(categoriesResponse);
+
+            Assert.That(categoriesResponse, Is.Not.Empty);
+
+            Assert.That(categoriesResponse.First().UpdatedAt, Is.Not.Null);
+
+            Assert.That(categoriesResponse.First().UpdatedAt.Value, Is.EqualTo(updatedAt));
+
+            // wait for the cache to clear and the server to update the UpdateAt value, we don't just clear the cache because we want to make sure they are expiring
+            await Task.Delay(300000);
+
+            categoriesResponse = await Helpers.GetApiClient().Coins.Categories.GetCoinCategoriesAsync();
+
+            Assert.IsNotNull(categoriesResponse);
+
+            Assert.That(categoriesResponse, Is.Not.Empty);
+
+            Assert.That(categoriesResponse.First().UpdatedAt, Is.Not.Null);
+
+            Assert.That(categoriesResponse.First().UpdatedAt.Value, Is.Not.EqualTo(updatedAt));
+        }
+
+        [Test]
+        public async Task CacheEnableDisableTest()
+        {
+            Helpers.GetApiClient().ClearCache();
+
+            Helpers.GetApiClient().IsCacheEnabled = true;
+
+            var categoriesResponse = await Helpers.GetApiClient().Coins.Categories.GetCoinCategoriesAsync();
+
+            Assert.IsNotNull(categoriesResponse);
+
+            Assert.That(categoriesResponse, Is.Not.Empty);
+
+            Assert.That(categoriesResponse.First().UpdatedAt, Is.Not.Null);
+
+            var updatedAt = categoriesResponse.First().UpdatedAt.Value;
+
+            await Task.Delay(1000);
+
+            categoriesResponse = await Helpers.GetApiClient().Coins.Categories.GetCoinCategoriesAsync();
+
+            Assert.IsNotNull(categoriesResponse);
+
+            Assert.That(categoriesResponse, Is.Not.Empty);
+
+            Assert.That(categoriesResponse.First().UpdatedAt, Is.Not.Null);
+
+            Assert.That(categoriesResponse.First().UpdatedAt.Value, Is.EqualTo(updatedAt));
+
+            Helpers.GetApiClient().IsCacheEnabled = false;
+
+            await Task.Delay(1000);
+
+            categoriesResponse = await Helpers.GetApiClient().Coins.Categories.GetCoinCategoriesAsync();
+
+            Assert.IsNotNull(categoriesResponse);
+
+            Assert.That(categoriesResponse, Is.Not.Empty);
+
+            Assert.That(categoriesResponse.First().UpdatedAt, Is.Not.Null);
+
+            Assert.That(categoriesResponse.First().UpdatedAt.Value, Is.EqualTo(updatedAt));
+
+            await Task.Delay(1000);
+
+            categoriesResponse = await Helpers.GetApiClient().Coins.Categories.GetCoinCategoriesAsync();
+
+            Assert.IsNotNull(categoriesResponse);
+
+            Assert.That(categoriesResponse, Is.Not.Empty);
+
+            Assert.That(categoriesResponse.First().UpdatedAt, Is.Not.Null);
+
+            Assert.That(categoriesResponse.First().UpdatedAt.Value, Is.EqualTo(updatedAt));
+
+            Helpers.GetApiClient().ClearCache();
+            Helpers.GetApiClient().IsCacheEnabled = true;
+
+            await Task.Delay(1000);
+
+            categoriesResponse = await Helpers.GetApiClient().Coins.Categories.GetCoinCategoriesAsync();
+
+            Assert.IsNotNull(categoriesResponse);
+
+            Assert.That(categoriesResponse, Is.Not.Empty);
+
+            Assert.That(categoriesResponse.First().UpdatedAt, Is.Not.Null);
+
+            Assert.That(categoriesResponse.First().UpdatedAt.Value, Is.EqualTo(updatedAt));
+
+            await Task.Delay(1000);
+
+            categoriesResponse = await Helpers.GetApiClient().Coins.Categories.GetCoinCategoriesAsync();
+
+            Assert.IsNotNull(categoriesResponse);
+
+            Assert.That(categoriesResponse, Is.Not.Empty);
+
+            Assert.That(categoriesResponse.First().UpdatedAt, Is.Not.Null);
+
+            Assert.That(categoriesResponse.First().UpdatedAt.Value, Is.EqualTo(updatedAt));
+
+            await Task.Delay(1000);
+
+            categoriesResponse = await Helpers.GetApiClient().Coins.Categories.GetCoinCategoriesAsync();
+
+            Assert.IsNotNull(categoriesResponse);
+
+            Assert.That(categoriesResponse, Is.Not.Empty);
+
+            Assert.That(categoriesResponse.First().UpdatedAt, Is.Not.Null);
+
+            Assert.That(categoriesResponse.First().UpdatedAt.Value, Is.EqualTo(updatedAt));
+
+            await Task.Delay(1000);
+
+            categoriesResponse = await Helpers.GetApiClient().Coins.Categories.GetCoinCategoriesAsync();
+
+            Assert.IsNotNull(categoriesResponse);
+
+            Assert.That(categoriesResponse, Is.Not.Empty);
+
+            Assert.That(categoriesResponse.First().UpdatedAt, Is.Not.Null);
+
+            Assert.That(categoriesResponse.First().UpdatedAt.Value, Is.EqualTo(updatedAt));
         }
 
         [Test]
         public async Task PingTest()
         {
-            await Helpers.DoRateLimiting();
-
-            var pingResult = await _apiClient.PingAsync();
+            var pingResult = await Helpers.GetApiClient().PingAsync();
 
             Assert.That(pingResult, Is.True);
         }
@@ -23,9 +224,7 @@
         [Test]
         public async Task GetExchangeRatesTest()
         {
-            await Helpers.DoRateLimiting();
-
-            var ratesResult = await _apiClient.GetExchangeRatesAsync();
+            var ratesResult = await Helpers.GetApiClient().GetExchangeRatesAsync();
 
             Assert.That(ratesResult, Is.Not.Null);
             Assert.That(ratesResult.Rates, Is.Not.Null);
@@ -35,17 +234,13 @@
         [Test]
         public async Task GetAssetPlatformsTest()
         {
-            await Helpers.DoRateLimiting();
-
-            var platformsResult = await _apiClient.GetAssetPlatformsAsync();
+            var platformsResult = await Helpers.GetApiClient().GetAssetPlatformsAsync();
 
             Assert.That(platformsResult, Is.Not.Null);
             Assert.That(platformsResult, Is.Not.Empty);
             Assert.That(platformsResult.Count(), Is.GreaterThanOrEqualTo(10));
 
-            await Helpers.DoRateLimiting();
-
-            platformsResult = await _apiClient.GetAssetPlatformsAsync("nft");
+            platformsResult = await Helpers.GetApiClient().GetAssetPlatformsAsync("nft");
 
             Assert.That(platformsResult, Is.Not.Null);
             Assert.That(platformsResult, Is.Not.Empty);

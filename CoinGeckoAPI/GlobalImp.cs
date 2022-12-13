@@ -27,10 +27,12 @@ namespace CoinGeckoAPI
     {
         private readonly RestClient _restClient;
         private readonly ILogger<CoinGeckoClient> _logger;
+        private readonly MemCache _cache;
 
-        internal GlobalImp(RestClient restClient, ILogger<CoinGeckoClient> logger = null)
+        internal GlobalImp(RestClient restClient, MemCache cache, ILogger<CoinGeckoClient> logger = null)
         {
             _logger = logger;
+            _cache = cache;
             _restClient = restClient;
         }
 
@@ -42,7 +44,7 @@ namespace CoinGeckoAPI
         {
             var request = new RestRequest(CoinGeckoClient.BuildUrl("global"));
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<GlobalResponse>(jsonStr);
         }
@@ -55,7 +57,7 @@ namespace CoinGeckoAPI
         {
             var request = new RestRequest(CoinGeckoClient.BuildUrl("global", "decentralized_finance_defi"));
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<GlobalDefiResponse>(jsonStr);
         }

@@ -1,19 +1,26 @@
-﻿namespace Tests
+﻿using Microsoft.Extensions.Logging;
+
+namespace Tests
 {
     internal static class Helpers
     {
-        private const uint _apiCallIntervalSeconds = 4;
-        private static DateTimeOffset _lastCallAt = DateTimeOffset.MinValue;
+        private static CoinGeckoClient? _apiClient = null;
 
-        internal static async Task DoRateLimiting()
+        internal static CoinGeckoClient GetApiClient()
         {
-            if (_lastCallAt.AddSeconds(_apiCallIntervalSeconds) > DateTimeOffset.UtcNow)
+            if (_apiClient == null)
             {
-                var waitTime = _lastCallAt.AddSeconds(_apiCallIntervalSeconds) - DateTimeOffset.UtcNow;
-                await Task.Delay(TimeSpan.FromSeconds(waitTime.TotalSeconds));
+                var factory = LoggerFactory.Create(x =>
+                {
+                    x.AddConsole();
+                    x.SetMinimumLevel(LogLevel.Debug);
+                });
+                var logger = factory.CreateLogger<CoinGeckoClient>();
+
+                _apiClient = new CoinGeckoClient(logger);
             }
 
-            _lastCallAt = DateTimeOffset.UtcNow;
+            return _apiClient;
         }
     }
 }

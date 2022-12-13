@@ -2,20 +2,11 @@
 {
     public class CoinsCategoriesTests
     {
-        private CoinGeckoClient _apiClient;
-
-        [SetUp]
-        public void Setup()
-        {
-            _apiClient = new CoinGeckoClient();
-        }
 
         [Test]
         public async Task GetCoinCategoriesTest()
         {
-            await Helpers.DoRateLimiting();
-
-            var categoriesResult = await _apiClient.Coins.Categories.GetCoinCategoriesAsync();
+            var categoriesResult = await Helpers.GetApiClient().Coins.Categories.GetCoinCategoriesAsync();
 
             Assert.That(categoriesResult, Is.Not.Null);
             Assert.That(categoriesResult, Is.Not.Empty);
@@ -29,9 +20,7 @@
         [Test]
         public async Task GetCoinCategoriesListTest()
         {
-            await Helpers.DoRateLimiting();
-
-            var categoriesResult = await _apiClient.Coins.Categories.GetCoinCategoriesListAsync();
+            var categoriesResult = await Helpers.GetApiClient().Coins.Categories.GetCoinCategoriesListAsync();
 
             Assert.That(categoriesResult, Is.Not.Null);
             Assert.That(categoriesResult, Is.Not.Empty);

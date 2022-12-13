@@ -2,20 +2,10 @@
 {
     public class GlobalTests
     {
-        private CoinGeckoClient _apiClient;
-
-        [SetUp]
-        public void Setup()
-        {
-            _apiClient = new CoinGeckoClient();
-        }
-
         [Test]
         public async Task GetGlobalTest()
         {
-            await Helpers.DoRateLimiting();
-
-            var globalResult = await _apiClient.Global.GetGlobalAsync();
+            var globalResult = await Helpers.GetApiClient().Global.GetGlobalAsync();
 
             Assert.That(globalResult, Is.Not.Null);
             Assert.That(globalResult.Data, Is.Not.Null);
@@ -25,9 +15,7 @@
         [Test]
         public async Task GetGlobalDefiTest()
         {
-            await Helpers.DoRateLimiting();
-
-            var globalResult = await _apiClient.Global.GetGlobalDefiAsync();
+            var globalResult = await Helpers.GetApiClient().Global.GetGlobalDefiAsync();
 
             Assert.That(globalResult, Is.Not.Null);
             Assert.That(globalResult.Data, Is.Not.Null);

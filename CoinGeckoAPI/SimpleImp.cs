@@ -27,10 +27,12 @@ namespace CoinGeckoAPI
     {
         private readonly RestClient _restClient;
         private readonly ILogger<CoinGeckoClient> _logger;
+        private readonly MemCache _cache;
 
-        internal SimpleImp(RestClient restClient, ILogger<CoinGeckoClient> logger = null)
+        internal SimpleImp(RestClient restClient, MemCache cache, ILogger<CoinGeckoClient> logger = null)
         {
             _logger = logger;
+            _cache = cache;
             _restClient = restClient;
         }
 
@@ -62,7 +64,7 @@ namespace CoinGeckoAPI
             if (include_last_updated_at) { request.AddQueryParameter("include_last_updated_at", "true"); }
             if (precision != 2) { request.AddQueryParameter("precision", precision); }
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, decimal>>>(jsonStr);
         }
@@ -102,7 +104,7 @@ namespace CoinGeckoAPI
             if (include_last_updated_at) { request.AddQueryParameter("include_last_updated_at", "true"); }
             if (precision != 2) { request.AddQueryParameter("precision", precision); }
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<Dictionary<string, Dictionary<string, decimal>>>(jsonStr);
         }
@@ -115,7 +117,7 @@ namespace CoinGeckoAPI
         {
             var request = new RestRequest(CoinGeckoClient.BuildUrl("simple", "supported_vs_currencies"));
 
-            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _logger);
+            var jsonStr = await CoinGeckoClient.GetStringResponseAsync(_restClient, request, _cache, _logger);
 
             return JsonConvert.DeserializeObject<string[]>(jsonStr);
         }
