@@ -92,7 +92,7 @@
 
             Assert.That(categoriesResponse.First().UpdatedAt.Value, Is.EqualTo(updatedAt));
 
-            // wait for the cache to clear, we don't just clear the cache because we want to make sure they are expiring
+            // wait for the cache to clear and the server to update the UpdateAt value, we don't just clear the cache because we want to make sure they are expiring
             await Task.Delay(300000);
 
             categoriesResponse = await Helpers.GetApiClient().Coins.Categories.GetCoinCategoriesAsync();
