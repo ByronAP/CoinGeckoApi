@@ -301,16 +301,21 @@ namespace CoinGeckoAPI
         {
             var fullUrl = client.BuildUri(request).ToString();
 
-            try
+            // we don't cache /ping
+            if (!fullUrl.EndsWith("/ping", StringComparison.InvariantCultureIgnoreCase))
             {
-                if (cache.TryGet(fullUrl, out var cacheResponse))
+
+                try
                 {
-                    return (string)cacheResponse;
+                    if (cache.TryGet(fullUrl, out var cacheResponse))
+                    {
+                        return (string)cacheResponse;
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                logger?.LogError(ex, "");
+                catch (Exception ex)
+                {
+                    logger?.LogError(ex, "");
+                }
             }
 
             try
@@ -321,7 +326,10 @@ namespace CoinGeckoAPI
 
                 if (response.IsSuccessStatusCode)
                 {
-                    cache.CacheRequest(fullUrl, response);
+                    if (!fullUrl.EndsWith("/ping", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        cache.CacheRequest(fullUrl, response);
+                    }
 
                     return response.Content;
 
