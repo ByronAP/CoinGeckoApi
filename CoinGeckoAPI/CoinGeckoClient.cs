@@ -320,7 +320,7 @@ namespace CoinGeckoAPI
 
             try
             {
-                await DoRateLimiting();
+                await DoRateLimiting(logger);
 
                 var response = await client.GetAsync(request);
 
@@ -355,7 +355,7 @@ namespace CoinGeckoAPI
             }
         }
 
-        internal static async Task DoRateLimiting()
+        internal static async Task DoRateLimiting(ILogger logger)
         {
             try
             {
@@ -392,7 +392,21 @@ namespace CoinGeckoAPI
                 LastApiCallAt = DateTimeOffset.UtcNow;
                 CallsInLast60Seconds++;
             }
-            finally { RateLimitSemaphore.Release(); }
+            catch (Exception ex)
+            {
+                logger?.LogError(ex, "DoRateLimiting threw an exception.");
+            }
+            finally
+            {
+                try
+                {
+                    RateLimitSemaphore.Release();
+                }
+                catch (Exception ex)
+                {
+                    logger?.LogError(ex, "DoRateLimiting threw an exception while releasing the semaphore.");
+                }
+            }
         }
 
         internal static void RateLimitTimerCallback(Object nothing)
@@ -403,7 +417,21 @@ namespace CoinGeckoAPI
 
                 CallsInLast60Seconds = 0;
             }
-            finally { RateLimitSemaphore.Release(); }
+            catch
+            {
+                // ignore, nothing we can do in here
+            }
+            finally
+            {
+                try
+                {
+                    RateLimitSemaphore.Release();
+                }
+                catch
+                {
+                    // ignore, nothing we can do in here
+                }
+            }
         }
 
         internal static string BuildUrl(params string[] parts)
@@ -440,6 +468,7 @@ namespace CoinGeckoAPI
                     {
                         try
                         {
+                            RateLimitTimer.Change(Timeout.Infinite, Timeout.Infinite);
                             RateLimitTimer.Dispose();
                         }
                         catch
