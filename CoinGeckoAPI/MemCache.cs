@@ -9,7 +9,7 @@ namespace CoinGeckoAPI
 {
     internal class MemCache : IDisposable
     {
-        internal bool Enabled { get; set; }
+        internal bool Enabled { get; set; } = true;
 
         private readonly ILogger _logger;
         private readonly List<string> _keys;
