@@ -133,88 +133,12 @@ namespace CoinGeckoAPI
         private bool _disposedValue;
         private readonly ILogger<CoinGeckoClient> _logger;
 
-        #region Constructors
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CoinGeckoClient"/> class.
-        /// </summary>
-        public CoinGeckoClient()
-        {
-            _logger = null;
-
-            _cache = new MemCache(_logger);
-
-            CGRestClient = new RestClient(Constants.API_BASE_URL);
-
-            Simple = new SimpleImp(CGRestClient, _cache, _logger);
-            Coins = new CoinsImp(CGRestClient, _cache, _logger);
-            Exchanges = new ExchangesImp(CGRestClient, _cache, _logger);
-            Indexes = new IndexesImp(CGRestClient, _cache, _logger);
-            Derivatives = new DerivativesImp(CGRestClient, _cache, _logger);
-            Nfts = new NftsImp(CGRestClient, _cache, _logger);
-            Search = new SearchImp(CGRestClient, _cache, _logger);
-            Global = new GlobalImp(CGRestClient, _cache, _logger);
-            Companies = new CompaniesImp(CGRestClient, _cache, _logger);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CoinGeckoClient"/> class.
-        /// </summary>
-        /// <param name="isPro">if set to <c>true</c> [is pro].</param>
-        public CoinGeckoClient(bool isPro)
-        {
-            _logger = null;
-
-            _cache = new MemCache(_logger);
-
-            if (isPro)
-            {
-                CGRestClient = new RestClient(Constants.API_PRO_BASE_URL);
-            }
-            else
-            {
-                CGRestClient = new RestClient(Constants.API_BASE_URL);
-            }
-
-            Simple = new SimpleImp(CGRestClient, _cache, _logger);
-            Coins = new CoinsImp(CGRestClient, _cache, _logger);
-            Exchanges = new ExchangesImp(CGRestClient, _cache, _logger);
-            Indexes = new IndexesImp(CGRestClient, _cache, _logger);
-            Derivatives = new DerivativesImp(CGRestClient, _cache, _logger);
-            Nfts = new NftsImp(CGRestClient, _cache, _logger);
-            Search = new SearchImp(CGRestClient, _cache, _logger);
-            Global = new GlobalImp(CGRestClient, _cache, _logger);
-            Companies = new CompaniesImp(CGRestClient, _cache, _logger);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CoinGeckoClient"/> class.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        public CoinGeckoClient(ILogger<CoinGeckoClient> logger)
-        {
-            _logger = logger;
-
-            _cache = new MemCache(_logger);
-
-            CGRestClient = new RestClient(Constants.API_BASE_URL);
-
-            Simple = new SimpleImp(CGRestClient, _cache, _logger);
-            Coins = new CoinsImp(CGRestClient, _cache, _logger);
-            Exchanges = new ExchangesImp(CGRestClient, _cache, _logger);
-            Indexes = new IndexesImp(CGRestClient, _cache, _logger);
-            Derivatives = new DerivativesImp(CGRestClient, _cache, _logger);
-            Nfts = new NftsImp(CGRestClient, _cache, _logger);
-            Search = new SearchImp(CGRestClient, _cache, _logger);
-            Global = new GlobalImp(CGRestClient, _cache, _logger);
-            Companies = new CompaniesImp(CGRestClient, _cache, _logger);
-        }
-
         /// <summary>
         /// Initializes a new instance of the <see cref="CoinGeckoClient"/> class.
         /// </summary>
         /// <param name="logger">The logger.</param>
         /// <param name="isPro">if set to <c>true</c> [is pro].</param>
-        public CoinGeckoClient(ILogger<CoinGeckoClient> logger, bool isPro)
+        public CoinGeckoClient(ILogger<CoinGeckoClient> logger = null, string apiKey = null)
         {
             _logger = logger;
 
@@ -239,7 +163,6 @@ namespace CoinGeckoAPI
             Global = new GlobalImp(CGRestClient, _cache, _logger);
             Companies = new CompaniesImp(CGRestClient, _cache, _logger);
         }
-        #endregion
 
         /// <summary>
         /// Check API server status.
