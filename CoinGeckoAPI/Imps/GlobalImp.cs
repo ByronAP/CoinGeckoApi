@@ -16,7 +16,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using System.Threading.Tasks;
 
-namespace CoinGeckoAPI
+namespace CoinGeckoAPI.Imps
 {
     /// <summary>
     /// <para>Implementation of the '/global' API calls.</para>

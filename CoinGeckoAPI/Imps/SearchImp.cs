@@ -17,7 +17,7 @@ using RestSharp;
 using System;
 using System.Threading.Tasks;
 
-namespace CoinGeckoAPI
+namespace CoinGeckoAPI.Imps
 {
     /// <summary>
     /// <para>Implementation of the '/search' API calls.</para>
@@ -42,10 +42,10 @@ namespace CoinGeckoAPI
         /// </summary>
         /// <param name="query">The search query string.</param>
         /// <returns>A Task&lt;<see cref="SearchResponse"/>&gt; representing the asynchronous operation.</returns>
-        /// <exception cref="System.ArgumentNullException">query - Invalid value. Value must be a valid search term.</exception>
+        /// <exception cref="ArgumentNullException">query - Invalid value. Value must be a valid search term.</exception>
         public async Task<SearchResponse> GetSearchAsync(string query)
         {
-            if (string.IsNullOrEmpty(query) || String.IsNullOrWhiteSpace(query))
+            if (string.IsNullOrEmpty(query) || string.IsNullOrWhiteSpace(query))
             {
                 throw new ArgumentNullException(nameof(query), "Invalid value. Value must be a valid search term.");
             }

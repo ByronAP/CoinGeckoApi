@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CoinGeckoAPI
+namespace CoinGeckoAPI.Imps
 {
     /// <summary>
     /// <para>Implementation of the '/derivatives' API calls.</para>
@@ -81,10 +81,10 @@ namespace CoinGeckoAPI
         /// <param name="id">The derivatives exchange id (can be obtained from <see cref="GetDerivativesExchangesListAsync"/>).</param>
         /// <param name="include_all_tickers">Set to <c>true</c> to include all, otherwise only unexpired.</param>
         /// <returns>A Task&lt;<see cref="DerivativesExchangeDetailItem"/>&gt; representing the asynchronous operation.</returns>
-        /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid derivatives exchange (EX: zbg_futures)</exception>
+        /// <exception cref="ArgumentNullException">id - Invalid value. Value must be a valid derivatives exchange (EX: zbg_futures)</exception>
         public async Task<DerivativesExchangeDetailItem> GetDerivativesExchangeAsync(string id, bool include_all_tickers = false)
         {
-            if (string.IsNullOrEmpty(id) || String.IsNullOrWhiteSpace(id))
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid derivatives exchange (EX: zbg_futures)");
             }

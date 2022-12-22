@@ -4,13 +4,14 @@
 // Created          : 12-10-2022
 //
 // Last Modified By : ByronAP
-// Last Modified On : 12-12-2022
+// Last Modified On : 12-22-2022
 // ***********************************************************************
 // <copyright file="CoinGeckoClient.cs" company="ByronAP">
 //     Copyright © 2022 ByronAP, CoinGecko. All rights reserved.
 // </copyright>
 // ***********************************************************************
 using CoinGeckoAPI.Exceptions;
+using CoinGeckoAPI.Imps;
 using CoinGeckoAPI.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;

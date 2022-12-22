@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CoinGeckoAPI
+namespace CoinGeckoAPI.Imps
 {
     /// <summary>
     /// <para>Implementation of the '/nfts' API calls.</para>
@@ -67,7 +67,7 @@ namespace CoinGeckoAPI
         /// </summary>
         /// <param name="id">The id of the nft collection (can be obtained from <see cref="GetNftsListAsync"/>).</param>
         /// <returns>A Task&lt;<see cref="NftResponse"/>&gt; representing the asynchronous operation.</returns>
-        /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid NFT collection id (EX: 8bit).</exception>
+        /// <exception cref="ArgumentNullException">id - Invalid value. Value must be a valid NFT collection id (EX: 8bit).</exception>
         public async Task<NftResponse> GetNftAsync(string id)
         {
             if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
@@ -88,8 +88,8 @@ namespace CoinGeckoAPI
         /// <param name="asset_platform_id">The id of the platform issuing tokens (See <see cref="CoinGeckoClient.GetAssetPlatformsAsync"/> for list of options, use filter=nft param).</param>
         /// <param name="contract_address">The contract_address of the nft collection (See <see cref="GetNftsListAsync"/> for list of nft collection with metadata).</param>
         /// <returns>A Task&lt;<see cref="NftResponse"/>&gt; representing the asynchronous operation.</returns>
-        /// <exception cref="System.ArgumentNullException">asset_platform_id - Invalid value. Value must be a valid NFT issuing platform (EX: ethereum).</exception>
-        /// <exception cref="System.ArgumentNullException">contract_address - Invalid value. Value must be a valid NFT contract address.</exception>
+        /// <exception cref="ArgumentNullException">asset_platform_id - Invalid value. Value must be a valid NFT issuing platform (EX: ethereum).</exception>
+        /// <exception cref="ArgumentNullException">contract_address - Invalid value. Value must be a valid NFT contract address.</exception>
         public async Task<NftResponse> GetNftAsync(string asset_platform_id, string contract_address)
         {
             if (string.IsNullOrEmpty(asset_platform_id) || string.IsNullOrWhiteSpace(asset_platform_id))

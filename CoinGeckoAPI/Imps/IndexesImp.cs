@@ -18,7 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CoinGeckoAPI
+namespace CoinGeckoAPI.Imps
 {
     /// <summary>
     /// <para>Implementation of the '/indexes' API calls.</para>
@@ -61,8 +61,8 @@ namespace CoinGeckoAPI
         /// <param name="market_id">The market id (can be obtained from <see cref="ExchangesImp.GetExchangesListAsync"/>).</param>
         /// <param name="id">The index id (can be obtained from <see cref="GetIndexesListAsync"/>).</param>
         /// <returns>A Task&lt;<see cref="IndexItem"/>&gt; representing the asynchronous operation.</returns>
-        /// <exception cref="System.ArgumentNullException">market_id - Invalid value. Value must be a valid market id (EX: cme_futures)</exception>
-        /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid index id (EX: btc)</exception>
+        /// <exception cref="ArgumentNullException">market_id - Invalid value. Value must be a valid market id (EX: cme_futures)</exception>
+        /// <exception cref="ArgumentNullException">id - Invalid value. Value must be a valid index id (EX: btc)</exception>
         public async Task<IndexItem> GetIndexAsync(string market_id, string id)
         {
             if (string.IsNullOrEmpty(market_id) || string.IsNullOrWhiteSpace(market_id))
