@@ -4,7 +4,7 @@
 // Created          : 12-10-2022
 //
 // Last Modified By : ByronAP
-// Last Modified On : 12-11-2022
+// Last Modified On : 12-22-2022
 // ***********************************************************************
 // <copyright file="CoinsContractImp.cs" company="ByronAP">
 //     Copyright © 2022 ByronAP, CoinGecko. All rights reserved.
@@ -78,7 +78,7 @@ namespace CoinGeckoAPI.Imps
         /// <exception cref="ArgumentOutOfRangeException">days - Invalid value. Value must not exceed 900000.</exception>
         public async Task<CoinMarketChartResponse> GetCoinContractMarketChartAsync(string id, string contract_address, string vs_currency, uint days)
         {
-            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(vs_currency))
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid coin id (EX: ethereum)");
             }
@@ -121,7 +121,7 @@ namespace CoinGeckoAPI.Imps
         /// <exception cref="ArgumentNullException">vs_currency - Invalid value. Value must be a valid target currency of market data (usd, eur, jpy, etc.)</exception>
         public async Task<CoinMarketChartResponse> GetCoinContractMarketChartRangeAsync(string id, string contract_address, string vs_currency, DateTimeOffset fromDate, DateTimeOffset toDate)
         {
-            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(vs_currency))
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid coin id (EX: ethereum)");
             }

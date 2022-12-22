@@ -4,7 +4,7 @@
 // Created          : 12-10-2022
 //
 // Last Modified By : ByronAP
-// Last Modified On : 12-11-2022
+// Last Modified On : 12-22-2022
 // ***********************************************************************
 // <copyright file="SimpleImp.cs" company="ByronAP">
 //     Copyright © 2022 ByronAP, CoinGecko. All rights reserved.
@@ -85,7 +85,7 @@ namespace CoinGeckoAPI.Imps
         /// <exception cref="ArgumentOutOfRangeException">precision - Value must be 0 through 18</exception>
         public async Task<Dictionary<string, Dictionary<string, decimal>>> GetTokenPriceAsync(string id, IEnumerable<string> contract_addresses, IEnumerable<string> vs_currencies, bool include_market_cap = false, bool include_24hr_vol = false, bool include_24hr_change = false, bool include_last_updated_at = false, uint precision = 2)
         {
-            if (id == null)
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid id of the platform issuing tokens (See asset_platforms endpoint for list of options)");
             }

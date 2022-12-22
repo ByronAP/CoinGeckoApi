@@ -4,7 +4,7 @@
 // Created          : 12-10-2022
 //
 // Last Modified By : ByronAP
-// Last Modified On : 12-11-2022
+// Last Modified On : 12-22-2022
 // ***********************************************************************
 // <copyright file="CoinsImp.cs" company="ByronAP">
 //     Copyright © 2022 ByronAP, CoinGecko. All rights reserved.
@@ -78,7 +78,7 @@ namespace CoinGeckoAPI.Imps
         /// <exception cref="ArgumentOutOfRangeException">page - Must be a valid page index starting from 1.</exception>
         public async Task<IEnumerable<CoinsMarketItem>> GetCoinMarketsAsync(string vs_currency, IEnumerable<string> ids = null, string category = "", MarketsOrderBy order = MarketsOrderBy.market_cap_desc, uint per_page = 100, uint page = 1, bool sparkline = false, MarketPriceChangePercentage price_change_percentage = MarketPriceChangePercentage.None)
         {
-            if (string.IsNullOrEmpty(vs_currency) || vs_currency.Trim() == string.Empty)
+            if (string.IsNullOrEmpty(vs_currency) || string.IsNullOrWhiteSpace(vs_currency))
             {
                 throw new ArgumentNullException(nameof(vs_currency), "Invalid value. Value must be a valid target currency of market data (usd, eur, jpy, etc.)");
             }
@@ -88,10 +88,7 @@ namespace CoinGeckoAPI.Imps
                 throw new ArgumentOutOfRangeException(nameof(per_page), "Must be a valid integer from 1 through 250.");
             }
 
-            if (page == 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(page), "Must be a valid page index starting from 1.");
-            }
+            if (page == 0) { page = 1; }
 
             var request = new RestRequest(CoinGeckoClient.BuildUrl("coins", "markets"));
             request.AddQueryParameter("vs_currency", vs_currency);
@@ -150,7 +147,7 @@ namespace CoinGeckoAPI.Imps
         /// <exception cref="ArgumentNullException">id - Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)</exception>
         public async Task<CoinResponse> GetCoinAsync(string id, bool localization = true, bool tickers = true, bool market_data = true, bool community_data = true, bool developer_data = true, bool sparkline = false)
         {
-            if (string.IsNullOrEmpty(id) || id.Trim() == string.Empty)
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)");
             }
@@ -187,15 +184,12 @@ namespace CoinGeckoAPI.Imps
         /// <exception cref="ArgumentOutOfRangeException">page - Must be a valid page index starting from 1.</exception>
         public async Task<CoinTickersResponse> GetCoinTickersAsync(string id, IEnumerable<string> exchange_ids = null, bool include_exchange_logo = false, uint page = 1, CoinTickersOrderBy order = CoinTickersOrderBy.trust_score_desc, bool depth = false)
         {
-            if (string.IsNullOrEmpty(id) || id.Trim() == string.Empty)
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)");
             }
 
-            if (page == 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(page), "Must be a valid page index starting from 1.");
-            }
+            if (page == 0) { page = 1; }
 
             var request = new RestRequest(CoinGeckoClient.BuildUrl("coins", id, "tickers"));
             if (exchange_ids != null && exchange_ids.Any()) { request.AddQueryParameter("exchange_ids", string.Join(",", exchange_ids)); }
@@ -256,7 +250,7 @@ namespace CoinGeckoAPI.Imps
         /// <exception cref="ArgumentOutOfRangeException">days - Invalid value. Value must not exceed 900000.</exception>
         public async Task<CoinMarketChartResponse> GetCoinMarketChartAsync(string id, string vs_currency, uint days, CoinMarketChartInterval interval = CoinMarketChartInterval.auto)
         {
-            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(vs_currency))
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)");
             }
@@ -297,7 +291,7 @@ namespace CoinGeckoAPI.Imps
         /// <exception cref="ArgumentNullException">vs_currency - Invalid value. Value must be a valid target currency of market data (usd, eur, jpy, etc.)</exception>
         public async Task<CoinMarketChartResponse> GetCoinMarketChartRangeAsync(string id, string vs_currency, DateTimeOffset fromDate, DateTimeOffset toDate)
         {
-            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(vs_currency))
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)");
             }
@@ -331,7 +325,7 @@ namespace CoinGeckoAPI.Imps
         /// <exception cref="ArgumentNullException">vs_currency - Invalid value. Value must be a valid target currency of market data (usd, eur, jpy, etc.)</exception>
         public async Task<decimal[][]> GetCoinOhlcAsync(string id, string vs_currency, uint days)
         {
-            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(vs_currency))
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid coin id (EX: bitcoin, ethereum)");
             }
