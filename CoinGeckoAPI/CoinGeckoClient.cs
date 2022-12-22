@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -144,14 +145,20 @@ namespace CoinGeckoAPI
 
             _cache = new MemCache(_logger);
 
-            if (isPro)
+            if (!string.IsNullOrEmpty(apiKey) && !string.IsNullOrWhiteSpace(apiKey))
             {
                 CGRestClient = new RestClient(Constants.API_PRO_BASE_URL);
+                CGRestClient.AddDefaultHeader("x-cg-pro-api-key", apiKey);
             }
             else
             {
                 CGRestClient = new RestClient(Constants.API_BASE_URL);
             }
+
+            CGRestClient.AddDefaultHeader("Accept-Encoding", "gzip, deflate, br");
+            CGRestClient.AddDefaultHeader("Accept", "application/json");
+            CGRestClient.AddDefaultHeader("Connection", "keep-alive");
+            CGRestClient.AddDefaultHeader("User-Agent", $"CoinGeckoApi .NET Client/{Assembly.GetExecutingAssembly().GetName().Version}");
 
             Simple = new SimpleImp(CGRestClient, _cache, _logger);
             Coins = new CoinsImp(CGRestClient, _cache, _logger);
