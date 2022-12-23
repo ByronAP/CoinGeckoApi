@@ -107,6 +107,12 @@ namespace CoinGeckoAPI
         /// <value>Companies API calls.</value>
         public CompaniesImp Companies { get; }
 
+        /// <para>Provides access to PRO API calls.</para>
+        /// <para>Requires an API key.</para>
+        /// An instance of <see cref="ProImp"/>.
+        /// <value>PRO API calls..</value>
+        public ProImp Pro { get; }
+
         /// <summary>
         /// <para>Gets or sets whether this instance is using response caching.</para>
         /// <para>Caching is enabled by default.</para>
@@ -149,6 +155,7 @@ namespace CoinGeckoAPI
             {
                 CGRestClient = new RestClient(Constants.API_PRO_BASE_URL);
                 CGRestClient.AddDefaultHeader("x-cg-pro-api-key", apiKey);
+                IsRateLimitingEnabled = false;
             }
             else
             {
@@ -169,6 +176,7 @@ namespace CoinGeckoAPI
             Search = new SearchImp(CGRestClient, _cache, _logger);
             Global = new GlobalImp(CGRestClient, _cache, _logger);
             Companies = new CompaniesImp(CGRestClient, _cache, _logger);
+            Pro = new ProImp(CGRestClient, _cache, _logger);
         }
 
         /// <summary>
