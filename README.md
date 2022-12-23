@@ -21,6 +21,7 @@
 +   Integrated response caching
 +   Integrated rate limiting
 +   Easier to use then other libraries
++   Supports PRO endpoints (I have no way to test)
 
 
 Just create an instance of 'CoinGeckoClient' and start making calls.

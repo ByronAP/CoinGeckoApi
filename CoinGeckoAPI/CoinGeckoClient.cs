@@ -4,19 +4,21 @@
 // Created          : 12-10-2022
 //
 // Last Modified By : ByronAP
-// Last Modified On : 12-12-2022
+// Last Modified On : 12-22-2022
 // ***********************************************************************
 // <copyright file="CoinGeckoClient.cs" company="ByronAP">
 //     Copyright © 2022 ByronAP, CoinGecko. All rights reserved.
 // </copyright>
 // ***********************************************************************
 using CoinGeckoAPI.Exceptions;
+using CoinGeckoAPI.Imps;
 using CoinGeckoAPI.Models;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -105,6 +107,12 @@ namespace CoinGeckoAPI
         /// <value>Companies API calls.</value>
         public CompaniesImp Companies { get; }
 
+        /// <para>Provides access to PRO API calls.</para>
+        /// <para>Requires an API key.</para>
+        /// An instance of <see cref="ProImp"/>.
+        /// <value>PRO API calls..</value>
+        public ProImp Pro { get; }
+
         /// <summary>
         /// <para>Gets or sets whether this instance is using response caching.</para>
         /// <para>Caching is enabled by default.</para>
@@ -132,70 +140,32 @@ namespace CoinGeckoAPI
         private bool _disposedValue;
         private readonly ILogger<CoinGeckoClient> _logger;
 
-        #region Constructors
         /// <summary>
         /// Initializes a new instance of the <see cref="CoinGeckoClient"/> class.
         /// </summary>
-        public CoinGeckoClient()
-        {
-            _logger = null;
-
-            _cache = new MemCache(_logger);
-
-            CGRestClient = new RestClient(Constants.API_BASE_URL);
-
-            Simple = new SimpleImp(CGRestClient, _cache, _logger);
-            Coins = new CoinsImp(CGRestClient, _cache, _logger);
-            Exchanges = new ExchangesImp(CGRestClient, _cache, _logger);
-            Indexes = new IndexesImp(CGRestClient, _cache, _logger);
-            Derivatives = new DerivativesImp(CGRestClient, _cache, _logger);
-            Nfts = new NftsImp(CGRestClient, _cache, _logger);
-            Search = new SearchImp(CGRestClient, _cache, _logger);
-            Global = new GlobalImp(CGRestClient, _cache, _logger);
-            Companies = new CompaniesImp(CGRestClient, _cache, _logger);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CoinGeckoClient"/> class.
-        /// </summary>
+        /// <param name="logger">The logger.</param>
         /// <param name="isPro">if set to <c>true</c> [is pro].</param>
-        public CoinGeckoClient(bool isPro)
+        public CoinGeckoClient(ILogger<CoinGeckoClient> logger = null, string apiKey = null)
         {
-            _logger = null;
+            _logger = logger;
 
             _cache = new MemCache(_logger);
 
-            if (isPro)
+            if (!string.IsNullOrEmpty(apiKey) && !string.IsNullOrWhiteSpace(apiKey))
             {
                 CGRestClient = new RestClient(Constants.API_PRO_BASE_URL);
+                CGRestClient.AddDefaultHeader("x-cg-pro-api-key", apiKey);
+                IsRateLimitingEnabled = false;
             }
             else
             {
                 CGRestClient = new RestClient(Constants.API_BASE_URL);
             }
 
-            Simple = new SimpleImp(CGRestClient, _cache, _logger);
-            Coins = new CoinsImp(CGRestClient, _cache, _logger);
-            Exchanges = new ExchangesImp(CGRestClient, _cache, _logger);
-            Indexes = new IndexesImp(CGRestClient, _cache, _logger);
-            Derivatives = new DerivativesImp(CGRestClient, _cache, _logger);
-            Nfts = new NftsImp(CGRestClient, _cache, _logger);
-            Search = new SearchImp(CGRestClient, _cache, _logger);
-            Global = new GlobalImp(CGRestClient, _cache, _logger);
-            Companies = new CompaniesImp(CGRestClient, _cache, _logger);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CoinGeckoClient"/> class.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        public CoinGeckoClient(ILogger<CoinGeckoClient> logger)
-        {
-            _logger = logger;
-
-            _cache = new MemCache(_logger);
-
-            CGRestClient = new RestClient(Constants.API_BASE_URL);
+            CGRestClient.AddDefaultHeader("Accept-Encoding", "gzip, deflate, br");
+            CGRestClient.AddDefaultHeader("Accept", "application/json");
+            CGRestClient.AddDefaultHeader("Connection", "keep-alive");
+            CGRestClient.AddDefaultHeader("User-Agent", $"CoinGeckoApi .NET Client/{Assembly.GetExecutingAssembly().GetName().Version}");
 
             Simple = new SimpleImp(CGRestClient, _cache, _logger);
             Coins = new CoinsImp(CGRestClient, _cache, _logger);
@@ -206,39 +176,8 @@ namespace CoinGeckoAPI
             Search = new SearchImp(CGRestClient, _cache, _logger);
             Global = new GlobalImp(CGRestClient, _cache, _logger);
             Companies = new CompaniesImp(CGRestClient, _cache, _logger);
+            Pro = new ProImp(CGRestClient, _cache, _logger);
         }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CoinGeckoClient"/> class.
-        /// </summary>
-        /// <param name="logger">The logger.</param>
-        /// <param name="isPro">if set to <c>true</c> [is pro].</param>
-        public CoinGeckoClient(ILogger<CoinGeckoClient> logger, bool isPro)
-        {
-            _logger = logger;
-
-            _cache = new MemCache(_logger);
-
-            if (isPro)
-            {
-                CGRestClient = new RestClient(Constants.API_PRO_BASE_URL);
-            }
-            else
-            {
-                CGRestClient = new RestClient(Constants.API_BASE_URL);
-            }
-
-            Simple = new SimpleImp(CGRestClient, _cache, _logger);
-            Coins = new CoinsImp(CGRestClient, _cache, _logger);
-            Exchanges = new ExchangesImp(CGRestClient, _cache, _logger);
-            Indexes = new IndexesImp(CGRestClient, _cache, _logger);
-            Derivatives = new DerivativesImp(CGRestClient, _cache, _logger);
-            Nfts = new NftsImp(CGRestClient, _cache, _logger);
-            Search = new SearchImp(CGRestClient, _cache, _logger);
-            Global = new GlobalImp(CGRestClient, _cache, _logger);
-            Companies = new CompaniesImp(CGRestClient, _cache, _logger);
-        }
-        #endregion
 
         /// <summary>
         /// Check API server status.
