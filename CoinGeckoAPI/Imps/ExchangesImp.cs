@@ -20,7 +20,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CoinGeckoAPI
+namespace CoinGeckoAPI.Imps
 {
     /// <summary>
     /// <para>Implementation of the '/exchanges' API calls.</para>
@@ -46,7 +46,7 @@ namespace CoinGeckoAPI
         /// <param name="per_page">Total results per page. Default: 100.</param>
         /// <param name="page">Page through results</param>
         /// <returns>A Task&lt;IEnumerable&lt;<see cref="ExchangeItem"/>&gt;&gt; representing the asynchronous operation.</returns>
-        /// <exception cref="System.ArgumentOutOfRangeException">per_page - Invalid value. Value must be an integer from 1 to 250.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">per_page - Invalid value. Value must be an integer from 1 to 250.</exception>
         public async Task<IEnumerable<ExchangeItem>> GetExchangesAsync(uint per_page = 100, uint page = 1)
         {
             if (per_page < 1 || per_page > 250)
@@ -86,10 +86,10 @@ namespace CoinGeckoAPI
         /// </summary>
         /// <param name="id">The exchange id (can be obtained from <see cref="GetExchangesListAsync"/>).</param>
         /// <returns>A Task&lt;<see cref="ExchangeResponse"/>&gt; representing the asynchronous operation.</returns>
-        /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid exchange id (EX: bitstamp)</exception>
+        /// <exception cref="ArgumentNullException">id - Invalid value. Value must be a valid exchange id (EX: bitstamp)</exception>
         public async Task<ExchangeResponse> GetExchangeAsync(string id)
         {
-            if (string.IsNullOrEmpty(id) || String.IsNullOrWhiteSpace(id))
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid exchange id (EX: bitstamp)");
             }
@@ -117,11 +117,11 @@ namespace CoinGeckoAPI
         /// <param name="depth">Set to <c>true</c> to include 2% orderbook depth i.e., cost_to_move_up_usd and cost_to_move_down_usd.</param>
         /// <param name="order">The ordering of results (sorting) <see cref="CoinTickersOrderBy"/>. Default: trust_score_desc.</param>
         /// <returns>A Task&lt;<see cref="ExchangeTickersResponse"/>&gt; representing the asynchronous operation.</returns>
-        /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid exchange id (EX: bitstamp)</exception>
-        /// <exception cref="System.ArgumentNullException">coin_ids - Invalid value. Value must be a valid enumerable of coin ids (EX: bitcoin, ethereum)</exception>
+        /// <exception cref="ArgumentNullException">id - Invalid value. Value must be a valid exchange id (EX: bitstamp)</exception>
+        /// <exception cref="ArgumentNullException">coin_ids - Invalid value. Value must be a valid enumerable of coin ids (EX: bitcoin, ethereum)</exception>
         public async Task<ExchangeTickersResponse> GetExchangeTickersAsync(string id, IEnumerable<string> coin_ids, bool include_exchange_logo = false, uint page = 1, bool depth = false, CoinTickersOrderBy order = CoinTickersOrderBy.trust_score_desc)
         {
-            if (string.IsNullOrEmpty(id) || String.IsNullOrWhiteSpace(id))
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid exchange id (EX: bitstamp)");
             }
@@ -132,7 +132,7 @@ namespace CoinGeckoAPI
             }
 
             var request = new RestRequest(CoinGeckoClient.BuildUrl("exchanges", id, "tickers"));
-            request.AddQueryParameter("coin_ids", String.Join(",", coin_ids));
+            request.AddQueryParameter("coin_ids", string.Join(",", coin_ids));
             if (include_exchange_logo) { request.AddQueryParameter("include_exchange_logo", "true"); }
             if (page > 0) { request.AddQueryParameter("page", page); }
             if (depth) { request.AddQueryParameter("depth", depth); }
@@ -150,7 +150,7 @@ namespace CoinGeckoAPI
         /// <param name="id">The exchange id (can be obtained from <see cref="GetExchangesListAsync"/>).</param>
         /// <param name="days">Data up to number of days ago (eg. 1,14,30).</param>
         /// <returns>A Task&lt;IEnumerable&lt;<see cref="ExchangeVolumeChartItem"/>&gt;&gt; representing the asynchronous operation.</returns>
-        /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid exchange id (EX: bitstamp)</exception>
+        /// <exception cref="ArgumentNullException">id - Invalid value. Value must be a valid exchange id (EX: bitstamp)</exception>
         public async Task<IEnumerable<ExchangeVolumeChartItem>> GetExchangeVolumeChartFriendlyAsync(string id, uint days)
         {
             var data = await GetExchangeVolumeChartAsync(id, days);
@@ -182,10 +182,10 @@ namespace CoinGeckoAPI
         /// <param name="id">The exchange id (can be obtained from <see cref="GetExchangesListAsync"/>).</param>
         /// <param name="days">Data up to number of days ago (eg. 1,14,30).</param>
         /// <returns>A Task&lt;System.String[][]&gt; representing the asynchronous operation.</returns>
-        /// <exception cref="System.ArgumentNullException">id - Invalid value. Value must be a valid exchange id (EX: bitstamp)</exception>
+        /// <exception cref="ArgumentNullException">id - Invalid value. Value must be a valid exchange id (EX: bitstamp)</exception>
         public async Task<string[][]> GetExchangeVolumeChartAsync(string id, uint days)
         {
-            if (string.IsNullOrEmpty(id) || String.IsNullOrWhiteSpace(id))
+            if (string.IsNullOrEmpty(id) || string.IsNullOrWhiteSpace(id))
             {
                 throw new ArgumentNullException(nameof(id), "Invalid value. Value must be a valid exchange id (EX: bitstamp)");
             }

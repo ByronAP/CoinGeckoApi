@@ -14,13 +14,14 @@
 [Library Documentation](https://byronap.github.io/CoinGeckApi_docs)
 
 ### Features
-+  Method names and locations match API
-+  Concrete classes (with very few exceptions)
-+  Fully asynchronous
-+  Compatible with dependency injection and logging
-+  Integrated response caching
-+  Integrated rate limiting
-+  Easier to use then other libraries
++   Method names and locations match API
++   Concrete classes (with very few exceptions)
++   Fully asynchronous
++   Compatible with dependency injection and logging
++   Integrated response caching
++   Integrated rate limiting
++   Easier to use then other libraries
++   Supports PRO endpoints (I have no way to test)
 
 
 Just create an instance of 'CoinGeckoClient' and start making calls.

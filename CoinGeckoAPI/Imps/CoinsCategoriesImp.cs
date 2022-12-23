@@ -18,7 +18,7 @@ using RestSharp;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CoinGeckoAPI
+namespace CoinGeckoAPI.Imps
 {
     /// <summary>
     /// <para>Implementation of the '/coins/categories' API calls.</para>
