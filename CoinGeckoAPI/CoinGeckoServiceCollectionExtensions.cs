@@ -10,7 +10,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
         public static IServiceCollection AddCoinGeckoApi(this IServiceCollection services, string apiKey)
             => services.AddSingleton<CoinGeckoClient>(new CoinGeckoClient(apiKey: apiKey));
-
+            
         public static IServiceCollection AddCoinGeckoApi(this IServiceCollection services, ILogger<CoinGeckoClient> logger)
             => services.AddSingleton<CoinGeckoClient>(new CoinGeckoClient(logger: logger));
 
