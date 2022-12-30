@@ -5,37 +5,65 @@
         [Test]
         public async Task GetDerivativesTest()
         {
-            var derivativesResult = await Helpers.GetApiClient().Derivatives.GetDerivativesAsync();
+            try
+            {
+                var derivativesResult = await Helpers.GetApiClient().Derivatives.GetDerivativesAsync();
 
-            Assert.That(derivativesResult, Is.Not.Null);
-            Assert.That(derivativesResult, Is.Not.Empty);
+                Assert.That(derivativesResult, Is.Not.Null);
+                Assert.That(derivativesResult, Is.Not.Empty);
+            }
+            catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+            {
+                Assert.Warn(ex.Message);
+            }
         }
 
         [Test]
         public async Task GetDerivativesExchangesTest()
         {
-            var derivativesResult = await Helpers.GetApiClient().Derivatives.GetDerivativesExchangesAsync();
+            try
+            {
+                var derivativesResult = await Helpers.GetApiClient().Derivatives.GetDerivativesExchangesAsync();
 
-            Assert.That(derivativesResult, Is.Not.Null);
-            Assert.That(derivativesResult, Is.Not.Empty);
+                Assert.That(derivativesResult, Is.Not.Null);
+                Assert.That(derivativesResult, Is.Not.Empty);
+            }
+            catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+            {
+                Assert.Warn(ex.Message);
+            }
         }
 
         [Test]
         public async Task GetDerivativesExchangeTest()
         {
-            var derivativesResult = await Helpers.GetApiClient().Derivatives.GetDerivativesExchangeAsync("zbg_futures");
+            try
+            {
+                var derivativesResult = await Helpers.GetApiClient().Derivatives.GetDerivativesExchangeAsync("zbg_futures");
 
-            Assert.That(derivativesResult, Is.Not.Null);
-            Assert.That(derivativesResult.YearEstablished, Is.GreaterThan(2000));
+                Assert.That(derivativesResult, Is.Not.Null);
+                Assert.That(derivativesResult.YearEstablished, Is.GreaterThan(2000));
+            }
+            catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+            {
+                Assert.Warn(ex.Message);
+            }
         }
 
         [Test]
         public async Task GetDerivativesExchangesListTest()
         {
-            var derivativesResult = await Helpers.GetApiClient().Derivatives.GetDerivativesExchangesListAsync();
+            try
+            {
+                var derivativesResult = await Helpers.GetApiClient().Derivatives.GetDerivativesExchangesListAsync();
 
-            Assert.That(derivativesResult, Is.Not.Null);
-            Assert.That(derivativesResult, Is.Not.Empty);
+                Assert.That(derivativesResult, Is.Not.Null);
+                Assert.That(derivativesResult, Is.Not.Empty);
+            }
+            catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+            {
+                Assert.Warn(ex.Message);
+            }
         }
     }
 }
