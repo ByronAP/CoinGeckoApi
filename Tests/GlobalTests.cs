@@ -5,21 +5,35 @@
         [Test]
         public async Task GetGlobalTest()
         {
-            var globalResult = await Helpers.GetApiClient().Global.GetGlobalAsync();
+            try
+            {
+                var globalResult = await Helpers.GetApiClient().Global.GetGlobalAsync();
 
-            Assert.That(globalResult, Is.Not.Null);
-            Assert.That(globalResult.Data, Is.Not.Null);
-            Assert.That(globalResult.Data.ActiveCryptocurrencies, Is.GreaterThan(6000));
+                Assert.That(globalResult, Is.Not.Null);
+                Assert.That(globalResult.Data, Is.Not.Null);
+                Assert.That(globalResult.Data.ActiveCryptocurrencies, Is.GreaterThan(6000));
+            }
+            catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+            {
+                Assert.Warn(ex.Message);
+            }
         }
 
         [Test]
         public async Task GetGlobalDefiTest()
         {
-            var globalResult = await Helpers.GetApiClient().Global.GetGlobalDefiAsync();
+            try
+            {
+                var globalResult = await Helpers.GetApiClient().Global.GetGlobalDefiAsync();
 
-            Assert.That(globalResult, Is.Not.Null);
-            Assert.That(globalResult.Data, Is.Not.Null);
-            Assert.That(Convert.ToDecimal(globalResult.Data.DefiDominance), Is.GreaterThan(1.1m));
+                Assert.That(globalResult, Is.Not.Null);
+                Assert.That(globalResult.Data, Is.Not.Null);
+                Assert.That(Convert.ToDecimal(globalResult.Data.DefiDominance), Is.GreaterThan(1.1m));
+            }
+            catch (HttpRequestException ex) when (ex.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+            {
+                Assert.Warn(ex.Message);
+            }
         }
     }
 }
